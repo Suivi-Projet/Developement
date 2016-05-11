@@ -19,7 +19,16 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 							  ORDER BY taches.codeTache");
 	$reqProjet->bindParam(1, $_GET["idProjet"]);
 	$reqProjet->execute();
-	$resultProjet = $reqProjet->fetchAll();
+	$resultProjet = $reqProjet->fetchAll(PDO::FETCH_ASSOC);
+
+	for($i = 0; $i < count($resultProjet); $i++) {
+		$resultProjet[$i]["respectCharge"] = $resultProjet[$i]["montantPrevu"] >= $resultProjet[$i]["montantReel"] ? true : false;
+		if($resultProjet[$i]["dateFinReelle"] == '' && new DateTime("now") > new DateTime($resultProjet[$i]["dateFinPrevue"]) == 1) {
+			$resultProjet[$i]["retard"] = true;
+		} else {
+			$resultProjet[$i]["retard"] = $resultProjet[$i]["dateFinReelle"] > $resultProjet[$i]["dateFinPrevue"] ? true : false;
+		}
+	}
 
 	$reqTaches = $db->prepare("SELECT t.codeTache, t.libelleTache, f.libelleFamille, t.dateDebutPrevue, t.dateFinPrevue, t.tempsPrevu, 
 								t.dateDebutReelle, t.dateFinReelle, temp.tempsConsomme, temp.cout, ROUND((temp.tempsConsomme/t.tempsPrevu)*100, 1) as ratio,
@@ -37,7 +46,7 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 							   ORDER BY t.codeTache");
 	$reqTaches->bindParam(1, $_GET["idProjet"]);	
 	$reqTaches->execute();
-	$resultTaches = $reqTaches->fetchAll();
+	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
 	$result = array("projet" => json_encode($resultProjet), "taches" => json_encode($resultTaches));
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {

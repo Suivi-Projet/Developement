@@ -232,41 +232,41 @@ if(isset($_POST["data"])){
 		
 		case 'projets':
 			$req = $db->query("SELECT * FROM projets");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		case 'familles':
 			$req = $db->query("SELECT * FROM familletache");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		case 'livrables':
 			$req = $db->query("SELECT * FROM livrables");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		case 'categs':
 			$req = $db->query("SELECT * FROM categoriepersonnel");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		case 'ressources':
 			$req = $db->query("SELECT * FROM ressources");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 
 		case 'parametres':
 			$req = $db->query("SELECT * FROM parametres");
-			$result = $req->fetchAll();
+			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
