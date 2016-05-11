@@ -97,7 +97,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 		
-		case 'projet':
+		case 'projets':
 			$req = $db->query("SELECT * FROM projets");
 
 			$result = $req->fetchAll();
@@ -106,7 +106,16 @@ if(isset($_POST["data"])){
 
 			break;
 
-		case 'categ':
+		case 'livrables':
+			$req = $db->query("SELECT * FROM livrables");
+
+			$result = $req->fetchAll();
+
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+			
+			break;
+
+		case 'categs':
 			$req = $db->query("SELECT * FROM categoriepersonnel");
 
 			$result = $req->fetchAll();
