@@ -21,24 +21,21 @@
     </ul>
 </div>
 <div>
-<<<<<<< HEAD
 
 </div>
-=======
->>>>>>> b896114fa69787d5c9b33ca71450f80f61cfa76d
-    <script>
-        $(function() {
-            $( "#tabs" ).tabs({
-                beforeLoad: function( event, ui ) {
-                    ui.jqXHR.fail(function() {
-                        ui.main.html(
-                        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                        "If this wouldn't be a demo." );
-                        });
-                }
-            });
+<script>
+    $(function() {
+        $( "#tabs" ).tabs({
+            beforeLoad: function( event, ui ) {
+                ui.jqXHR.fail(function() {
+                    ui.main.html(
+                    "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                    "If this wouldn't be a demo." );
+                });
+            }
         });
-    </script>
-</div>
+    }
+    );
+</script>
 </body>
 </html>
