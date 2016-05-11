@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion projet</title>
+    <script src="js/jquery-2.2.3.min.js"></script>
+    <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css">
+</head>
+<body>
+<div id="tabs">
+    <ul>
+        <li><a href="vues/previsionnel.html">Prévisionnel</a></li>
+        <li><a href="vues/suivi.html">Suivi</a></li>
+        <li><a href="vues/rapport_mensuel.html">Rapport Mensuel</a></li>
+        <li><a href="vues/planning_prev.html">Planning Initial</a></li>
+        <li><a href="vues/planning_reel.html">Planning Réel</a></li>
+        <li><a href="vues/donnees_croisees.html">Données croisés</a></li>
+        <li><a href="vues/parametres.html">Paramètres</a></li>
+    </ul>
+</div>
+    <script>
+        $(function() {
+            $( "#tabs" ).tabs({
+                beforeLoad: function( event, ui ) {
+                    ui.jqXHR.fail(function() {
+                        ui.main.html(
+                        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                        "If this wouldn't be a demo." );
+                        });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
