@@ -7,9 +7,7 @@
 					<td style="text-align:center">Nom du projet</td>
 				</tr>
 			</thead>
-			<tbody>
-				<tr id="nomProjet">
-				</tr>
+			<tbody id="nomProjet">
 			</tbody>
 			<tfoot>
 				<tr>
@@ -151,6 +149,18 @@
 		$("#nomCategorie").empty();
 		$("#nomRessource").empty();
 		$("#parametre").val();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projet", function(data){
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></td>");
+			});
+		});
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=categ", function(data){
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#nomCategorie").append("<tr><td>" + currentValue.libelleCategorie + "</td></td>");
+			});
+		});
 	}
 
 	majData();

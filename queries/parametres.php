@@ -98,15 +98,21 @@ if(isset($_POST["data"])){
 			break;
 		
 		case 'projet':
-			$req = $db->prepare("SELECT * FROM projets");
-			$done = $req->execute();
-			
-			if($done) {
-				$result = $req->fetch(PDO::FETCH_ASSOC);
-				echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
-			} else {
-				echo json_encode(['codeRetour' => 500, 'result' => "Impossible de récupérer les différents projets. Veuillez réessayer dans quelques instants."]);
-			}
+			$req = $db->query("SELECT * FROM projets");
+
+			$result = $req->fetchAll();
+
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+
+			break;
+
+		case 'categ':
+			$req = $db->query("SELECT * FROM categoriepersonnel");
+
+			$result = $req->fetchAll();
+
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+
 			break;
 
 		default:
