@@ -7,7 +7,7 @@ if(isset($_POST["data"])){
 	$json = json_decode($_POST["data"]);
 
 	switch ($json['object']) {
-		case 'taches':
+		case 'tache':
 		if(!isset($json['codeTache'])) {
 			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, dateDebutReelle, dateFinReelle, coutPrevu, codeLivrable, codeProjet) 
 						  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -53,7 +53,7 @@ if(isset($_POST["data"])){
 
 		case 'projet':
 			if(!isset($json["codeProjet"])) {
-				$req = $db->prepare("INSERT INTO taches (libelleProjet) 
+				$req = $db->prepare("INSERT INTO projets (libelleProjet) 
 						  VALUES (?)");
 
 				$req->bindParam(1, $json["libelleProjet"]);
@@ -65,7 +65,7 @@ if(isset($_POST["data"])){
 				else echo json_encode(['codeRetour' => 500, 'result' => "La création du projet a échouée. Veuillez réessayer dans quelques instants."]);
 
 			} else {
-				$req = $db ->prepare("UPDATE projet SET libelleProjet = ? WHERE codeProjet = ?");
+				$req = $db ->prepare("UPDATE projets SET libelleProjet = ? WHERE codeProjet = ?");
 				$req->bindParam(1, $json["libelleProjet"]);
 				$req->bindParam(2, $json["codeProjet"]);
 
@@ -76,6 +76,139 @@ if(isset($_POST["data"])){
 				else echo json_encode(['codeRetour' => 500, 'result' => "La modification du projet a échouée. Veuillez réessayer dans quelques instants."]);
 			}
 			break;
+
+		case 'familles':
+			if(!isset($json['codeFamille'])) {
+				$req = $db->prepare("INSERT INTO familletache (libelleFamille) 
+							  VALUES (?)");
+
+				$req->bindParam(1, $json["libelleFamille"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La création de la famille de tâche a échouée. Veuillez réessayer dans quelques instants."]);
+
+			} else {
+				$req = $db->prepare("UPDATE familletache 
+									 SET libelleFamille = ? WHERE codeFamille = ?");
+
+				$req->bindParam(1, $json["libelleFamille"]);
+				$req->bindParam(2, $json["codeFamille"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La modification de la famille de tâche a échouée. Veuillez réessayer dans quelques instants."]);
+			}
+			break;
+
+		case 'livrables':
+			if(!isset($json['codeLivrable'])) {
+				$req = $db->prepare("INSERT INTO livrables (libelleLivrable) 
+							  VALUES (?)");
+
+				$req->bindParam(1, $json["libelleLivrable"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La création du livrable a échouée. Veuillez réessayer dans quelques instants."]);
+
+			} else {
+				$req = $db->prepare("UPDATE familletache 
+									 SET libelleLivrable = ? WHERE codeLivrable = ?");
+
+				$req->bindParam(1, $json["libelleLivrable"]);
+				$req->bindParam(2, $json["codeLivrable"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La modification du livrable a échouée. Veuillez réessayer dans quelques instants."]);
+			}
+			break;
+
+		case 'categs':
+			if(!isset($json['codeCategorie'])) {
+				$req = $db->prepare("INSERT INTO categoriepersonnel (libelleCategorie) 
+							  VALUES (?)");
+
+				$req->bindParam(1, $json["libelleCategorie"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La création de la catégorie a échouée. Veuillez réessayer dans quelques instants."]);
+
+			} else {
+				$req = $db->prepare("UPDATE categoriepersonnel 
+									 SET libelleCategorie = ? WHERE codeCategorie = ?");
+
+				$req->bindParam(1, $json["libelleCategorie"]);
+				$req->bindParam(2, $json["codeCategorie"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La modification de la catégorie a échouée. Veuillez réessayer dans quelques instants."]);
+			}
+			break;
+
+		case 'ressources':
+			if(!isset($json['codeRessource'])) {
+				$req = $db->prepare("INSERT INTO ressources (nomRessource, tauxHoraire, codeCatPerso) 
+							  VALUES (?, ?, ?)");
+
+				$req->bindParam(1, $json["nomRessource"]);
+				$req->bindParam(2, $json["tauxHoraire"]);
+				$req->bindParam(3, $json["codeCatPerso"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La création de la ressource a échouée. Veuillez réessayer dans quelques instants."]);
+
+			} else {
+				$req = $db->prepare("UPDATE ressources 
+									 SET nomRessource = ?, tauxHoraire = ?, codeCatPerso = ? WHERE codeRessource = ?");
+
+				$req->bindParam(1, $json["nomRessource"]);
+				$req->bindParam(2, $json["tauxHoraire"]);
+				$req->bindParam(3, $json["codeCatPerso"]);
+				$req->bindParam(4, $json["codeRessource"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La modification de la ressource a échouée. Veuillez réessayer dans quelques instants."]);
+			}
+			break;
+
+		case 'parametres':
+			$reqCount = $db->query("SELECT COUNT(*) FROM parametres");
+			$count = $req->fetch();
+			if($count != 0) {
+				$clear = $db->query("TRUNCATE TABLE parametres");
+				$clear->execute();
+			}
+			$req = $db->prepare("INSERT INTO parametres (dureeLegale)
+									 VALUES (?)");
+				$req->bindParam(1, $json["dureeLegale"]);
+
+				$done = $req->execute();
+
+				if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La création de la durée légale de trvail par jour a échouée. Veuillez réessayer dans quelques instants."]);
 
 		default:
 			# code...
@@ -99,29 +232,43 @@ if(isset($_POST["data"])){
 		
 		case 'projets':
 			$req = $db->query("SELECT * FROM projets");
-
 			$result = $req->fetchAll();
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+			break;
 
+		case 'familles':
+			$req = $db->query("SELECT * FROM familletache");
+			$result = $req->fetchAll();
+
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		case 'livrables':
 			$req = $db->query("SELECT * FROM livrables");
-
 			$result = $req->fetchAll();
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
-			
 			break;
 
 		case 'categs':
 			$req = $db->query("SELECT * FROM categoriepersonnel");
+			$result = $req->fetchAll();
 
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+			break;
+
+		case 'ressources':
+			$req = $db->query("SELECT * FROM ressources");
 			$result = $req->fetchAll();
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 
+		case 'parametres':
+			$req = $db->query("SELECT * FROM parametres");
+			$result = $req->fetchAll();
+
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
 		default:
