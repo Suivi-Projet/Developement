@@ -100,7 +100,7 @@ if(isset($_POST["data"])){
 		case 'projet':
 			$req = $db->prepare("SELECT * FROM projets");
 			$done = $req->execute();
-
+			
 			if($done) {
 				$result = $req->fetch(PDO::FETCH_ASSOC);
 				echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
