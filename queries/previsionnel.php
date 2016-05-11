@@ -3,18 +3,23 @@
 include 'config.php';
 
 if(isset(htmlspecialchars($_GET["idProjet"])) && !is_nan($_GET["idProjet"])) {
-	$req = $db->prepare("SELECT temp.codeTache, temp.libelleTache, temp.codeFamille, temp.dateDebutPrevue, temp.dateFinPrevue, temp.tempsPrevu,
-	                            temp.coutPrevu, temp.dateDebutReelle, temp.dateFinReelle, temp.tempsConsomme, SUM(cout) as coutTotal , temp.avancement 
-	                            FROM (
-								SELECT t.*, conso.codeRessource, SUM(tempsPassee) AS tempsConsomme, tauxHoraire, SUM(tempsPassee)*tauxHoraire as cout 
-								FROM taches as t, conso 
-								INNER JOIN ressources ON (ressources.codeRessource = conso.codeRessource) 
-								WHERE codeProjet = ? 
-								GROUP BY conso.codeRessource
-								) AS temp");
-	$req->bindParam(1, htmlspecialchars($_GET["idProjet"]);	
 
-	$result = $req->fetchAll();
+	$reqTaches = $db->prepare("SELECT t.codeTache, t.libelleTache, f.libelleFamille, t.dateDebutPrevue, t.dateFinPrevue, t.tempsPrevu, 
+								t.dateDebutReelle, t.dateFinReelle, temp.tempsConsomme, temp.cout, ROUND((temp.tempsConsomme/t.tempsPrevu)*100, 1) as ratio,
+								t.avancement, t.tempsPrevu-temp.tempsConsomme as tempsRestant
+						 FROM taches as t, familletache as f,
+						 (
+							SELECT c.codeTache, SUM(c.tempsPassee) as tempsConsomme, SUM(c.tempsPassee*r.tauxHoraire) as cout
+							FROM conso as c, ressources as r
+							WHERE c.codeRessource = r.codeRessource
+							GROUP BY c.codeTache
+						 ) AS temp
+						 WHERE t.codeTache = temp.codeTache    
+						 AND f.codeFamille = t.codeFamille
+						 AND t.codeProjet = ?");
+	$reqTaches->bindParam(1, htmlspecialchars($_GET["idProjet"]);	
+
+	$resultTaches = $reqTaches->fetchAll();
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
