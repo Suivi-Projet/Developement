@@ -88,7 +88,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3"><button style="width:100%;" onclick="handleClickRessource()">Ajouter</button></td>
+					<td colspan="3"><button style="width:100%;" id="addUser">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -110,13 +110,103 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickParametre()">Mettre à Jour</button></td>
+					<td><button style="width:100%;" onclick="handleClickParametre()">Mettre à  Jour</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
 </div>
+<div id="dialog-form-user" title="Ajouter une ressource">
+    <form>
+        <div><label for="Nom">Nom</label>
+        <input type="text" id="nomRes"></div>
+        <div><label for="Categorie">Catégorie</label>
+        <select></select></div>
+        <div><label for="Cout Horaire">Coût Horaire</label>
+        <input type="number" id="coutRes"></div>
+        <input type="submit" tabindex="-1">
+    </form>
+</div>
 <script>
+    $(function() {
+        var dialogUser, formUser,
+
+
+        nomRes = $( "#nomRes" ),
+        coutRes = $("#coutRes"),
+        allFields = $( [] ).add( nomRes).add(coutRes),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+                    .text( t )
+                    .addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function checkRegexp( o, regexp, n ) {
+            if ( !( regexp.test( o.val() ) ) ) {
+                o.addClass( "ui-state-error" );
+                updateTips( n );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addUser() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomRes, "username", 3, 16 );
+
+            valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+
+            if ( valid ) {
+                $( );
+            }
+            return valid;
+        }
+
+        dialogUser = $( "#dialog-form-user" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addUser,
+                Cancel: function() {
+                    dialogUser.dialog( "close" );
+                }
+            },
+            close: function() {
+                formUser[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formUser = dialogUser.find( "formUser" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addUser();
+        });
+
+        $( "#addUser" ).button().on( "click", function() {
+            dialogUser.dialog( "open" );
+        });
+    });
 	function handleClickProjet(){
 		alert("projet");
 	}
@@ -130,7 +220,7 @@
 	}
 
 	function handleClickCategorie(){
-		alert("catégorie");
+		alert("catÃ©gorie");
 	}
 
 	function handleClickRessource(){

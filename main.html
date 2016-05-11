@@ -20,18 +20,19 @@
         <li><a href="vues/parametres.html">Paramètres</a></li>
     </ul>
 </div>
-    <script>
-        $(function() {
-            $( "#tabs" ).tabs({
-                beforeLoad: function( event, ui ) {
-                    ui.jqXHR.fail(function() {
-                        ui.main.html(
-                        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                        "If this wouldn't be a demo." );
-                        });
-                }
-            });
+<script>
+    $(function() {
+        $( "#tabs" ).tabs({
+            beforeLoad: function( event, ui ) {
+                ui.jqXHR.fail(function() {
+                    ui.main.html(
+                    "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                    "If this wouldn't be a demo." );
+                });
+            }
         });
-    </script>
+    }
+    );
+</script>
 </body>
 </html>
