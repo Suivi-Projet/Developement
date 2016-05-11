@@ -2,7 +2,7 @@
 
 include 'config.php';
 
-if(isset($_POST["data"]){
+if(isset($_POST["data"])){
 
 	$json = json_decode($_POST["data"]);
 
@@ -24,7 +24,7 @@ if(isset($_POST["data"]){
 
 			$done = $req->execute();
 
-			if(done)
+			if($done)
 				echo json_encode(['codeRetour' => 200, 'result' => null]);
 			else echo json_encode(['codeRetour' => 500, 'result' => "La création de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 
@@ -45,7 +45,7 @@ if(isset($_POST["data"]){
 
 			$done = $req->execute();
 
-			if(done)
+			if($done)
 				echo json_encode(['codeRetour' => 200, 'result' => null]);
 			else echo json_encode(['codeRetour' => 500, 'result' => "La modification de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 		}
@@ -60,7 +60,7 @@ if(isset($_POST["data"]){
 
 				$done = $req->execute();
 
-				if(done)
+				if($done)
 					echo json_encode(['codeRetour' => 200, 'result' => null]);
 				else echo json_encode(['codeRetour' => 500, 'result' => "La création du projet a échouée. Veuillez réessayer dans quelques instants."]);
 
@@ -71,7 +71,7 @@ if(isset($_POST["data"]){
 
 				$done = $req->execute();
 
-				if(done)
+				if($done)
 					echo json_encode(['codeRetour' => 200, 'result' => null]);
 				else echo json_encode(['codeRetour' => 500, 'result' => "La modification du projet a échouée. Veuillez réessayer dans quelques instants."]);
 			}
@@ -89,7 +89,7 @@ if(isset($_POST["data"]){
 			$req->bindParam(1, htmlspecialchars($_GET["codeProjet"]));
 			$done = $req->execute();
 
-			if(done) {
+			if($done) {
 				$result = $req->fetch(PDO::FETCH_ASSOC);
 				echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			} else {
@@ -98,10 +98,10 @@ if(isset($_POST["data"]){
 			break;
 		
 		case 'projet':
-			$req = $db->prepare("SELECT * FROM projet");
+			$req = $db->prepare("SELECT * FROM projets");
 			$done = $req->execute();
 
-			if(done) {
+			if($done) {
 				$result = $req->fetch(PDO::FETCH_ASSOC);
 				echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			} else {
