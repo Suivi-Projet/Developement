@@ -552,10 +552,6 @@
         });
     });
 
-	function handleClickRessource(){
-		alert("ressource");
-	}
-
 	function handleClickParametre(){
 		$.ajax
 		({
@@ -583,21 +579,21 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomProjet").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleProjet + "</td></td>");
+				$("#nomProjet").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleProjet + "</td></tr>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomLivrable").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleLivrable + "</td></td>");
+				$("#nomLivrable").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleLivrable + "</td></tr>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomCategorie").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleCategorie + "</td></td>");
+				$("#nomCategorie").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleCategorie + "</td></tr>");
 				$("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
 			});
 		});
@@ -605,7 +601,7 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomFamille").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleFamille + "</td></td>");
+				$("#nomFamille").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleFamille + "</td></tr>");
 			});
 		});
 
@@ -613,6 +609,13 @@
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#parametre").val(currentValue.dureeLegale);
+			});
+		});
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#nomRessource").append("<tr><td style=\"text-align:center;\">" + currentValue.nomRessource + "</td><td style=\"text-align:center;\">" + currentValue.libelleCategorie + "</td><td style=\"text-align:center;\">" + currentValue.tauxHoraire + "</td></tr>");
 			});
 		});
 
