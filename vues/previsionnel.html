@@ -1,19 +1,23 @@
-<div>
-	<div>
-		<label>Projet :</label>
-		<select id="selectProject" onChange="majTaches()"></select>
+<div class="row-fluid">
+	<div class="span4">
+		<h3>Projet :</h3>
+		<select class="form-control" id="selectProject" onChange="majTaches()"></select>
 	</div>
-	<div>
+</div>
+<div class="row-fluid">
+	<div class="span11">
 		<fieldset>
 			<legend>Liste des tâches du projet</legend>
-			<table style="width:100%;">
-				<thead>
+			<table class="table table-bordered table-hover">
+				<thead class="btn-primary disabled">
 					<tr>
-						<td style="text-align:center;width:10%;">Réf. Tâche</td>
-						<td style="text-align:center;width:30%;">Libellé</td>
-						<td style="text-align:center;width:20%;">Famille</td>
-						<td style="text-align:center;width:20%;">Début Prévu</td>
-						<td style="text-align:center;width:20%;">Fin Prévue</td>
+						<td>Réf. Tâche</td>
+						<td>Libellé</td>
+						<td>Famille</td>
+						<td>Début Prévu</td>
+						<td>Fin Prévue</td>
+						<td>Temps prévu en h</td>
+						<td>Coût prévu €</td>
 					</tr>
 				</thead>
 				<tbody id="taches">
@@ -21,28 +25,62 @@
 			</table>
 		</fieldset>
 	</div>
-	<div>
+	<div class="span4">
 		<button id="addTache">Ajouter une Tâche</button>
 	</div>
 </div>
 <div id="dialog-form-tache" title="Ajouter une tache">
-    <form>
-        <div><label for="nom">Intitulé de la tâche</label>
-        <input type="text" id="nomTache"></div>
-        <div><label for="ref">Référence de la tâche</label>
-        <input type="text" id="refTache"></div>
-        <div><label for="famille">Famille de la tâche</label>
-        <select id="selectFamille"></select></div>
-        <div><label for="dateDebut">Date de début de la tâche</label>
-        <input type="text" id="startTache" class="datePicker"></div>
-        <div><label for="dateFin">Date de fin de la tâche</label>
-        <input type="text" id="endTache" class="datePicker"></div>
-        <div><label for="tpsTache">Temps prévu pour la tâche</label>
-        <input type="number" id="tempsTache"></div>
-        <div><label for="ctTache">Coût prévu pour la tâche</label>
-        <input type="number" id="coutTache"></div>
-        <div><label for="livTache">Livrable pour la tâche</label>
-        <select id="selectLivrable"><option value="0"> --- </option></select></div>
+    <form class="form-horizontal">
+		<div class="row-fluid">
+			<div class="form-group">
+				<div class="col-md-12">
+					<label class="control-label col-md-3" for="nom">Intitulé</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="text" id="nomTache">
+					</div>
+					<label class="control-label col-md-3" for="ref">Référence</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="text" id="refTache">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-12">
+					<label class="control-label col-md-3" for="famille">Famille</label>
+					<div class=" col-md-3">
+						<select class="form-control" id="selectFamille"></select>
+					</div>
+					<label class="control-label col-md-3" for="livTache">Livrable</label>
+					<div class=" col-md-3">
+						<select class="form-control" id="selectLivrable"><option value="0"> --- </option></select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-12">
+					<label class="control-label col-md-3" for="dateDebut">Date de début</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="text" id="startTache" class="datePicker">
+					</div>
+					<label class="control-label col-md-3" for="dateFin">Date de fin</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="text" id="endTache" class="datePicker">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-12">
+					<label class="control-label col-md-3" for="tpsTache">Temps prévu</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="number" id="tempsTache">
+					</div>
+					<label class="control-label col-md-3" for="ctTache">Coût prévu</label>
+					<div class=" col-md-3">
+						<input class="form-control" type="number" id="coutTache">
+					</div>
+				</div>
+			</div>
+		</div>
     </form>
 </div>
 <script>
@@ -107,8 +145,8 @@
 
         dialogTache = $( "#dialog-form-tache" ).dialog({
             autoOpen: false,
-            height: 300,
-            width: 350,
+            height: 350,
+            width: 795,
             modal: true,
             buttons: {
                 "Ajouter": addTache,
@@ -159,7 +197,7 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				var dateDebut = new Date(currentValue.dateDebutPrevue).getDate() + " " + months[new Date(currentValue.dateDebutPrevue).getMonth()] + " " + new Date(currentValue.dateDebutPrevue).getFullYear();
 				var dateFin = new Date(currentValue.dateFinPrevue).getDate() + " " + months[new Date(currentValue.dateFinPrevue).getMonth()] + " " + new Date(currentValue.dateFinPrevue).getFullYear();
-				$("#taches").append("<tr><td style='text-align:center;width:10%;'>" + currentValue.referenceTache + "</td><td style='text-align:center;width:30%;'>" + currentValue.libelleTache + "</td><td style='text-align:center;width:20%;'>" + currentValue.libelleFamille + "</td><td style='text-align:center;width:20%;'>" + dateDebut + "</td><td style='text-align:center;width:20%;'>" + dateFin + "</td></tr>");
+				$("#taches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
 			});
 		});
 	}
