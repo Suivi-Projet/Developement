@@ -9,18 +9,18 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	switch ($json['objet']) {
 		case 'tache':
 		if(!isset($json['codeTache'])) {
-			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, dateDebutReelle, dateFinReelle, coutPrevu, codeLivrable, codeProjet) 
+			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) 
 						  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			$req->bindParam(1, $json["libelleTache"]);
 			$req->bindParam(2, $json["codeFamille"]);
 			$req->bindParam(3, $json["dateDebutPrevue"]);
 			$req->bindParam(4, $json["dateFinPrevue"]);
-			$req->bindParam(5, $json["dateDebutReelle"]);
-			$req->bindParam(6, $json["dateFinReelle"]);
-			$req->bindParam(7, $json["coutPrevu"]);
-			$req->bindParam(8, $json["codeLivrable"]);
-			$req->bindParam(9, $json["codeProjet"]);
+			$req->bindParam(5, $json["codeProjet"]);
+			$req->bindParam(6, $json["refTache"]);
+			$req->bindParam(7, $json["tempsPrevu"]);
+			$req->bindParam(8, $json["coutPrevu"]);
+			$req->bindParam(9, $json["codeLivrable"]);
 
 			$done = $req->execute();
 

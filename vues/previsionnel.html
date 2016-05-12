@@ -1,0 +1,193 @@
+<div>
+	<div>
+		<label>Projet :</label>
+		<select id="selectProject" onChange="majTaches()"></select>
+	</div>
+	<div>
+		<fieldset>
+			<legend>Liste des tâches du projet</legend>
+			<table style="width:100%;">
+				<thead>
+					<tr>
+						<td style="text-align:center;width:10%;">Réf. Tâche</td>
+						<td style="text-align:center;width:30%;">Libellé</td>
+						<td style="text-align:center;width:20%;">Famille</td>
+						<td style="text-align:center;width:20%;">Début Prévu</td>
+						<td style="text-align:center;width:20%;">Fin Prévue</td>
+					</tr>
+				</thead>
+				<tbody id="taches">
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+	<div>
+		<button id="addTache">Ajouter une Tâche</button>
+	</div>
+</div>
+<div id="dialog-form-tache" title="Ajouter une tache">
+    <form>
+        <div><label for="nom">Intitulé de la tâche</label>
+        <input type="text" id="nomTache"></div>
+        <div><label for="ref">Référence de la tâche</label>
+        <input type="text" id="refTache"></div>
+        <div><label for="famille">Famille de la tâche</label>
+        <select id="selectFamille"></select></div>
+        <div><label for="dateDebut">Date de début de la tâche</label>
+        <input type="text" id="startTache" class="datePicker"></div>
+        <div><label for="dateFin">Date de fin de la tâche</label>
+        <input type="text" id="endTache" class="datePicker"></div>
+        <div><label for="tpsTache">Temps prévu pour la tâche</label>
+        <input type="number" id="tempsTache"></div>
+        <div><label for="ctTache">Coût prévu pour la tâche</label>
+        <input type="number" id="coutTache"></div>
+        <div><label for="livTache">Livrable pour la tâche</label>
+        <select id="selectLivrable"><option value="0"> --- </option></select></div>
+    </form>
+</div>
+<script>
+	$(function() {
+        var dialogTache, formTache,
+
+		nomTache = $( "#nomTache" ),
+        refTache = $("#refTache"),
+        dateDebut = $("#startTache"),
+        dateFin = $("#endTache"),
+        tpsPrevu = $("#tempsTache"),
+        ctPrevu = $("#coutTache"),
+        allFields = $( [] ).add(nomTache).add(refTache).add(dateDebut).add(dateFin).add(tpsPrevu).add(ctPrevu),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addTache() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomTache, "nomtache", 3, 255 ) && checkLength(refTache, "reftache", 2, 8) && checkLength(dateDebut, "dateDebut", 10, 10) && checkLength(dateFin, "dateFin", 10, 10) && checkLength(tpsPrevu, "tempsPrevu", 1, 10) && checkLength(ctPrevu, "coutPrevu", 1, 10);
+
+            if ( valid ) {
+            	var codeLivrable = $("#selectLivrable").val() == "0" ? null : "\"" + $("#selectLivrable").val() + "\"";
+				$.ajax({
+					type: "POST",
+					url: "http://localhost/Developement/queries/parametres.php",
+					dataType: 'json',
+					contentType:'application/json',
+					data: '{"objet" : "tache",	"libelleTache" : "'+$("#nomTache").val()+'","refTache" : "'+$("#refTache").val()+'","codeFamille" : "'+$("#selectFamille").val()+'","dateDebutPrevue" : "'+new Date($("#startTache").val()).getFullYear() + "-" + (new Date($("#startTache").val()).getMonth() + 1) + "-" + new Date($("#startTache").val()).getDate() +'","dateFinPrevue" : "'+new Date($("#endTache").val()).getFullYear() + "-" + (new Date($("#endTache").val()).getMonth() + 1) + "-" + new Date($("#endTache").val()).getDate()+'", "codeProjet" : "'+$("#selectProject").val()+'","tempsPrevu" : "' + $("#tempsTache").val() + '", "coutPrevu" : "' + $("#coutTache").val() + '", "codeLivrable" : ' + codeLivrable + ' }',
+					success : function(){
+						majProjects();
+						dialogTache.dialog("close");
+					},
+					error : function(){
+						alert("Y'a un souci")
+						dialogTache.dialog("close");
+					}
+				});
+            }
+            return valid;
+        }
+
+        dialogTache = $( "#dialog-form-tache" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addTache,
+                Cancel: function() {
+                    dialogTache.dialog( "close" );
+                }
+            },
+            close: function() {
+                formTache[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formTache = dialogTache.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addTache();
+        });
+
+        $( "#addTache" ).button().on( "click", function() {
+            dialogTache.dialog( "open" );
+        });
+    });
+</script>
+<script>
+	function majProjects() {
+		var selected = $("#selectProject").val();
+
+		$("#selectProject").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
+			});
+			$("#selectProject").val(selected);
+			majTaches();
+		});
+	}
+
+	function majTaches(){
+
+		$("#taches").empty();
+
+		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProject").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#taches").append("<tr><td style='text-align:center;width:10%;'>" + currentValue.referenceTache + "</td><td style='text-align:center;width:30%;'>" + currentValue.libelleTache + "</td><td style='text-align:center;width:20%;'>" + currentValue.libelleFamille + "</td><td style='text-align:center;width:20%;'>" + currentValue.dateDebutPrevue + "</td><td style='text-align:center;width:20%;'>" + currentValue.dateFinPrevue + "</td></tr>");
+			});
+		});
+	}
+
+	$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
+		if(jQuery.parseJSON(data.data) !== false)
+		jQuery.parseJSON(data.data).forEach(function (currentValue) {
+			$("#selectFamille").append("<option value=\"" + currentValue.codeFamille + "\">" + currentValue.libelleFamille + "</option>");
+		});
+	});
+
+	$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
+		if(jQuery.parseJSON(data.data) !== false)
+		jQuery.parseJSON(data.data).forEach(function (currentValue) {
+			$("#selectLivrable").append("<option value=\"" + currentValue.codeLivrable + "\">" + currentValue.libelleLivrable + "</option>");
+		});
+	});
+
+
+    $( ".datePicker" ).datepicker();
+
+    function razProjects() {
+		$("#selectProject").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
+			});
+			majTaches();
+		});
+    }
+
+	razProjects();
+</script>
