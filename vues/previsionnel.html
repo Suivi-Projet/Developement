@@ -150,12 +150,16 @@
 
 	function majTaches(){
 
+		var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
 		$("#taches").empty();
 
 		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProject").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#taches").append("<tr><td style='text-align:center;width:10%;'>" + currentValue.referenceTache + "</td><td style='text-align:center;width:30%;'>" + currentValue.libelleTache + "</td><td style='text-align:center;width:20%;'>" + currentValue.libelleFamille + "</td><td style='text-align:center;width:20%;'>" + currentValue.dateDebutPrevue + "</td><td style='text-align:center;width:20%;'>" + currentValue.dateFinPrevue + "</td></tr>");
+				var dateDebut = new Date(currentValue.dateDebutPrevue).getDate() + " " + months[new Date(currentValue.dateDebutPrevue).getMonth()] + " " + new Date(currentValue.dateDebutPrevue).getFullYear();
+				var dateFin = new Date(currentValue.dateFinPrevue).getDate() + " " + months[new Date(currentValue.dateFinPrevue).getMonth()] + " " + new Date(currentValue.dateFinPrevue).getFullYear();
+				$("#taches").append("<tr><td style='text-align:center;width:10%;'>" + currentValue.referenceTache + "</td><td style='text-align:center;width:30%;'>" + currentValue.libelleTache + "</td><td style='text-align:center;width:20%;'>" + currentValue.libelleFamille + "</td><td style='text-align:center;width:20%;'>" + dateDebut + "</td><td style='text-align:center;width:20%;'>" + dateFin + "</td></tr>");
 			});
 		});
 	}
