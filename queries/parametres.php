@@ -252,7 +252,8 @@ if(isset($_POST["data"])){
 			break;
 
 		case 'categs':
-			$req = $db->query("SELECT * FROM categoriepersonnel");
+			$req = $db->prepare("SELECT * FROM categoriepersonnel");
+			$req->execute();
 			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);

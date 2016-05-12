@@ -121,7 +121,7 @@
         <div><label for="Nom">Nom</label>
         <input type="text" id="nomRes"></div>
         <div><label for="Categorie">Catégorie</label>
-        <select></select></div>
+        <select id="selectCateg"></select></div>
         <div><label for="Cout Horaire">Coût Horaire</label>
         <input type="number" id="coutRes" min="0"></div>
         <input type="submit" tabindex="-1">
@@ -243,21 +243,22 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></td>");
+				$("#nomProjet").append("<tr><td style='text-align:center'>" + currentValue.libelleProjet + "</td></td>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomLivrable").append("<tr><td>" + currentValue.libelleLivrable + "</td></td>");
+				$("#nomLivrable").append("<tr><td style='text-align:center'>" + currentValue.libelleLivrable + "</td></td>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomCategorie").append("<tr><td>" + currentValue.libelleCategorie + "</td></td>");
+				$("#nomCategorie").append("<tr><td style='text-align:center;'>" + currentValue.libelleCategorie + "</td></td>");
+				$("#selectCateg").append("<option value='" + currentValue.codeCategorie + "'>" + currentValue.libelleCategorie + "</option>");
 			});
 		});
 	}
