@@ -1,8 +1,34 @@
 <div>
-	<label>Projet :</label>
+	<div><label for="projet">Projet :</label>
 	<select id="selectProjet" onChange="majTaches()">
-	</select>
-	<button id="addSaisie">Saisie</button>
+	</select></div>
+    <div>
+        <div>
+            <fieldset>
+                <legend>Rappel Projet</legend>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>nombre de tâches</td>
+                            <td id="nbTask">9</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>dépassements de charges</td>
+                            <td id="upperThanInitial">5</td>
+                            <td id="percentUpper">56%</td>
+                        </tr>
+                        <tr>
+                            <td>retards</td>
+                            <td id="late">7</td>
+                            <td id="percentLate">78%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+	<div><button id="addSaisie">Saisie</button></div>
 </div>
 <div id="dialog-form-saisie" title="Saisir un temps de travail">
     <form>
@@ -113,6 +139,7 @@
 					$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
 				});
                 majTaches();
+                majRecapProj();
 			});
 		});
 	}
@@ -122,13 +149,29 @@
 	function majTaches(){
 		$("#selectTache").empty();
 
-        console.log($("#selectProject").val());
-
-		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProject").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.libelleTache + "</option>");
 			});
 		});
 	}
+
+    function majRecapProj(){
+        $("#nbTask").empty();
+        $("#upperThanInitial").empty();
+        $("#percentUpper").empty();
+        $("#late").empty();
+        $("#percentLate").empty();
+
+        $.getJSON("http://localhost/Developement/queries/suivi.php?idProjet=" + $("#selectProjet").val(), function(data){
+            if(jQuery.parseJSON(data.data) !== false) {
+                $("#nbTask").append(jQuery.parseJSON(data.data).nbTaches);
+                $("#upperThanInitial").append(jQuery.parseJSON(data.data).nbDepassement);
+                $("#late").append(jQuery.parseJSON(data.data).nbLate);
+                $("#percentUpper").append((jQuery.parseJSON(data.data).nbDepassement / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
+                $("#percentLate").append((jQuery.parseJSON(data.data).nbLate / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
+            }
+        });
+    }
 </script>

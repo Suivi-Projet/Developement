@@ -9,8 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	switch ($json['objet']) {
 		case 'tache':
 		if(!isset($json['codeTache'])) {
-			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) 
-						  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			$req->bindParam(1, $json["libelleTache"]);
 			$req->bindParam(2, $json["codeFamille"]);
