@@ -1,118 +1,128 @@
-<div>
-	<fieldset>
+<div class="row-fluid">
+	<div class="span4">
+    <fieldset>
 		<legend>Projets</legend>
-		<table style="width:100%;">
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
 				<tr>
-					<td style="text-align:center">Nom du projet</td>
+					<td >Nom du projet</td>
 				</tr>
 			</thead>
 			<tbody id="nomProjet">
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" id="addProjet">Ajouter</button></td>
+					<td><button id="addProjet"><i class="icon-plus" ></i> Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
+    </div>
+    <div class="span4">
 	<fieldset>
 		<legend>Familles</legend>
-		<table style="width:100%;">
-			<thead>
-				<tr>
-					<td style="text-align:center">Intitulé de la famille de tâches</td>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
+				<tr >
+					<td>Intitulé de la famille de tâches</td>
 				</tr>
 			</thead>
 			<tbody id="nomFamille">
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" id="addFamille">Ajouter</button></td>
+					<td><button id="addFamille"><i class="icon-plus" ></i>Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
+    </div>
+    <div class="span4">
 	<fieldset>
 		<legend>Livrables</legend>
-		<table style="width:100%;">
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
 				<tr>
-					<td style="text-align:center">Intitulé du livrable</td>
+					<td>Intitulé du livrable</td>
 				</tr>
 			</thead>
 			<tbody id="nomLivrable">
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" id="addLivrable">Ajouter</button></td>
+					<td><button id="addLivrable"><i class="icon-plus" ></i>Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
+    </div>
 </div>
-<div>
+<div class="row-fluid">
+    <div class="span4">
 	<fieldset>
 		<legend>Catégories</legend>
-		<table style="width:100%;">
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
 				<tr>
-					<td style="text-align:center">Intitulé de la catégorie</td>
+					<td >Intitulé de la catégorie</td>
 				</tr>
 			</thead>
 			<tbody id="nomCategorie">
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" id="addCategorie">Ajouter</button></td>
+					<td><button id="addCategorie"><i class="icon-plus" ></i>Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
+    </div>
+    <div class="span4">
 	<fieldset>
 		<legend>Ressources</legend>
-		<table style="width:100%;">
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
 				<tr>
-					<td style="text-align:center;width:30%;">Nom</td>
-					<td style="text-align:center;width:30%;">Catégorie</td>
-					<td style="text-align:center;width:30%;">Coût/H</td>
+					<td >Nom</td>
+					<td >Catégorie</td>
+					<td >Coût/H</td>
 				</tr>
 			</thead>
 			<tbody id="nomRessource">
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3"><button style="width:100%;" id="addUser">Ajouter</button></td>
+					<td ><button id="addUser"><i class="icon-plus" ></i>Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
-</div>
-<div>
+    </div>
+    <div class="span4">
 	<fieldset>
 		<legend>Paramètres</legend>
-		<table style="width:100%;">
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="btn-primary disabled">
 				<tr>
-					<td style="text-align:center">Quota heures/J</td>
+					<td>Quota heures/J</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td style="text-align:center"><input type="number" name="quota" id="parametre" style="text-align:center;"/></td>
+					<td><input type="number" name="quota" id="parametre" style="text-align:center;"/></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickParametre()">Mettre à Jour</button></td>
+					<td><button id="addQuota"><i class="icon-plus" ></i>Mettre à Jour</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
+    </div>
 </div>
 <div id="dialog-form-user" title="Ajouter une ressource">
-    <form>
+    <form >
         <div><label for="Nom">Nom</label>
         <input type="text" id="nomRes"></div>
         <div><label for="Categorie">Catégorie</label>
@@ -191,6 +201,7 @@
 
             valid = valid && checkLength( nomRes, "username", 3, 255 );
 			valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Votre nom peut contenir les caractères suivants : a-z, 0-9, underscores, espaces et doit commencer par une lettre." );
+            valid = valid && checkLength( categ, "username", 1, 5 );
 
             if ( valid ) {
 				$.ajax({
@@ -547,20 +558,21 @@
         });
     });
 
-	function handleClickParametre(){
-		console.log($("#parametre").val());
-		$.ajax
-		({
-			type: "POST",
-			url: "http://localhost/Developement/queries/parametres.php",
-			dataType: 'json',
-			contentType:'application/json',
-			data: '{"objet": "parametre","dureeLegale": "' + $("#parametre").val() + '"}',
-			success: function () {
-			    majData();
-			}
-		})
-	}
+	$ (function (){
+        $( "#addQuota" ).button().on( "click", function() {
+            $.ajax
+            ({
+                type: "POST",
+                url: "http://localhost/Developement/queries/parametres.php",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: '{"objet": "parametre","dureeLegale": "' + $("#parametre").val() + '"}',
+                success: function () {
+                    majData();
+                }
+            })
+        });
+	})
 </script>
 <script>
 	function majData(){
@@ -575,21 +587,21 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomProjet").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleProjet + "</td></tr>");
+				$("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></tr>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomLivrable").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleLivrable + "</td></tr>");
+				$("#nomLivrable").append("<tr><td >" + currentValue.libelleLivrable + "</td></tr>");
 			});
 		});
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomCategorie").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleCategorie + "</td></tr>");
+				$("#nomCategorie").append("<tr><td >" + currentValue.libelleCategorie + "</td></tr>");
 				$("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
 			});
 		});
@@ -597,7 +609,7 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomFamille").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleFamille + "</td></tr>");
+				$("#nomFamille").append("<tr><td >" + currentValue.libelleFamille + "</td></tr>");
 			});
 		});
 
@@ -611,7 +623,7 @@
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomRessource").append("<tr><td style=\"text-align:center;\">" + currentValue.nomRessource + "</td><td style=\"text-align:center;\">" + currentValue.libelleCategorie + "</td><td style=\"text-align:center;\">" + currentValue.tauxHoraire + "</td></tr>");
+				$("#nomRessource").append("<tr><td> " + currentValue.nomRessource + "</td><td>" + currentValue.libelleCategorie + "</td><td> " + currentValue.tauxHoraire + "</td></tr>");
 			});
 		});
 
