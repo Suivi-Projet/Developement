@@ -2,10 +2,10 @@
 
 include 'config.php';
 
-if($_SERVER['REQUEST_METHOD'] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$json = json_decode(file_get_contents('php://input'), true);
 
-	$req = $db->prepare(INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?));
+	$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
 	$req->bindParam(1, $json["codeRessource"]);
 	$req->bindParam(2, $json["codeTache"]);
 	$req->bindParam(3, date("Y-m-d"));
@@ -26,30 +26,33 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
 			$reqExistDateDeb->execute();
 			$resultDateDeb = $reqExistDateDeb->fetchAll(PDO::FETCH_ASSOC);
 
-			if(is_null(resultDateDeb["dateDebutReelle"])) {
+			if(is_null($resultDateDeb["dateDebutReelle"])) {
 				$updTache = $db->prepare("UPDATE taches SET dateDebutReelle = ? WHERE codeTache = ?");
 				$updTache->bindParam(1, date("Y-m-d"));
 				$updTache->bindParam(2, $json["codeTache"]);
 				$doneDateDeb = $updTache->execute();
 
 				if(!$doneDateDeb)
-					echo json_encode(['codeRetour' => 500, 'result' => "La mis à jour de la date de début réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
+					echo json_encode(['codeRetour' => 500, 'result' => "La mise à jour de la date de début réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 
 			}
 
 			if($json["avancement"] == 100) {
-				$updTacheEnd = $db->prepare("UPDATE taches SET dateeFinReelle = ? WHERE codeTache = ?");
+				$updTacheEnd = $db->prepare("UPDATE taches SET dateFinReelle = ? WHERE codeTache = ?");
 				$updTacheEnd->bindParam(1, date("Y-m-d"));
 				$updTacheEnd->bindParam(2, $json["codeTache"]);
 				$doneUpTacheEnd = $updTacheEnd->execute();
-				if($doneUpTacheEnd)
-					echo json_encode(['codeRetour' => 200, 'result' => null]);
-				else echo json_encode(['codeRetour' => 500, 'result' => "La mise à jour de la date de fin réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
+				if(!$doneUpTacheEnd)
+					echo json_encode(['codeRetour' => 500, 'result' => "La mise à jour de la date de fin réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 			}
+
+
+			echo json_encode(['codeRetour' => 200, 'result' => null]);
 		}
 		
 	}
 } else {
 
 }
+
 ?>
