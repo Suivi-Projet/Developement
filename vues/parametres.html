@@ -124,7 +124,6 @@
         <select id="selectCateg"></select></div>
         <div><label for="Cout Horaire">Coût Horaire</label>
         <input type="number" id="coutRes" min="0"></div>
-        <input type="submit" tabindex="-1">
     </form>
 </div>
 <script>
@@ -133,6 +132,7 @@
 
 		nomRes = $( "#nomRes" ),
         coutRes = $("#coutRes"),
+		categ = $("#selectCateg"),
         allFields = $( [] ).add( nomRes).add(coutRes),
         tips = $( ".validateTips" );
 
@@ -174,7 +174,19 @@
 			valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
 
             if ( valid ) {
-                $(  );
+				$.ajax({
+					type: "POST",
+					url: "http://localhost/Developement/queries/parametres.php?ressource",
+					data: {
+						nomRessource : nomRes,
+						tauxHoraire : coutRes,
+						codeCatPerso : categ
+					},
+					dataType: JSON,
+					success : function(){
+						majData
+					}
+				});
             }
             return valid;
         }
