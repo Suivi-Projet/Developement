@@ -21,14 +21,28 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 	$reqProjet->execute();
 	$resultProjet = $reqProjet->fetchAll(PDO::FETCH_ASSOC);
 
+	$nbr_non_respect_charge = 0;
+	$nbr_retard = 0;
 	for($i = 0; $i < count($resultProjet); $i++) {
 		$resultProjet[$i]["respectCharge"] = $resultProjet[$i]["montantPrevu"] >= $resultProjet[$i]["montantReel"] ? true : false;
+		if(!$resultProjet[$i]["respectCharge"]) {
+			$nbr_non_respect_charge++;
+		}
 		if($resultProjet[$i]["dateFinReelle"] == '' && new DateTime("now") > new DateTime($resultProjet[$i]["dateFinPrevue"]) == 1) {
 			$resultProjet[$i]["retard"] = true;
+			$nbr_retard++;
 		} else {
 			$resultProjet[$i]["retard"] = $resultProjet[$i]["dateFinReelle"] > $resultProjet[$i]["dateFinPrevue"] ? true : false;
+			if($resultProjet[$i]["retard"]) {
+				$nbr_retard++;
+			}
 		}
 	}
+
+	$resultRecap = array();
+	$resultRecap["nbrTaches"] = count($resultProjet) + 1;
+	$resultRecap["nbrDepassementCharge"] = $nbr_non_respect_charge;
+	$resultRecap["nbrRetard"] = $nbr_retard;
 
 	$reqTaches = $db->prepare("SELECT t.codeTache, t.libelleTache, f.libelleFamille, t.dateDebutPrevue, t.dateFinPrevue, t.tempsPrevu, 
 								t.dateDebutReelle, t.dateFinReelle, temp.tempsConsomme, temp.cout, ROUND((temp.tempsConsomme/t.tempsPrevu)*100, 1) as ratio,
@@ -47,7 +61,7 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 	$reqTaches->bindParam(1, $_GET["idProjet"]);	
 	$reqTaches->execute();
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
-	$result = array("projet" => json_encode($resultProjet), "taches" => json_encode($resultTaches));
+	$result = array("projet" => json_encode($resultProjet), "taches" => json_encode($resultTaches), "recapitulatif" => $resultRecap);
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => 'Le paramètre passé n\'est pas valide.']);
