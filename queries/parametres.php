@@ -195,7 +195,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
 		case 'parametre':
 			$reqCount = $db->query("SELECT COUNT(*) FROM parametres");
-			$count = $req->fetch();
+			$count = $reqCount->fetch();
 			if($count != 0) {
 				$clear = $db->query("TRUNCATE TABLE parametres");
 				$clear->execute();
