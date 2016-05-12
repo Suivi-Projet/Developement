@@ -589,42 +589,37 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></tr>");
 			});
-		});
-
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomLivrable").append("<tr><td >" + currentValue.libelleLivrable + "</td></tr>");
-			});
-		});
-
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomCategorie").append("<tr><td >" + currentValue.libelleCategorie + "</td></tr>");
-				$("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
-			});
-		});
-
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomFamille").append("<tr><td >" + currentValue.libelleFamille + "</td></tr>");
-			});
-		});
-
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#parametre").val(currentValue.dureeLegale);
-			});
-		});
-
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomRessource").append("<tr><td> " + currentValue.nomRessource + "</td><td>" + currentValue.libelleCategorie + "</td><td> " + currentValue.tauxHoraire + "</td></tr>");
-			});
+            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
+                if(jQuery.parseJSON(data.data) !== false)
+                jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                    $("#nomLivrable").append("<tr><td >" + currentValue.libelleLivrable + "</td></tr>");
+                });
+                $.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
+                    if(jQuery.parseJSON(data.data) !== false)
+                    jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                        $("#nomCategorie").append("<tr><td >" + currentValue.libelleCategorie + "</td></tr>");
+                        $("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
+                    });
+                    $.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
+                        if(jQuery.parseJSON(data.data) !== false)
+                        jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                            $("#nomFamille").append("<tr><td >" + currentValue.libelleFamille + "</td></tr>");
+                        });
+                        $.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
+                            if(jQuery.parseJSON(data.data) !== false)
+                            jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                                $("#parametre").val(currentValue.dureeLegale);
+                            });
+                            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+                                if(jQuery.parseJSON(data.data) !== false)
+                                jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                                    $("#nomRessource").append("<tr><td> " + currentValue.nomRessource + "</td><td>" + currentValue.libelleCategorie + "</td><td> " + currentValue.tauxHoraire + "</td></tr>");
+                                });
+                            });
+                        });
+                    });
+                });
+            });
 		});
 
 	}
