@@ -131,16 +131,15 @@
     $(function() {
         var dialogUser, formUser,
 
-
-        nomRes = $( "#nomRes" ),
+		nomRes = $( "#nomRes" ),
         coutRes = $("#coutRes"),
         allFields = $( [] ).add( nomRes).add(coutRes),
         tips = $( ".validateTips" );
 
         function updateTips( t ) {
             tips
-                    .text( t )
-                    .addClass( "ui-state-highlight" );
+				.text( t )
+				.addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -172,11 +171,10 @@
             allFields.removeClass( "ui-state-error" );
 
             valid = valid && checkLength( nomRes, "username", 3, 16 );
-
-            valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+			valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
 
             if ( valid ) {
-                $( );
+                $(  );
             }
             return valid;
         }
@@ -198,7 +196,7 @@
             }
         });
 
-        formUser = dialogUser.find( "formUser" ).on( "submit", function( event ) {
+        formUser = dialogUser.find( "form" ).on( "submit", function( event ) {
             event.preventDefault();
             addUser();
         });
