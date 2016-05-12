@@ -195,7 +195,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
 		case 'parametre':
 			$reqCount = $db->query("SELECT COUNT(*) FROM parametres");
-			$count = $req->fetch();
+			$count = $reqCount->fetch();
 			if($count != 0) {
 				$clear = $db->query("TRUNCATE TABLE parametres");
 				$clear->execute();
@@ -259,7 +259,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 
 		case 'ressources':
-			$req = $db->query("SELECT * FROM ressources");
+			$req = $db->query("SELECT r.nomRessource, c.libelleCategorie, r.tauxHoraire FROM ressources r
+			 INNER JOIN categoriepersonnel c ON r.codeCatPerso = c.codeCategorie");
 			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
