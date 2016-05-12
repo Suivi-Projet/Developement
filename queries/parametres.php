@@ -2,11 +2,11 @@
 
 include 'config.php';
 
-if(isset($_POST["data"])){
+if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-	$json = json_decode($_POST["data"]);
+	$json = json_decode(file_get_contents('php://input'), true);
 
-	switch ($json['object']) {
+	switch ($json['objet']) {
 		case 'tache':
 		if(!isset($json['codeTache'])) {
 			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, dateDebutReelle, dateFinReelle, coutPrevu, codeLivrable, codeProjet) 
@@ -77,7 +77,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 
-		case 'familles':
+		case 'famille':
 			if(!isset($json['codeFamille'])) {
 				$req = $db->prepare("INSERT INTO familletache (libelleFamille) 
 							  VALUES (?)");
@@ -105,7 +105,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 
-		case 'livrables':
+		case 'livrable':
 			if(!isset($json['codeLivrable'])) {
 				$req = $db->prepare("INSERT INTO livrables (libelleLivrable) 
 							  VALUES (?)");
@@ -133,7 +133,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 
-		case 'categs':
+		case 'categ':
 			if(!isset($json['codeCategorie'])) {
 				$req = $db->prepare("INSERT INTO categoriepersonnel (libelleCategorie) 
 							  VALUES (?)");
@@ -161,7 +161,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 
-		case 'ressources':
+		case 'ressource':
 			if(!isset($json['codeRessource'])) {
 				$req = $db->prepare("INSERT INTO ressources (nomRessource, tauxHoraire, codeCatPerso) 
 							  VALUES (?, ?, ?)");
@@ -193,7 +193,7 @@ if(isset($_POST["data"])){
 			}
 			break;
 
-		case 'parametres':
+		case 'parametre':
 			$reqCount = $db->query("SELECT COUNT(*) FROM parametres");
 			$count = $req->fetch();
 			if($count != 0) {
