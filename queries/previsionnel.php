@@ -61,7 +61,7 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 	$reqTaches->bindParam(1, $_GET["idProjet"]);	
 	$reqTaches->execute();
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
-	$result = array("projet" => json_encode($resultProjet), "taches" => json_encode($resultTaches), "recapitulatif" => $resultRecap);
+	$result = array("projet" => json_encode($resultProjet), "taches" => json_encode($resultTaches), "recapitulatif" => json_encode($resultRecap));
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => 'Le paramètre passé n\'est pas valide.']);
