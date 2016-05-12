@@ -11,7 +11,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickProjet()">Ajouter</button></td>
+					<td><button style="width:100%;" id="addProjet">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -124,7 +124,12 @@
         <select id="selectCateg"></select></div>
         <div><label for="Cout Horaire">Coût Horaire</label>
         <input type="number" id="coutRes" min="0"></div>
-        <input type="submit" tabindex="-1">
+    </form>
+</div>
+<div id="dialog-form-projet" title="Ajouter un projet">
+    <form>
+        <div><label for="Nom du projet">Nom</label>
+        <input type="text" id="nomProj"></div>
     </form>
 </div>
 <script>
@@ -205,9 +210,83 @@
             dialogUser.dialog( "open" );
         });
     });
-	function handleClickProjet(){
-		alert("projet");
-	}
+
+	$(function() {
+        var dialogProjet, formProjet,
+
+		nomProjet = $( "#nomProj" ),
+        allFields = $( [] ).add( nomProjet),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addProjet() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomProjet, "projet", 3, 16 );
+
+            if ( valid ) {
+				$.ajax
+			    ({
+			        type: "POST",
+			        url: "http://localhost/Developement/queries/parametres.php",
+			        dataType: 'json',
+			        contentType:'application/json',
+			        data: '{"objet": "projet","libelleProjet": "' + $("#nomProj").val() + '"}',
+			        success: function () {
+			        	majData();
+			        	dialogProjet.dialog("close");
+			        }
+			    })
+            }
+            return valid;
+        }
+
+        dialogProjet = $( "#dialog-form-projet" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addProjet,
+                Cancel: function() {
+                    dialogProjet.dialog( "close" );
+                }
+            },
+            close: function() {
+                formProjet[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formProjet = dialogProjet.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addProjet();
+        });
+
+        $( "#addProjet" ).button().on( "click", function() {
+            dialogProjet.dialog( "open" );
+        });
+    });
 
 	function handleClickFamille(){
 		alert("famille");
@@ -235,6 +314,7 @@
 		$("#nomFamille").empty();
 		$("#nomLivrable").empty();
 		$("#nomCategorie").empty();
+		$("#selectCateg").empty();
 		$("#nomRessource").empty();
 		$("#parametre").val();
 
