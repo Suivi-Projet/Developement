@@ -21,7 +21,7 @@
 		<table style="width:100%;">
 			<thead>
 				<tr>
-					<td style="text-align:center">Intitulé de la tâche</td>
+					<td style="text-align:center">Intitulé de la famille de tâches</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,7 +30,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickFamille()">Ajouter</button></td>
+					<td><button style="width:100%;" id="addFamille">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -48,7 +48,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickLivrable()">Ajouter</button></td>
+					<td><button style="width:100%;" id="addLivrable">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -68,7 +68,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button style="width:100%;" onclick="handleClickCategorie()">Ajouter</button></td>
+					<td><button style="width:100%;" id="addCategorie">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -132,6 +132,24 @@
         <input type="text" id="nomProj"></div>
     </form>
 </div>
+<div id="dialog-form-famille" title="Ajouter une famille de tâches">
+    <form>
+        <div><label for="Nom de la famille">Nom</label>
+        <input type="text" id="nomFam"></div>
+    </form>
+</div>
+<div id="dialog-form-livrable" title="Ajouter un livrable">
+    <form>
+        <div><label for="Nom du livrable">Nom</label>
+        <input type="text" id="nomLiv"></div>
+    </form>
+</div>
+<div id="dialog-form-categorie" title="Ajouter une catégorie de personnel">
+    <form>
+        <div><label for="Nom de la catégorie">Nom</label>
+        <input type="text" id="nomCat"></div>
+    </form>
+</div>
 <script>
     $(function() {
         var dialogUser, formUser,
@@ -175,7 +193,7 @@
             var valid = true;
             allFields.removeClass( "ui-state-error" );
 
-            valid = valid && checkLength( nomRes, "username", 3, 16 );
+            valid = valid && checkLength( nomRes, "username", 3, 255 );
 			valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
 
             if ( valid ) {
@@ -242,7 +260,7 @@
             var valid = true;
             allFields.removeClass( "ui-state-error" );
 
-            valid = valid && checkLength( nomProjet, "projet", 3, 16 );
+            valid = valid && checkLength( nomProjet, "projet", 3, 255 );
 
             if ( valid ) {
 				$.ajax
@@ -288,24 +306,253 @@
         });
     });
 
-	function handleClickFamille(){
-		alert("famille");
-	}
+	$(function() {
+        var dialogFamille, formFamille,
 
-	function handleClickLivrable(){
-		alert("livrable");
-	}
+		nomFamille = $( "#nomFam" ),
+        allFields = $( [] ).add( nomFamille),
+        tips = $( ".validateTips" );
 
-	function handleClickCategorie(){
-		alert("catÃ©gorie");
-	}
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addFamille() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomFamille, "famille", 3, 255 );
+
+            if ( valid ) {
+				$.ajax
+			    ({
+			        type: "POST",
+			        url: "http://localhost/Developement/queries/parametres.php",
+			        dataType: 'json',
+			        contentType:'application/json',
+			        data: '{"objet": "famille","libelleFamille": "' + $("#nomFam").val() + '"}',
+			        success: function () {
+			        	majData();
+			        	dialogFamille.dialog("close");
+			        }
+			    })
+            }
+            return valid;
+        }
+
+        dialogFamille = $( "#dialog-form-famille" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addFamille,
+                Cancel: function() {
+                    dialogFamille.dialog( "close" );
+                }
+            },
+            close: function() {
+                formFamille[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formFamille = dialogFamille.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addFamille();
+        });
+
+        $( "#addFamille" ).button().on( "click", function() {
+            dialogFamille.dialog( "open" );
+        });
+    });
+
+	$(function() {
+        var dialogLivrable, formLivrable,
+
+		nomLivrable = $( "#nomLiv" ),
+        allFields = $( [] ).add( nomFamille),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addLivrable() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomLivrable, "livrable", 3, 255 );
+
+            if ( valid ) {
+				$.ajax
+			    ({
+			        type: "POST",
+			        url: "http://localhost/Developement/queries/parametres.php",
+			        dataType: 'json',
+			        contentType:'application/json',
+			        data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
+			        success: function () {
+			        	majData();
+			        	dialogLivrable.dialog("close");
+			        }
+			    })
+            }
+            return valid;
+        }
+
+        dialogLivrable = $( "#dialog-form-livrable" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addLivrable,
+                Cancel: function() {
+                    dialogLivrable.dialog( "close" );
+                }
+            },
+            close: function() {
+                formLivrable[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formLivrable = dialogLivrable.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addLivrable();
+        });
+
+        $( "#addLivrable" ).button().on( "click", function() {
+            dialogLivrable.dialog( "open" );
+        });
+    });
+
+	$(function() {
+        var dialogCategorie, formCategorie,
+
+		nomCategorie = $( "#nomCat" ),
+        allFields = $( [] ).add( nomCategorie),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addCategorie() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( nomCategorie, "livrable", 3, 255 );
+
+            if ( valid ) {
+				$.ajax
+			    ({
+			        type: "POST",
+			        url: "http://localhost/Developement/queries/parametres.php",
+			        dataType: 'json',
+			        contentType:'application/json',
+			        data: '{"objet": "categ","libelleCategorie": "' + $("#nomCat").val() + '"}',
+			        success: function () {
+			        	majData();
+			        	dialogCategorie.dialog("close");
+			        }
+			    })
+            }
+            return valid;
+        }
+
+        dialogCategorie = $( "#dialog-form-categorie" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addCategorie,
+                Cancel: function() {
+                    dialogCategorie.dialog( "close" );
+                }
+            },
+            close: function() {
+                formCategorie[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formCategorie = dialogCategorie.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addCategorie();
+        });
+
+        $( "#addCategorie" ).button().on( "click", function() {
+            dialogCategorie.dialog( "open" );
+        });
+    });
 
 	function handleClickRessource(){
 		alert("ressource");
 	}
 
 	function handleClickParametre(){
-		alert("parametre");
+		$.ajax
+		({
+			type: "POST",
+			url: "http://localhost/Developement/queries/parametres.php",
+			dataType: 'json',
+			contentType:'application/json',
+			data: '{"objet": "parametre","dureeLegale": "' + $("#parametre").val() + '"}',
+			success: function () {
+			    majData();
+			}
+		})
 	}
 </script>
 <script>
@@ -339,6 +586,21 @@
 				$("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
 			});
 		});
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#nomFamille").append("<tr><td style=\"text-align:center;\">" + currentValue.libelleFamille + "</td></td>");
+			});
+		});
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#parametre").val(currentValue.dureeLegale);
+			});
+		});
+
 	}
 
 	majData();
