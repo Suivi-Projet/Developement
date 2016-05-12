@@ -40,7 +40,7 @@ if(isset($_GET["idRessource"])) {
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'taches' => json_encode($resultTaches), 'total' => json_encode($resultTotal)]);
 } else {
-	json_encode(['codeRetour' => 500, 'result' => "Parametre invalide !"]);
+	echo json_encode(['codeRetour' => 500, 'result' => "Parametre invalide !"]);
 }
 
 ?>
