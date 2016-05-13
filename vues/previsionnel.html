@@ -41,7 +41,7 @@
 					<span class="sr-only">Close</span>
 				</button>
 				<h4 class="modal-title" id="myModalLabel">
-					Modal title
+					Ajouter une tâche
 				</h4>
 			</div>
 
@@ -111,9 +111,6 @@
 				<button type="button" id="addTache" class="btn btn-primary">
 					Ajouter
 				</button>
-				<button type="button" id="resetTache" class="btn btn-danger">
-					Reset
-				</button>
 			</div>
 		</div>
 	</div>
@@ -159,6 +156,7 @@
 
             if ( valid ) {
             	var codeLivrable = $("#selectLivrable").val() == "0" ? null : "\"" + $("#selectLivrable").val() + "\"";
+
 				$.ajax({
 					type: "POST",
 					url: "http://localhost/Developement/queries/parametres.php",
@@ -167,11 +165,11 @@
 					data: '{"objet" : "tache",	"libelleTache" : "'+$("#nomTache").val()+'","refTache" : "'+$("#refTache").val()+'","codeFamille" : "'+$("#selectFamille").val()+'","dateDebutPrevue" : "'+new Date($("#startTache").val()).getFullYear() + "-" + (new Date($("#startTache").val()).getMonth() + 1) + "-" + new Date($("#startTache").val()).getDate() +'","dateFinPrevue" : "'+new Date($("#endTache").val()).getFullYear() + "-" + (new Date($("#endTache").val()).getMonth() + 1) + "-" + new Date($("#endTache").val()).getDate()+'", "codeProjet" : "'+$("#selectProject").val()+'","tempsPrevu" : "' + $("#tempsTache").val() + '", "coutPrevu" : "' + $("#coutTache").val() + '", "codeLivrable" : ' + codeLivrable + ' }',
 					success : function(){
 						majProjects();
-						dialogTache.dialog("close");
+						$('#form-tache').modal('hide');
 					},
 					error : function(){
 						alert("Y'a un souci")
-						dialogTache.dialog("close");
+						$('#form-tache').modal('hide');
 					}
 				});
             }
@@ -187,6 +185,7 @@
 
 		$("#callFormTache").on("click", function(){
 			$('#addFormTache').find('input:text, input:password ,select, textarea').val('');
+			$('selectLivrable').reset();
 			$('#coutTache').val('');
 			$('#tempsTache').val('');
 		});
