@@ -117,7 +117,7 @@
 </div>
 <script>
 	$(function() {
-        var dialogTache, formTache,
+        var
 
 		nomTache = $( "#nomTache" ),
         refTache = $("#refTache"),
@@ -184,7 +184,7 @@
         });
 
 		$("#callFormTache").on("click", function(){
-			$('#addFormTache').find('input:text, input:password ,select, textarea').val('');
+			$('#addFormTache').find('input:text, select').val('');
 			$('selectLivrable').reset();
 			$('#coutTache').val('');
 			$('#tempsTache').val('');
