@@ -78,11 +78,11 @@
 							<div class="col-md-12">
 								<label class="control-label col-md-3" for="dateDebut">Date de début</label>
 								<div class=" col-md-3">
-									<input class="form-control" type="date" id="startTache">
+									<input class="form-control" type="text" id="startTache">
 								</div>
 								<label class="control-label col-md-3" for="dateFin">Date de fin</label>
 								<div class=" col-md-3">
-									<input type='date' class="form-control" id="endTache" />
+									<input type='text' class="form-control" id="endTache" />
 								</div>
 							</div>
 						</div>
@@ -177,6 +177,9 @@
             }
             return valid;
         }
+
+		$ ("#startTache").datepicker();
+		$ ("#endTache").datepicker();
 
         $( "#addTache" ).on( "click", function() {
 			addTache();
