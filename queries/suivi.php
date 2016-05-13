@@ -94,14 +94,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
 } else if(isset($_GET["recapProjet"]) && !is_nan($_GET["recapProjet"])) {
-	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, t.dateDebutReelle, t.dateFinReelle, t.tempsPrevu, SUM(c.tempsPassee) as tempsConsomme, 
-								SUM(c.tempsPassee*r.tauxHoraire) as cout, (SUM(c.tempsPassee)/t.tempsPrevu) as ratioTemps, 
-								(t.tempsPrevu-SUM(c.tempsPassee)) as tempsRestant, t.avancement, p.dureeLegale
-						FROM parametres as p, taches as t
-						INNER JOIN conso as c ON (c.codeTache = t.codeTache)
-						INNER JOIN ressources as r ON (r.codeRessource = c.codeRessource)
-						WHERE t.codeProjet = ? 
-						GROUP BY c.codeTache");
+	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, t.dateDebutReelle, t.dateFinReelle, t.tempsPrevu, SUM(res.tempsPassee) as tempsConsomme, 
+		SUM(res.tempsPassee * res.tauxHoraire) as cout,
+		(SUM(res.tempsPassee)/t.tempsPrevu) as ratioTemps,
+		t.avancement, t.dateFinPrevue, t.dateDebutPrevue, p.dureeLegale
+		FROM parametres as p, taches as t
+		LEFT JOIN
+		(
+			SELECT c.codeTache, c.tempsPassee, r.tauxHoraire FROM conso c
+			INNER JOIN ressources r
+			ON (c.codeRessource = r.codeRessource)
+		) res
+	ON
+	(res.codeTache = t.codeTache)
+	WHERE t.codeProjet = ?
+	GROUP BY t.codeTache");
 	$req->bindParam(1, $_GET["recapProjet"]);
 
 	$done = $req->execute();

@@ -1,0 +1,57 @@
+<div>
+	<div><label for="projet">Projet :</label>
+	<select id="selectProjet" onChange="">
+	</select></div>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<td>Mois</td>
+					<td>Année</td>
+					<td>Ressource</td>
+					<td>Tâche</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<select>
+							<option value="0">Tous</option>
+							<option value="1">Janvier</option>
+							<option value="2">Février</option>
+							<option value="3">Mars</option>
+							<option value="4">Avril</option>
+							<option value="5">Mai</option>
+							<option value="6">Juin</option>
+							<option value="7">Juillet</option>
+							<option value="8">Août</option>
+							<option value="9">Septembre</option>
+							<option value="10">Octobre</option>
+							<option value="11">Novembre</option>
+							<option value="12">Décembre</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+	function majProjets(){
+		$("#selectProjet").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProjet").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+			});
+			majTaches();
+		});
+	}
+
+	majProjets();
+
+	function majTaches(){
+
+	}
+</script>
