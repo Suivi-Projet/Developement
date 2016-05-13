@@ -323,7 +323,7 @@
         $("#recapTaches").empty();
 
         $.getJSON("http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
-
-        }
+            console.log(jQuery.parseJSON(data.data));
+        });
     }
 </script>

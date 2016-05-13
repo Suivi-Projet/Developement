@@ -106,8 +106,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 	$done = $req->execute();
 	if($done) {
-		$done = $req->fetchAll(PDO::FETCH_ASSOC);
-		$result = $req->fetch(PDO::FETCH_ASSOC);
+		$result = $req->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
 }
