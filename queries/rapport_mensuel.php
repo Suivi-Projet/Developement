@@ -72,6 +72,17 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'ressources' => json_encode($resultRessources), 'total' => json_encode($resultTotal)]);	
+} else if (isset($_GET["anneesProjet"]) && !is_nan($_GET["anneesProjet"])){
+	$sqlRessources = "SELECT YEAR(MIN(c.date)) as smallAnnee, YEAR(MAX(c.date)) as bigAnnee FROM conso c
+		INNER JOIN
+		taches t
+		ON t.codeTache = c.codeTache
+		WHERE t.codeProjet = " . $_GET["anneesProjet"];
+
+	$reqRessources = $db->query($sqlRessources);
+	$result = $reqRessources->fetch(PDO::FETCH_ASSOC);
+
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => "Parametre invalide !"]);
 }

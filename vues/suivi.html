@@ -1,6 +1,6 @@
 <div>
 	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj();">
+	<select id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj();majRecapTaches();">
 	</select></div>
     <div>
         <div>
@@ -209,6 +209,7 @@
                 majTaches();
                 majRecapProj();
                 majEtatProj();
+                majRecapTaches();
 			});
 		});
 	}
@@ -319,7 +320,7 @@
         });
     }
 
-    function majRecapProj(){
+    function majRecapTaches(){
         $("#recapTaches").empty();
 
         $.getJSON("http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
