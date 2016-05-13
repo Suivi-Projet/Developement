@@ -36,11 +36,11 @@
 						</select>
 					</td>
 					<td>
-						<select id="selectRessource">
+						<select id="selectRessource" onChange="updateRessource();">
 						</select>
 					</td>
 					<td>
-						<select id="selectTache">
+						<select id="selectTache" onChange="updateTache();">
 						</select>
 					</td>
 				</tr>
@@ -100,6 +100,8 @@
 	function majRessources(){
 		$("#selectRessource").empty();
 
+		$("#selectRessource").append("<option value=\"0\"> --- </option>");
+
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
@@ -110,6 +112,8 @@
 
 	function majTaches(){
 		$("#selectTache").empty();
+
+		$("#selectTache").append("<option value=\"0\"> --- </option>");
 
 		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
@@ -123,12 +127,36 @@
 		$("#tempsTotal").empty();
 		$("#montantTotal").empty();
 
+		var url = "";
 
-		$.getJSON("http://localhost/Developement/queries/rapport_mensuel.php?idProjet=" + $("#selectProjet").val(), function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
+		if ($("#selectRessource").val() == "0") {
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjet").val();
+			$.getJSON(url, function(data){
+				console.log(data);
+				if(jQuery.parseJSON(data.total) !== false) {
+					$("#tempsTotal").append(jQuery.parseJSON(data.total).tempsTotal);
+					$("#montantTotal").append(jQuery.parseJSON(data.total).montantTotal);
+				}
 			});
-		});
+		} else if ($("#selectTache").val() == "0") {
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessource").val() + "&idProjet=" + $("#selectProjet").val();
+			$.getJSON(url, function(data){
+				console.log(data);
+				if(jQuery.parseJSON(data.total) !== false) {
+					$("#tempsTotal").append(jQuery.parseJSON(data.total).tempsTotal);
+					$("#montantTotal").append(jQuery.parseJSON(data.total).montantTotal);
+				}
+			});
+		}
+	}
+
+	function updateRessource(){
+		$("#selectTache").val("0");
+		majTableauTotal();
+	}
+
+	function updateTache(){
+		$("#selectRessource").val("0");
+		majTableauTotal();
 	}
 </script>

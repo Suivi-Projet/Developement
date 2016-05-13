@@ -8,7 +8,7 @@ $monthEnd = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] 
 
 if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idRessource"])) {
 
-	$sqlTaches = "SELECT c.date, c.referenceTache, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache, SUM(tempsPassee) as tempsTotTache, dureeLegale,
+	$sqlTaches = "SELECT c.date, t.referenceTache, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache, SUM(tempsPassee) as tempsTotTache, dureeLegale,
 						 t.tempsPrevu
 			FROM parametres as p, conso as c   
 			INNER JOIN taches as t ON (t.codeTache = c.codeTache)
@@ -19,6 +19,9 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 		  	AND t.codeTache = c.codeTache 
 		    AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31' 
 		    GROUP BY c.codeTache";
+
+echo $sqlTaches;
+
 	$reqTaches = $db->query($sqlTaches);
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
 
@@ -41,6 +44,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'taches' => json_encode($resultTaches), 'total' => json_encode($resultTotal)]);
 } else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"]) && !is_nan($_GET["idTache"])){
+	
 	$sqlRessources = "SELECT c.date, t.referenceTache, r.nomRessource, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache,
 							 SUM(tempsPassee) as tempsTotTache, dureeLegale, t.tempsPrevu
 					  FROM parametres as p, conso as c   
@@ -52,6 +56,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 				  	  AND t.codeTache = c.codeTache 
 				      AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31' 
 				      GROUP BY c.codeRessource";
+
 	$reqRessources = $db->query($sqlRessources);
 	$resultRessources = $reqRessources->fetchAll(PDO::FETCH_ASSOC);
 
