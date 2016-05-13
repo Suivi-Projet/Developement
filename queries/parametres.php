@@ -213,6 +213,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			# code...
 			break;
 	}
+}else if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
+	
+	$req = $db->prepare("SELECT * FROM projets WHERE codeProjet = ?");
+
+	$req->bindParam(1, $_GET["idProjet"]);
+
+	$done = $req->execute();
+
+	$result = $req->fetchAll(PDO::FETCH_ASSOC);
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
 	$object = htmlspecialchars($_GET["objet"]);
 	switch ($object) {

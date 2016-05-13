@@ -1,6 +1,6 @@
 <div>
 	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majTaches()">
+	<select id="selectProjet" onChange="majTaches();majRecapProj();majEtatProj();">
 	</select></div>
     <div>
         <div>
@@ -22,6 +22,47 @@
                             <td>retards</td>
                             <td id="late">7</td>
                             <td id="percentLate">78%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Etat Projet</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td>prévu</td>
+                            <td>réel</td>
+                            <td>Ecarts</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>début</td>
+                            <td id="debutPrevu">25 Mai 2016</td>
+                            <td id="debutReel">06 Juin 2016</td>
+                            <td id="ecartDebut">15</td>
+                        </tr>
+                        <tr>
+                            <td>fin</td>
+                            <td id="finPrevu">29 Mai 2016</td>
+                            <td id="finReel">10 Juin 2016</td>
+                            <td id="ecartFin">15</td>
+                        </tr>
+                        <tr>
+                            <td>durée (h)</td>
+                            <td id="dureePrevue">4</td>
+                            <td id="dureeReelle">4</td>
+                            <td id="ecartDuree">0</td>
+                        </tr>
+                        <tr>
+                            <td>montant (€)</td>
+                            <td id="montantPrevue">150</td>
+                            <td id="montantReelle">160</td>
+                            <td id="ecartMontant">10</td>
                         </tr>
                     </tbody>
                 </table>
@@ -86,6 +127,8 @@
 					data: '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}',
 					success : function(){
 						majTaches();
+                        majRecapProj();
+                        majEtatProj();
 						dialogSaisie.dialog("close");
 					},
 					error : function(){
@@ -140,6 +183,7 @@
 				});
                 majTaches();
                 majRecapProj();
+                majEtatProj();
 			});
 		});
 	}
@@ -171,6 +215,81 @@
                 $("#late").append(jQuery.parseJSON(data.data).nbLate);
                 $("#percentUpper").append((jQuery.parseJSON(data.data).nbDepassement / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
                 $("#percentLate").append((jQuery.parseJSON(data.data).nbLate / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
+            }
+        });
+    }
+
+    function majEtatProj(){
+        $("#debutPrevu").empty();
+        $("#debutReel").empty();
+        $("#ecartDebut").empty();
+        $("#finPrevu").empty();
+        $("#finReel").empty();
+        $("#ecartFin").empty();
+        $("#dureePrevue").empty();
+        $("#dureeReelle").empty();
+        $("#ecartDuree").empty();
+        $("#montantPrevue").empty();
+        $("#montantReelle").empty();
+        $("#ecartMontant").empty();
+
+
+        var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+        $.getJSON("http://localhost/Developement/queries/suivi.php?infoProjet=" + $("#selectProjet").val(), function(data){
+            if(jQuery.parseJSON(data.data) !== false) {
+
+                if (jQuery.parseJSON(data.data).dateDebutPrevue != null) {
+                    var dateDebutPrevu = new Date(jQuery.parseJSON(data.data).dateDebutPrevue).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateDebutPrevue).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateDebutPrevue).getFullYear();
+                    $("#debutPrevu").append(dateDebutPrevu);
+                }
+
+                if (jQuery.parseJSON(data.data).dateFinPrevue != null) {
+                    var dateFinPrevu = new Date(jQuery.parseJSON(data.data).dateFinPrevue).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinPrevue).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinPrevue).getFullYear();
+                    $("#finPrevu").append(dateFinPrevu);
+                }
+
+                if (jQuery.parseJSON(data.data).dureePrevu != null) {
+                    $("#dureePrevue").append(jQuery.parseJSON(data.data).dureePrevu);
+                }
+
+                if (jQuery.parseJSON(data.data).montantPrevu != null) {
+                    $("#montantPrevue").append(jQuery.parseJSON(data.data).montantPrevu);
+                }
+
+                if (jQuery.parseJSON(data.data).dateDebutReelle != null) {
+                    var dateDebutReel = new Date(jQuery.parseJSON(data.data).dateDebutReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateDebutReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateDebutReelle).getFullYear();
+                    $("#debutReel").append(dateDebutReel);
+                }
+
+                if (jQuery.parseJSON(data.data).dateFinReelle != null) {
+                    var dateFinReel = new Date(jQuery.parseJSON(data.data).dateFinReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinReelle).getFullYear();
+                    $("#finReel").append(dateFinReel);
+                }
+
+                if (jQuery.parseJSON(data.data).tempsConsomme != null) {
+                    $("#dureeReelle").append(jQuery.parseJSON(data.data).tempsConsomme);
+                }
+
+                if (jQuery.parseJSON(data.data).montantReel != null) {
+                    $("#montantReelle").append(jQuery.parseJSON(data.data).montantReel);
+                }
+
+                if (jQuery.parseJSON(data.data).ecartDateDebut != null) {
+                    $("#ecartDebut").append(jQuery.parseJSON(data.data).ecartDateDebut);
+                }
+
+                if (jQuery.parseJSON(data.data).ecartDateFin != null) {
+                    $("#ecartFin").append(jQuery.parseJSON(data.data).ecartDateFin);
+                }
+
+                if (jQuery.parseJSON(data.data).ecartDuree != null) {
+                    $("#ecartDuree").append(jQuery.parseJSON(data.data).ecartDuree);
+                }
+
+                if (jQuery.parseJSON(data.data).ecartMontant != null) {
+                    $("#ecartMontant").append(jQuery.parseJSON(data.data).ecartMontant);
+                }
             }
         });
     }
