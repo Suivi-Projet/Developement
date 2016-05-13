@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title>Gestion projet</title>
     <script src="js/jquery-2.2.3.min.js"></script>
+
     <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="project.ico" />
 </head>
@@ -32,8 +34,7 @@
             beforeLoad: function( event, ui ) {
                 ui.jqXHR.fail(function() {
                     ui.main.html(
-                    "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                    "If this wouldn't be a demo." );
+                    "Couldn't load this tab. We'll try to fix this as soon as possible. "    );
                 });
             }
         });

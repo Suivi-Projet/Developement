@@ -1,6 +1,6 @@
 # Other files and folders
 .idea/
-/queries/config.php
+queries/config.php
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important

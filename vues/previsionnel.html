@@ -26,62 +26,97 @@
 		</fieldset>
 	</div>
 	<div class="span4">
-		<button id="addTache">Ajouter une Tâche</button>
+		<button class="btn btn-primary" id="callFormTache" data-toggle="modal" data-target="#form-tache">Ajouter une Tâche</button>
 	</div>
 </div>
-<div id="dialog-form-tache" title="Ajouter une tache">
-    <form class="form-horizontal">
-		<div class="row-fluid">
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label col-md-3" for="nom">Intitulé</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="text" id="nomTache">
-					</div>
-					<label class="control-label col-md-3" for="ref">Référence</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="text" id="refTache">
-					</div>
-				</div>
+<div class="modal fade" id="form-tache" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<button type="button" class="close"
+						data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					Modal title
+				</h4>
 			</div>
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label col-md-3" for="famille">Famille</label>
-					<div class=" col-md-3">
-						<select class="form-control" id="selectFamille"></select>
+
+			<!-- Modal Body -->
+			<div class="modal-body" id="addFormTache">
+
+				<form class="form-horizontal">
+					<div class="row-fluid">
+						<div class="form-group">
+							<div class="col-md-12">
+								<label class="control-label col-md-3" for="nom">Intitulé</label>
+								<div class=" col-md-3">
+									<input class="form-control" type="text" id="nomTache">
+								</div>
+								<label class="control-label col-md-3" for="ref">Référence</label>
+								<div class=" col-md-3">
+									<input class="form-control" type="text" id="refTache">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<label class="control-label col-md-3" for="famille">Famille</label>
+								<div class=" col-md-3">
+									<select class="form-control" id="selectFamille"></select>
+								</div>
+								<label class="control-label col-md-3" for="livTache">Livrable</label>
+								<div class=" col-md-3">
+									<select class="form-control" id="selectLivrable"><option value="0"> --- </option></select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<label class="control-label col-md-3" for="dateDebut">Date de début</label>
+								<div class=" col-md-3">
+									<input class="form-control" type="date" id="startTache">
+								</div>
+								<label class="control-label col-md-3" for="dateFin">Date de fin</label>
+								<div class=" col-md-3">
+									<input type='date' class="form-control" id="endTache" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<label class="control-label col-md-3" for="tpsTache">Temps prévu</label>
+								<div class=" col-md-3">
+									<input class="form-control" type="number" id="tempsTache">
+								</div>
+								<label class="control-label col-md-3" for="ctTache">Coût prévu</label>
+								<div class=" col-md-3">
+									<input class="form-control" type="number" id="coutTache">
+								</div>
+							</div>
+						</div>
 					</div>
-					<label class="control-label col-md-3" for="livTache">Livrable</label>
-					<div class=" col-md-3">
-						<select class="form-control" id="selectLivrable"><option value="0"> --- </option></select>
-					</div>
-				</div>
+				</form>
 			</div>
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label col-md-3" for="dateDebut">Date de début</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="text" id="startTache" class="datePicker">
-					</div>
-					<label class="control-label col-md-3" for="dateFin">Date de fin</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="text" id="endTache" class="datePicker">
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label col-md-3" for="tpsTache">Temps prévu</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="number" id="tempsTache">
-					</div>
-					<label class="control-label col-md-3" for="ctTache">Coût prévu</label>
-					<div class=" col-md-3">
-						<input class="form-control" type="number" id="coutTache">
-					</div>
-				</div>
+
+			<!-- Modal Footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default"
+						data-dismiss="modal">
+					Cancel
+				</button>
+				<button type="button" id="addTache" class="btn btn-primary">
+					Ajouter
+				</button>
+				<button type="button" id="resetTache" class="btn btn-danger">
+					Reset
+				</button>
 			</div>
 		</div>
-    </form>
+	</div>
 </div>
 <script>
 	$(function() {
@@ -143,31 +178,13 @@
             return valid;
         }
 
-        dialogTache = $( "#dialog-form-tache" ).dialog({
-            autoOpen: false,
-            height: 350,
-            width: 795,
-            modal: true,
-            buttons: {
-                "Ajouter": addTache,
-                Cancel: function() {
-                    dialogTache.dialog( "close" );
-                }
-            },
-            close: function() {
-                formTache[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
+        $( "#addTache" ).on( "click", function() {
+			addTache();
         });
 
-        formTache = dialogTache.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
-            addTache();
-        });
-
-        $( "#addTache" ).button().on( "click", function() {
-            dialogTache.dialog( "open" );
-        });
+		$("#callFormTache").on("click", function(){
+			$('#addFormTache').find('input:text, input:password, select, textarea').val('');
+		});
     });
 </script>
 <script>
@@ -232,4 +249,6 @@
     }
 
 	razProjects();
+
+
 </script>
