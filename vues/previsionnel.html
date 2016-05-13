@@ -90,11 +90,11 @@
 							<div class="col-md-12">
 								<label class="control-label col-md-3" for="tpsTache">Temps prévu</label>
 								<div class=" col-md-3">
-									<input class="form-control" type="number" id="tempsTache">
+									<input class="form-control" type="number" min="0" id="tempsTache">
 								</div>
 								<label class="control-label col-md-3" for="ctTache">Coût prévu</label>
 								<div class=" col-md-3">
-									<input class="form-control" type="number" id="coutTache">
+									<input class="form-control" type="number" min="0" id="coutTache">
 								</div>
 							</div>
 						</div>
@@ -186,7 +186,9 @@
         });
 
 		$("#callFormTache").on("click", function(){
-			$('#addFormTache').find('input:text, input:password, select, textarea').val('');
+			$('#addFormTache').find('input:text, input:password ,select, textarea').val('');
+			$('#coutTache').val('');
+			$('#tempsTache').val('');
 		});
     });
 </script>
