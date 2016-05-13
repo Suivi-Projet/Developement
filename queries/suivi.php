@@ -12,6 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$req->bindParam(4, $json["tempsPassee"]);
 
 	$done = $req->execute();
+	echo($done);
 	if(!done)
 		echo json_encode(['codeRetour' => 500, 'result' => "La création de la journée de travail a échouée. Veuillez réessayer dans quelques instants."]);
 	else {
