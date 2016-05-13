@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 else if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 	
-	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, f.libelleFamille, t.dateDebutPrevue, t.dateFinPrevue, t.tempsPrevu, t.coutPrevu
+	$req = $db->prepare("SELECT t.codeTache, t.referenceTache, t.libelleTache, f.libelleFamille, t.dateDebutPrevue, t.dateFinPrevue, t.coutPrevu, t.tempsPrevu 
 		FROM taches t INNER JOIN familletache f ON t.codeFamille = f.codeFamille WHERE t.codeProjet = ?");
 
 	$req->bindParam(1, $_GET["idProjet"]);

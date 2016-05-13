@@ -9,8 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 	switch ($json['objet']) {
 		case 'tache':
 		if(!isset($json['codeTache'])) {
-			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) 
-						  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			$req->bindParam(1, $json["libelleTache"]);
 			$req->bindParam(2, $json["codeFamille"]);
@@ -223,7 +222,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$done = $req->execute();
 
 			if($done) {
-				$result = $req->fetch(PDO::FETCH_ASSOC);
+				$result = $req->fetch();
 				echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			} else {
 				echo json_encode(['codeRetour' => 500, 'result' => "Impossible de récupérer les taches du projet. Veuillez réessayer dans quelques instants."]);
@@ -259,7 +258,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 
 		case 'ressources':
-			$req = $db->query("SELECT r.nomRessource, c.libelleCategorie, r.tauxHoraire FROM ressources r
+			$req = $db->query("SELECT r.codeRessource, r.nomRessource, c.libelleCategorie, r.tauxHoraire FROM ressources r
 			 INNER JOIN categoriepersonnel c ON r.codeCatPerso = c.codeCategorie");
 			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 

@@ -1,0 +1,177 @@
+<div>
+	<div><label for="projet">Projet :</label>
+	<select id="selectProjet" onChange="majTaches()">
+	</select></div>
+    <div>
+        <div>
+            <fieldset>
+                <legend>Rappel Projet</legend>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>nombre de tâches</td>
+                            <td id="nbTask">9</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>dépassements de charges</td>
+                            <td id="upperThanInitial">5</td>
+                            <td id="percentUpper">56%</td>
+                        </tr>
+                        <tr>
+                            <td>retards</td>
+                            <td id="late">7</td>
+                            <td id="percentLate">78%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+	<div><button id="addSaisie">Saisie</button></div>
+</div>
+<div id="dialog-form-saisie" title="Saisir un temps de travail">
+    <form>
+    	<div><label for="nom">Membre du personnel</label>
+    	<select id="selectRessource"></select></div>
+        <div><label for="referenceTache">Tâche avancée</label>
+    	<select id="selectTache"></select></div>
+        <div><label for="tpsPasse">Temps passé sur la tâche (h)</label>
+        <input type="number" id="tpsPasseTache"></div>
+        <div><label for="tpsPasse">Pourcentage avancement tâche (%)</label>
+        <input type="number" id="pourcentTache"></div>
+    </form>
+</div>
+<script>
+	$(function() {
+        var dialogSaisie, formSaisie,
+
+		tpsPasse = $( "#tpsPasseTache" ),
+        pctTache = $("#pourcentTache"),
+        allFields = $( [] ).add(tpsPasse).add(pctTache),
+        tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+            tips
+				.text( t )
+				.addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+            if ( o.val().length > max || o.val().length < min ) {
+                o.addClass( "ui-state-error" );
+                updateTips( "Length of " + n + " must be between " +
+                        min + " and " + max + "." );
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function addSaisie() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+
+            valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && pctTache.val() >= 0 && pctTache.val() <= 100;
+
+            if ( valid ) {
+            	$.ajax({
+					type: "POST",
+					url: "http://localhost/Developement/queries/suivi.php",
+					dataType: 'json',
+					contentType:'application/json',
+					data: '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}',
+					success : function(){
+						majTaches();
+						dialogSaisie.dialog("close");
+					},
+					error : function(){
+						alert("Y'a un souci")
+						dialogSaisie.dialog("close");
+					}
+				});
+            }
+            return valid;
+        }
+
+        dialogSaisie = $( "#dialog-form-saisie" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Ajouter": addSaisie,
+                Cancel: function() {
+                    dialogSaisie.dialog( "close" );
+                }
+            },
+            close: function() {
+                formSaisie[ 0 ].reset();
+                allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        formSaisie = dialogSaisie.find( "form" ).on( "submit", function( event ) {
+            event.preventDefault();
+            addSaisie();
+        });
+
+        $( "#addSaisie" ).button().on( "click", function() {
+            dialogSaisie.dialog( "open" );
+        });
+    });
+</script>
+<script>
+	function majProjets(){
+		$("#selectProjet").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProjet").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+			});
+			$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+				if(jQuery.parseJSON(data.data) !== false)
+				jQuery.parseJSON(data.data).forEach(function (currentValue) {
+					$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
+				});
+                majTaches();
+                majRecapProj();
+			});
+		});
+	}
+
+	majProjets();
+
+	function majTaches(){
+		$("#selectTache").empty();
+
+		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.libelleTache + "</option>");
+			});
+		});
+	}
+
+    function majRecapProj(){
+        $("#nbTask").empty();
+        $("#upperThanInitial").empty();
+        $("#percentUpper").empty();
+        $("#late").empty();
+        $("#percentLate").empty();
+
+        $.getJSON("http://localhost/Developement/queries/suivi.php?idProjet=" + $("#selectProjet").val(), function(data){
+            if(jQuery.parseJSON(data.data) !== false) {
+                $("#nbTask").append(jQuery.parseJSON(data.data).nbTaches);
+                $("#upperThanInitial").append(jQuery.parseJSON(data.data).nbDepassement);
+                $("#late").append(jQuery.parseJSON(data.data).nbLate);
+                $("#percentUpper").append((jQuery.parseJSON(data.data).nbDepassement / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
+                $("#percentLate").append((jQuery.parseJSON(data.data).nbLate / jQuery.parseJSON(data.data).nbTaches * 100) + "%");
+            }
+        });
+    }
+</script>
