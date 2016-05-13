@@ -40,12 +40,8 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'taches' => json_encode($resultTaches), 'total' => json_encode($resultTotal)]);
-<<<<<<< HEAD
-	// Recherche pour une tache
-} else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"])){
-=======
+
 } else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"]) && !is_nan($_GET["idTache"])){
->>>>>>> aeba82a064e0c6320653fd605821f00530c8e163
 	$sqlRessources = "SELECT c.date, t.referenceTache, r.nomRessource, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache,
 							 SUM(tempsPassee) as tempsTotTache, dureeLegale, t.tempsPrevu
 					  FROM parametres as p, conso as c   
