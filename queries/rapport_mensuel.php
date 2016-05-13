@@ -20,8 +20,6 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 		    AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31' 
 		    GROUP BY c.codeTache";
 
-echo $sqlTaches;
-
 	$reqTaches = $db->query($sqlTaches);
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
 

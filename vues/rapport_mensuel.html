@@ -132,19 +132,21 @@
 		if ($("#selectRessource").val() == "0") {
 			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjet").val();
 			$.getJSON(url, function(data){
-				console.log(data);
 				if(jQuery.parseJSON(data.total) !== false) {
-					$("#tempsTotal").append(jQuery.parseJSON(data.total).tempsTotal);
-					$("#montantTotal").append(jQuery.parseJSON(data.total).montantTotal);
+					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
+					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
+					$("#tempsTotal").append(tempsTotal);
+					$("#montantTotal").append(montantTotal);
 				}
 			});
 		} else if ($("#selectTache").val() == "0") {
 			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessource").val() + "&idProjet=" + $("#selectProjet").val();
 			$.getJSON(url, function(data){
-				console.log(data);
 				if(jQuery.parseJSON(data.total) !== false) {
-					$("#tempsTotal").append(jQuery.parseJSON(data.total).tempsTotal);
-					$("#montantTotal").append(jQuery.parseJSON(data.total).montantTotal);
+					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
+					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
+					$("#tempsTotal").append(tempsTotal);
+					$("#montantTotal").append(montantTotal);
 				}
 			});
 		}
