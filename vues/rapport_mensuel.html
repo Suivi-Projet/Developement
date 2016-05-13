@@ -65,6 +65,10 @@
 			</tbody>
 		</table>
 	</div>
+	<div>
+		<table id="tableauDetail">
+		</table>
+	</div>
 </div>
 <script>
 	function majProjets(){
@@ -147,6 +151,7 @@
 					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
 					$("#tempsTotal").append(tempsTotal);
 					$("#montantTotal").append(montantTotal);
+					$("#tableauDetail").append("<thead><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead>")
 				}
 			});
 		}
