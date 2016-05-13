@@ -1,42 +1,41 @@
 <div>
-	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj();">
-	</select></div>
-    <div>
-        <div>
+	<label for="projet">Projet :</label>
+	<select id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj();"></select>
+<div>
+    <div class="row-fluid">
+        <div class="col-md-12">
             <fieldset>
                 <legend>Rappel Projet</legend>
-                <table>
+                <table class="table table-bordered table-hover">
+
                     <tbody>
-                        <tr>
-                            <td>nombre de tâches</td>
-                            <td id="nbTask">9</td>
-                            <td></td>
+                        <tr >
+                            <td class="btn-primary disabled col-md-2">nombre de tâches</td>
+                            <td class="col-md-1" id="nbTask"></td>
+                            <td class="col-md-1"></td>
+                        </tr>
+                        <tr >
+                            <td class="btn-primary disabled col-md-2">dépassements de charges</td>
+                            <td class="col-md-1" id="upperThanInitial"></td>
+                            <td class="col-md-1" id="percentUpper"></td>
                         </tr>
                         <tr>
-                            <td>dépassements de charges</td>
-                            <td id="upperThanInitial">5</td>
-                            <td id="percentUpper">56%</td>
-                        </tr>
-                        <tr>
-                            <td>retards</td>
-                            <td id="late">7</td>
-                            <td id="percentLate">78%</td>
+                            <td class="btn-primary disabled col-md-2" >retards</td>
+                            <td class="col-md-1" id="late"></td>
+                            <td class="col-md-1" id="percentLate"></td>
                         </tr>
                     </tbody>
                 </table>
             </fieldset>
-        </div>
-        <div>
             <fieldset>
                 <legend>Etat Projet</legend>
-                <table>
-                    <thead>
+                <table class="table table-bordered table-hover">
+                    <thead class="btn-primary disabled">
                         <tr>
-                            <td></td>
-                            <td>prévu</td>
-                            <td>réel</td>
-                            <td>Ecarts</td>
+                            <td class="col-md-2"></td>
+                            <td class="col-md-2">prévu</td>
+                            <td class="col-md-2">réel</td>
+                            <td class="col-md-2">Ecarts</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,31 +67,32 @@
                 </table>
             </fieldset>
         </div>
-        <div>
-            <fieldset>
-                <legend>Récapitulatif des tâches</legend>
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Réf. Tâche</td>
-                            <td>Libellé</td>
-                            <td>Début Réel</td>
-                            <td>Fin Réelle</td>
-                            <td>Temps Consommé</td>
-                            <td>Coût</td>
-                            <td>Ratio tps réel / tps prévu</td>
-                            <td>% avancement</td>
-                            <td>Temps restant estimé</td>
-                            <td>Respect de la charge</td>
-                            <td>Retard avéré</td>
-                        </tr>
-                    </thead>
-                    <tbody id="recapTaches">
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
     </div>
+    <div>
+        <fieldset>
+            <legend>Récapitulatif des tâches</legend>
+            <table class="table table-bordered table-hover">
+                <thead class="btn-primary disabled">
+                    <tr>
+                        <td>Réf. Tâche</td>
+                        <td>Libellé</td>
+                        <td>Début Réel</td>
+                        <td>Fin Réelle</td>
+                        <td>Temps Consommé</td>
+                        <td>Coût</td>
+                        <td>Ratio tps réel / tps prévu</td>
+                        <td>% avancement</td>
+                        <td>Temps restant estimé</td>
+                        <td>Respect de la charge</td>
+                        <td>Retard avéré</td>
+                    </tr>
+                </thead>
+                <tbody id="recapTaches">
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
 	<div><button id="addSaisie">Saisie</button></div>
 </div>
 <div id="dialog-form-saisie" title="Saisir un temps de travail">
