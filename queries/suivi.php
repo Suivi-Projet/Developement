@@ -63,6 +63,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 	$result = $req->fetch(PDO::FETCH_ASSOC);
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+}else if(isset($_GET["infoProjet"]) && !is_nan($_GET["infoProjet"])) {
+	$req = $db->prepare("SELECT dateDebutPrevue, dateFinPrevue, SUM(tempsPrevu) as dureePrevu, MIN(dateDebutReelle) as dateDebutReelle, MAX(dateFinReelle) as dateFinReelle,
+									  DATEDIFF(MIN(dateDebutReelle), dateDebutPrevue) as ecartDateDebut, DATEDIFF(MAX(dateFinReelle), dateFinPrevue) as ecartDateFin,
+									  temp.tempsConsomme, (SUM(tempsPrevu) - temp.tempsConsomme) as ecartDuree, temp.montantPrevu, temp.montantReel, (temp.montantPrevu-temp.montantReel) as ecartMontant 
+							  FROM taches, (
+								SELECT SUM(t.coutPrevu) as montantPrevu, res.tempsConsomme, res.montantReel
+								FROM taches t, 
+								(SELECT SUM(cons.tempsPassee) as tempsConsomme, SUM(cons.montantConso) as montantReel
+								FROM taches t
+								INNER JOIN
+								(SELECT c.tempsPassee, (c.tempsPassee * res.tauxHoraire) montantConso, c.codeTache FROM conso c
+								INNER JOIN 
+								(SELECT r.codeRessource, r.tauxHoraire FROM ressources r) res
+								ON (res.codeRessource = c.codeRessource)
+								) cons
+								ON (cons.codeTache = t.codeTache)
+								WHERE t.codeProjet = ?) res
+								WHERE t.codeProjet = ?
+                              ) as temp
+							  WHERE codeProjet = ?");
+
+	$req->bindParam(1, $_GET["infoProjet"]);
+	$req->bindParam(2, $_GET["infoProjet"]);
+	$req->bindParam(3, $_GET["infoProjet"]);
+
+	$done = $req->execute();
+
+	$result = $req->fetch(PDO::FETCH_ASSOC);
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 }
 
 ?>
