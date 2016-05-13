@@ -1,6 +1,6 @@
 <div>
 	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="">
+	<select id="selectProjet" onChange="majAnnees();majTaches();majTableauTotal();">
 	</select></div>
 	<div>
 		<table>
@@ -15,7 +15,7 @@
 			<tbody>
 				<tr>
 					<td>
-						<select>
+						<select id="selectMois">
 							<option value="0">Tous</option>
 							<option value="1">Janvier</option>
 							<option value="2">Février</option>
@@ -31,6 +31,36 @@
 							<option value="12">Décembre</option>
 						</select>
 					</td>
+					<td>
+						<select id="selectAnnee">
+						</select>
+					</td>
+					<td>
+						<select id="selectRessource">
+						</select>
+					</td>
+					<td>
+						<select id="selectTache">
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<table>
+			<thead class="btn-primary disabled">
+				<tr>
+					<td></td>
+					<td>temps (h)</td>
+					<td>Montant (€)</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="btn-primary disabled">Totaux</td>
+					<td id="tempsTotal"></td>
+					<td id="montantTotal"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -46,12 +76,59 @@
 				$("#selectProjet").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
 			majTaches();
+			majAnnees();
+			majRessources();
 		});
 	}
 
 	majProjets();
 
-	function majTaches(){
+	function majAnnees(){
+		$("#selectAnnee").empty();
 
+		$.getJSON("http://localhost/Developement/queries/rapport_mensuel.php?anneesProjet=" + $("#selectProjet").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false) {
+				var numberOfYears = jQuery.parseJSON(data.data).bigAnnee - jQuery.parseJSON(data.data).smallAnnee;
+
+				for (var i = 0; i < numberOfYears + 1; i++) {
+					$("#selectAnnee").append("<option value=\"" + (jQuery.parseJSON(data.data).bigAnnee - i) + "\">" + (jQuery.parseJSON(data.data).bigAnnee - i) + "</option>");
+				};
+			}
+		});
+	}
+
+	function majRessources(){
+		$("#selectRessource").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
+			});
+		});
+	}
+
+	function majTaches(){
+		$("#selectTache").empty();
+
+		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
+			});
+		});
+	}
+
+	function majTableauTotal(){
+		$("#tempsTotal").empty();
+		$("#montantTotal").empty();
+
+
+		$.getJSON("http://localhost/Developement/queries/rapport_mensuel.php?idProjet=" + $("#selectProjet").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
+			});
+		});
 	}
 </script>
