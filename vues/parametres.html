@@ -12,7 +12,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button id="addProjet"><i class="icon-plus" ></i> Ajouter</button></td>
+					<td><button class="btn btn-primary" id="callFormProjet" data-toggle="modal" data-target="#form-projet"> Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -31,7 +31,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button id="addFamille"><i class="icon-plus" ></i> Ajouter</button></td>
+					<td><button class="btn btn-primary" id="callFormFamille" data-toggle="modal" data-target="#form-famille">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -50,7 +50,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button id="addLivrable"><i class="icon-plus" ></i> Ajouter</button></td>
+					<td><button class="btn btn-primary" id="callFormLivrable" data-toggle="modal" data-target="#form-livrable">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -71,7 +71,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button id="addCategorie"><i class="icon-plus" ></i> Ajouter</button></td>
+					<td><button class="btn btn-primary" id="callFormCategorie" data-toggle="modal" data-target="#form-categorie">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -92,7 +92,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3"><button id="addUser"><i class="icon-plus" ></i> Ajouter</button></td>
+					<td colspan="3"><button class="btn btn-primary" id="callFormUser" data-toggle="modal" data-target="#form-user">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -114,52 +114,192 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button id="addQuota"><i class="icon-plus" ></i> Mettre à Jour</button></td>
+					<td><button class="btn btn-primary" id="addQuota">Mettre à Jour</button></td>
 				</tr>
 			</tfoot>
 		</table>
 	</fieldset>
     </div>
 </div>
-<div id="dialog-form-user" title="Ajouter une ressource">
-    <form >
-        <div><label for="Nom">Nom</label>
-        <input type="text" id="nomRes"></div>
-        <div><label for="Categorie">Catégorie</label>
-        <select id="selectCateg"></select></div>
-        <div><label for="coutHoraire">Coût Horaire</label>
-        <input type="number" id="coutRes" min="0"></div>
-    </form>
+<div class="modal fade" id="form-user" tabindex="-1" role="dialog"
+     aria-labelledby="labelUser" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelUser">
+                    Ajouter une ressource
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormUser">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="Nom">Nom</label>
+                                <input class="form-control" type="text" id="nomRes">
+                                <label class="control-label" for="Categorie">Catégorie</label>
+                                <select class="form-control" id="selectCateg"></select>
+                                <label class="control-label" for="coutHoraire">Coût Horaire</label>
+                                <input class="form-control" type="number" id="coutRes" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" id="addUser" class="btn btn-primary">
+                    Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="dialog-form-projet" title="Ajouter un projet">
-    <form>
-        <div><label for="nom">Nom du projet</label>
-        <input type="text" id="nomProj"></div>
-    </form>
+<div class="modal fade" id="form-projet" tabindex="-1" role="dialog"
+     aria-labelledby="labelProjet" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelProjet">
+                    Ajouter un projet
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormProjet">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="Nom">Nom du projet</label>
+                                <input class="form-control" type="text" id="nomProj">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="addProjet" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="dialog-form-famille" title="Ajouter une famille de tâches">
-    <form>
-        <div><label for="nom">Nom de la famille</label>
-        <input type="text" id="nomFam"></div>
-    </form>
+<div class="modal fade" id="form-famille" tabindex="-1" role="dialog"
+     aria-labelledby="labelFamille" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelFamille">
+                    Ajouter une famille de tâche
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormFamille">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="nom">Nom de la famille</label>
+                                <input class="form-control" type="text" id="nomFam">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="addFamille" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="dialog-form-livrable" title="Ajouter un livrable">
-    <form>
-        <div><label for="nom">Nom du livrable</label>
-        <input type="text" id="nomLiv"></div>
-    </form>
+<div class="modal fade" id="form-livrable" tabindex="-1" role="dialog"
+     aria-labelledby="labelLivrable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelLivrable">
+                    Ajouter un livrable
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormLivrable">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="nom">Nom de la livrable</label>
+                                <input class="form-control" type="text" id="nomLiv">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="addLivrable" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="dialog-form-categorie" title="Ajouter une catégorie de personnel">
-    <form>
-        <div><label for="nom">Nom de la catégorie</label>
-        <input type="text" id="nomCat"></div>
-    </form>
+<div class="modal fade" id="form-categorie" tabindex="-1" role="dialog"
+     aria-labelledby="labelCategorie" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelCategorie">
+                    Ajouter un categorie
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormCategorie">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="nom">Nom de la categorie</label>
+                                <input class="form-control" type="text" id="nomCat">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="addCategorie" class="btn btn-primary">Ajouter</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
+    /* Gestion Formulaire Add User */
     $(function() {
-        var dialogUser, formUser,
-
-		nomRes = $( "#nomRes" ),
+        var nomRes = $( "#nomRes" ),
         coutRes = $("#coutRes"),
 		categ = $("#selectCateg"),
         allFields = $( [] ).add( nomRes).add(coutRes),
@@ -212,48 +352,32 @@
 					data: '{"objet" : "ressource",	"nomRessource" : "' + $("#nomRes").val()+ '","tauxHoraire" : "'+ $("#coutRes").val()+'","codeCatPerso" : "'+ $("#selectCateg").val()+'" }',
 					success : function(){
 						majData();
-						dialogUser.dialog("close");
+                        $('#form-user').modal('hide');;
 					},
 					error : function(){
 						alert("Y'a un souci")
-						dialogUser.dialog("close");
+                        $('#form-user').modal('hide');
 					}
 				});
             }
             return valid;
         }
 
-        dialogUser = $( "#dialog-form-user" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addUser,
-                Cancel: function() {
-                    dialogUser.dialog( "close" );
-                }
-            },
-            close: function() {
-                formUser[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formUser = dialogUser.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
+        $( "#addUser" ).on( "click", function() {
             addUser();
         });
 
-        $( "#addUser" ).button().on( "click", function() {
-            dialogUser.dialog( "open" );
+        $("#callFormUser").on("click", function(){
+            $('#addFormUser').find('input:text').val('');
+            $('selectCateg').reset();
+            $('#coutRes').val('');
         });
     });
 
+    /* Gestion Formulaire Add Projet */
 	$(function() {
-        var dialogProjet, formProjet,
 
-		nomProjet = $( "#nomProj" ),
+        var nomProjet = $( "#nomProj" ),
         allFields = $( [] ).add( nomProjet),
         tips = $( ".validateTips" );
 
@@ -293,44 +417,29 @@
 			        data: '{"objet": "projet","libelleProjet": "' + $("#nomProj").val() + '"}',
 			        success: function () {
 			        	majData();
-			        	dialogProjet.dialog("close");
-			        }
+                        $('#form-projet').modal('hide');;
+                    },
+                    error : function(){
+                        alert("Y'a un souci")
+                        $('#form-projet').modal('hide');
+                    }
 			    })
             }
             return valid;
         }
 
-        dialogProjet = $( "#dialog-form-projet" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addProjet,
-                Cancel: function() {
-                    dialogProjet.dialog( "close" );
-                }
-            },
-            close: function() {
-                formProjet[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formProjet = dialogProjet.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
+        $( "#addProjet" ).button().on( "click", function() {
             addProjet();
         });
-
-        $( "#addProjet" ).button().on( "click", function() {
-            dialogProjet.dialog( "open" );
+        $("#callFormProjet").on("click", function(){
+            $('#addFormProjet').find('input:text').val('');
         });
     });
 
+    /* Gestion formulaire Add Famille */
 	$(function() {
-        var dialogFamille, formFamille,
 
-		nomFamille = $( "#nomFam" ),
+        var nomFamille = $( "#nomFam" ),
         allFields = $( [] ).add( nomFamille),
         tips = $( ".validateTips" );
 
@@ -370,44 +479,26 @@
 			        data: '{"objet": "famille","libelleFamille": "' + $("#nomFam").val() + '"}',
 			        success: function () {
 			        	majData();
-			        	dialogFamille.dialog("close");
-			        }
+                        $('#form-famille').modal('hide');;
+                    },
+                    error : function(){
+                        alert("Y'a un souci")
+                        $('#form-famille').modal('hide');
+                    }
 			    })
             }
             return valid;
         }
 
-        dialogFamille = $( "#dialog-form-famille" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addFamille,
-                Cancel: function() {
-                    dialogFamille.dialog( "close" );
-                }
-            },
-            close: function() {
-                formFamille[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formFamille = dialogFamille.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
-            addFamille();
-        });
-
-        $( "#addFamille" ).button().on( "click", function() {
-            dialogFamille.dialog( "open" );
+        $( "#callFormFamille" ).button().on( "click", function() {
+            $('#addFormFamille').find('input:text').val('');
         });
     });
 
+    /*Gestion formulaire Add Livrable */
 	$(function() {
-        var dialogLivrable, formLivrable,
 
-		nomLivrable = $( "#nomLiv" ),
+        var nomLivrable = $( "#nomLiv" ),
         allFields = $( [] ).add( nomFamille),
         tips = $( ".validateTips" );
 
@@ -447,44 +538,29 @@
 			        data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
 			        success: function () {
 			        	majData();
-			        	dialogLivrable.dialog("close");
-			        }
+                        $('#form-livrable').modal('hide');;
+                    },
+                    error : function(){
+                        alert("Y'a un souci")
+                        $('#form-livrable').modal('hide');
+                    }
 			    })
             }
             return valid;
         }
 
-        dialogLivrable = $( "#dialog-form-livrable" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addLivrable,
-                Cancel: function() {
-                    dialogLivrable.dialog( "close" );
-                }
-            },
-            close: function() {
-                formLivrable[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formLivrable = dialogLivrable.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
+        $( "#addLivrable" ).button().on( "click", function() {
             addLivrable();
         });
 
-        $( "#addLivrable" ).button().on( "click", function() {
-            dialogLivrable.dialog( "open" );
+        $( "#callFormLivrable" ).button().on( "click", function() {
+            $('#addFormLivrable').find('input:text').val('');
         });
     });
 
+    /* Gestion formulaire Add Catégorie */
 	$(function() {
-        var dialogCategorie, formCategorie,
-
-		nomCategorie = $( "#nomCat" ),
+        var nomCategorie = $( "#nomCat" ),
         allFields = $( [] ).add( nomCategorie),
         tips = $( ".validateTips" );
 
@@ -524,37 +600,23 @@
 			        data: '{"objet": "categ","libelleCategorie": "' + $("#nomCat").val() + '"}',
 			        success: function () {
 			        	majData();
-			        	dialogCategorie.dialog("close");
-			        }
+                        $('#form-categorie').modal('hide');;
+                    },
+                    error : function(){
+                        alert("Y'a un souci")
+                        $('#form-categorie').modal('hide');
+                    }
 			    })
             }
             return valid;
         }
 
-        dialogCategorie = $( "#dialog-form-categorie" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addCategorie,
-                Cancel: function() {
-                    dialogCategorie.dialog( "close" );
-                }
-            },
-            close: function() {
-                formCategorie[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formCategorie = dialogCategorie.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
+        $( "#addCategorie" ).button().on( "click", function() {
             addCategorie();
         });
 
-        $( "#addCategorie" ).button().on( "click", function() {
-            dialogCategorie.dialog( "open" );
+        $( "#callFormCategorie" ).button().on( "click", function() {
+            $('#addFormCategorie').find('input:text').val('');
         });
     });
 

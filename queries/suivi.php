@@ -97,7 +97,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, t.dateDebutReelle, t.dateFinReelle, t.tempsPrevu, SUM(res.tempsPassee) as tempsConsomme, 
 		SUM(res.tempsPassee * res.tauxHoraire) as cout,
 		(SUM(res.tempsPassee)/t.tempsPrevu) as ratioTemps,
-		(t.tempsPrevu - SUM(res.tempsPassee)) as tempsRestant,
 		t.avancement, t.dateFinPrevue, t.dateDebutPrevue, p.dureeLegale
 		FROM parametres as p, taches as t
 		LEFT JOIN

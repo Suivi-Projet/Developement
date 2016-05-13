@@ -6,7 +6,7 @@ $year = isset($_GET["year"]) ? $_GET["year"] : date("Y");
 $monthStart = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '01';
 $monthEnd = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '12';
 
-if(isset($_GET["idRessource"]) && !isset($_GET["idTache"])) {
+if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idRessource"])) {
 
 	$sqlTaches = "SELECT c.date, c.referenceTache, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache, SUM(tempsPassee) as tempsTotTache, dureeLegale,
 						 t.tempsPrevu
@@ -40,8 +40,12 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"])) {
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'taches' => json_encode($resultTaches), 'total' => json_encode($resultTotal)]);
+<<<<<<< HEAD
 	// Recherche pour une tache
 } else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"])){
+=======
+} else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"]) && !is_nan($_GET["idTache"])){
+>>>>>>> aeba82a064e0c6320653fd605821f00530c8e163
 	$sqlRessources = "SELECT c.date, t.referenceTache, r.nomRessource, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache,
 							 SUM(tempsPassee) as tempsTotTache, dureeLegale, t.tempsPrevu
 					  FROM parametres as p, conso as c   
@@ -73,6 +77,17 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"])) {
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
 
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'ressources' => json_encode($resultRessources), 'total' => json_encode($resultTotal)]);	
+} else if (isset($_GET["anneesProjet"]) && !is_nan($_GET["anneesProjet"])){
+	$sqlRessources = "SELECT YEAR(MIN(c.date)) as smallAnnee, YEAR(MAX(c.date)) as bigAnnee FROM conso c
+		INNER JOIN
+		taches t
+		ON t.codeTache = c.codeTache
+		WHERE t.codeProjet = " . $_GET["anneesProjet"];
+
+	$reqRessources = $db->query($sqlRessources);
+	$result = $reqRessources->fetch(PDO::FETCH_ASSOC);
+
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => "Parametre invalide !"]);
 }
