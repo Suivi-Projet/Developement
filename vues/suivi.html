@@ -378,7 +378,7 @@
                     }
                 }
 
-                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar' role='progressbar' aria-valuemin='0' aria-valuemax='100'>" + currentValue.avancement + "</div></div></td><td>" + tempsRestant + "</td><td style=\"background-color:" + couleurCharge + ";\"></td><td style=\"background-color:" + couleurRetard + "\"></td></tr>");
+                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='"+ currentValue.avancement +" %' aria-valuemin='0' aria-valuemax='100'></div></div></td><td>" + tempsRestant + "</td><td style=\"background-color:" + couleurCharge + ";\"></td><td style=\"background-color:" + couleurRetard + "\"></td></tr>");
             });
         });
     }
