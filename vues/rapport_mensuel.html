@@ -1,69 +1,78 @@
-<div>
-	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majAnnees();majTaches();majTableauTotal();">
-	</select></div>
-	<div>
-		<table>
-			<thead>
-				<tr>
-					<td>Mois</td>
-					<td>Année</td>
-					<td>Ressource</td>
-					<td>Tâche</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<select id="selectMois">
-							<option value="0">Tous</option>
-							<option value="1">Janvier</option>
-							<option value="2">Février</option>
-							<option value="3">Mars</option>
-							<option value="4">Avril</option>
-							<option value="5">Mai</option>
-							<option value="6">Juin</option>
-							<option value="7">Juillet</option>
-							<option value="8">Août</option>
-							<option value="9">Septembre</option>
-							<option value="10">Octobre</option>
-							<option value="11">Novembre</option>
-							<option value="12">Décembre</option>
-						</select>
-					</td>
-					<td>
-						<select id="selectAnnee">
-						</select>
-					</td>
-					<td>
-						<select id="selectRessource" onChange="updateRessource();">
-						</select>
-					</td>
-					<td>
-						<select id="selectTache" onChange="updateTache();">
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+<div class="row-fluid">
+	<div class="span2 offset5">
+		<h4>Projet :</h4>
+		<select class="form-control" id="selectProjet" onChange="majAnnees();majTaches();majTableauTotal();"></select>
 	</div>
-	<div>
-		<table>
-			<thead class="btn-primary disabled">
-				<tr>
-					<td></td>
-					<td>temps (h)</td>
-					<td>Montant (€)</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="btn-primary disabled">Totaux</td>
-					<td id="tempsTotal"></td>
-					<td id="montantTotal"></td>
-				</tr>
-			</tbody>
-		</table>
+</div>
+<div class="row-fluid">
+	<div class="span5 offset1">
+		<fieldset>
+			<legend>Zone de critères</legend>
+			<table class="table table-bordered table-hover">
+				<thead class="btn-primary disabled">
+					<tr>
+						<td>Mois</td>
+						<td>Année</td>
+						<td>Ressource</td>
+						<td>Tâche</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<select id="selectMois">
+								<option value="0">Tous</option>
+								<option value="1">Janvier</option>
+								<option value="2">Février</option>
+								<option value="3">Mars</option>
+								<option value="4">Avril</option>
+								<option value="5">Mai</option>
+								<option value="6">Juin</option>
+								<option value="7">Juillet</option>
+								<option value="8">Août</option>
+								<option value="9">Septembre</option>
+								<option value="10">Octobre</option>
+								<option value="11">Novembre</option>
+								<option value="12">Décembre</option>
+							</select>
+						</td>
+						<td>
+							<select id="selectAnnee">
+							</select>
+						</td>
+						<td>
+							<select id="selectRessource" onChange="updateRessource();">
+							</select>
+						</td>
+						<td>
+							<select id="selectTache" onChange="updateTache();">
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+	<div class="span5">
+		<fieldset>
+			<legend>Rapport totaux</legend>
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<td></td>
+						<td class="btn-primary disabled">temps (h)</td>
+						<td class="btn-primary disabled">Montant (€)</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="btn-primary disabled">Totaux</td>
+						<td id="tempsTotal"></td>
+						<td id="montantTotal"></td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
 	</div>
 	<div>
 		<table id="tableauDetail">

@@ -1,6 +1,6 @@
 <div class="row-fluid">
-	<div class="span2">
-		<h3>Projet :</h3>
+	<div class="span2 offset5">
+		<h4>Projet :</h4>
 		<select class="form-control" id="selectProject" onChange="majTaches()"></select>
 	</div>
 </div>
@@ -185,7 +185,6 @@
 
 		$("#callFormTache").on("click", function(){
 			$('#addFormTache').find('input:text, select').val('');
-			$('selectLivrable').reset();
 			$('#coutTache').val('');
 			$('#tempsTache').val('');
 		});
