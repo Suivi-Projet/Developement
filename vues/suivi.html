@@ -330,17 +330,13 @@
                 var couleurCharge = "green";
                 var couleurRetard = "red";
 
-                if (dateJour.addDays(parseInt(currentValue.tempsRestant / currentValue.dureeLegale)) > currentValue.dateFinPrevue || (currentValue.dateDebutPrevue < dateJour) && currentValue.dateDebutReelle == null) {
+                if (dateJour.addDays(parseInt(currentValue.tempsRestant / currentValue.dureeLegale)) > currentValue.dateFinPrevue || (currentValue.dateFinPrevu < dateJour) && currentValue.dateFinReelle == null) {
                     couleurRetard = "red";
                 } else {
                     couleurRetard = "green";
                 }
 
-                if (currentValue.avancement == 0 && currentValue.tempsConsomme == 0) {
-                    couleurCharge = "green";
-                } else if (currentValue.avancement == 0){
-                    couleurCharge = "red";
-                } else if (((currentValue.tempsConsomme * 100) / currentValue.avancement) > currentValue.tempsRestant) {
+                if (currentValue.tempsConsomme > currentValue.tempsPrevu) {
                     couleurCharge = "red";
                 } else {
                     couleurCharge = "green";
@@ -349,7 +345,14 @@
                 var tempsConsomme = currentValue.tempsConsomme == null ? "0" : currentValue.tempsConsomme;
                 var cout = currentValue.cout == null ? "0" : currentValue.cout;
                 var ratioTemps = currentValue.ratioTemps == null ? "0" : currentValue.ratioTemps;
-                var tempsRestant = currentValue.tempsRestant == null ? "0" : currentValue.tempsRestant;
+
+                var tempsRestant = currentValue.tempsPrevu;
+
+                if (currentValue.avancement != 0) {
+                    if (tempsConsomme != "0"){
+                        tempsRestant = ((tempsConsomme * 100) / currentValue.avancement);
+                    }
+                }
 
                 $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td>" + currentValue.avancement + "</td><td>" + tempsRestant + "</td><td style=\"background-color:" + couleurCharge + ";\"></td><td style=\"background-color:" + couleurRetard + "\"></td></tr>");
             });
