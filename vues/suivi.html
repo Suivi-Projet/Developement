@@ -1,74 +1,79 @@
-<div>
-	<label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj(); majRecapTaches();"></select>
-<div>
-    <div class="row-fluid">
-        <div class="col-md-12">
-            <fieldset>
-                <legend>Rappel Projet</legend>
-                <table class="table table-bordered table-hover">
-
-                    <tbody>
-                        <tr >
-                            <td class="btn-primary disabled col-md-2">nombre de tâches</td>
-                            <td class="col-md-1" id="nbTask"></td>
-                            <td class="col-md-1"></td>
-                        </tr>
-                        <tr >
-                            <td class="btn-primary disabled col-md-2">dépassements de charges</td>
-                            <td class="col-md-1" id="upperThanInitial"></td>
-                            <td class="col-md-1" id="percentUpper"></td>
-                        </tr>
-                        <tr>
-                            <td class="btn-primary disabled col-md-2" >retards</td>
-                            <td class="col-md-1" id="late"></td>
-                            <td class="col-md-1" id="percentLate"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-            <fieldset>
-                <legend>Etat Projet</legend>
-                <table class="table table-bordered table-hover">
-                    <thead class="btn-primary disabled">
-                        <tr>
-                            <td class="col-md-2"></td>
-                            <td class="col-md-2">prévu</td>
-                            <td class="col-md-2">réel</td>
-                            <td class="col-md-2">Ecarts</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>début</td>
-                            <td id="debutPrevu">25 Mai 2016</td>
-                            <td id="debutReel">06 Juin 2016</td>
-                            <td id="ecartDebut">15</td>
-                        </tr>
-                        <tr>
-                            <td>fin</td>
-                            <td id="finPrevu">29 Mai 2016</td>
-                            <td id="finReel">10 Juin 2016</td>
-                            <td id="ecartFin">15</td>
-                        </tr>
-                        <tr>
-                            <td>durée (h)</td>
-                            <td id="dureePrevue">4</td>
-                            <td id="dureeReelle">4</td>
-                            <td id="ecartDuree">0</td>
-                        </tr>
-                        <tr>
-                            <td>montant (€)</td>
-                            <td id="montantPrevue">150</td>
-                            <td id="montantReelle">160</td>
-                            <td id="ecartMontant">10</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
+<div class="row-fluid">
+    <div class="span2">
+        <label class="control-label" for="projet">Projet :</label>
+        <select class="form-control" id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj(); majRecapTaches();"></select>
     </div>
-    <div>
+</div>
+<div class="row-fluid">
+    <div class="span4">
+        <fieldset>
+            <legend>Rappel Projet</legend>
+            <table class="table table-bordered table-hover">
+
+                <tbody>
+                    <tr >
+                        <td class="btn-primary disabled col-md-2">nombre de tâches</td>
+                        <td class="col-md-1" id="nbTask"></td>
+                        <td class="col-md-1"></td>
+                    </tr>
+                    <tr >
+                        <td class="btn-primary disabled col-md-2">dépassements de charges</td>
+                        <td class="col-md-1" id="upperThanInitial"></td>
+                        <td class="col-md-1" id="percentUpper"></td>
+                    </tr>
+                    <tr>
+                        <td class="btn-primary disabled col-md-2" >retards</td>
+                        <td class="col-md-1" id="late"></td>
+                        <td class="col-md-1" id="percentLate"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    <div class="span8">
+        <fieldset>
+            <legend>Etat Projet</legend>
+            <table class="table table-bordered table-hover">
+                <thead >
+                    <tr>
+                        <td class="col-md-2"></td>
+                        <td class="col-md-2 btn-primary disabled">prévu</td>
+                        <td class="col-md-2 btn-primary disabled">réel</td>
+                        <td class="col-md-2 btn-primary disabled">Ecarts</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="btn-primary disabled">début</td>
+                        <td id="debutPrevu"></td>
+                        <td id="debutReel"></td>
+                        <td id="ecartDebut"></td>
+                    </tr>
+                    <tr>
+                        <td class="btn-primary disabled">fin</td>
+                        <td id="finPrevu"></td>
+                        <td id="finReel"></td>
+                        <td id="ecartFin"></td>
+                    </tr>
+                    <tr>
+                        <td class="btn-primary disabled">durée (h)</td>
+                        <td id="dureePrevue"></td>
+                        <td id="dureeReelle"></td>
+                        <td id="ecartDuree"></td>
+                    </tr>
+                    <tr>
+                        <td class="btn-primary disabled">montant (€)</td>
+                        <td id="montantPrevue"></td>
+                        <td id="montantReelle"></td>
+                        <td id="ecartMontant"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
         <fieldset>
             <legend>Récapitulatif des tâches</legend>
             <table class="table table-bordered table-hover">
@@ -93,19 +98,52 @@
         </fieldset>
     </div>
 </div>
-	<div><button id="addSaisie">Saisie</button></div>
-</div>
-<div id="dialog-form-saisie" title="Saisir un temps de travail">
-    <form>
-    	<div><label for="nom">Membre du personnel</label>
-    	<select id="selectRessource"></select></div>
-        <div><label for="referenceTache">Tâche avancée</label>
-    	<select id="selectTache"></select></div>
-        <div><label for="tpsPasse">Temps passé sur la tâche (h)</label>
-        <input type="number" id="tpsPasseTache"></div>
-        <div><label for="tpsPasse">Pourcentage avancement tâche (%)</label>
-        <input type="number" id="pourcentTache"></div>
-    </form>
+<div><button class="btn btn-primary" id="callFormSaisie" data-toggle="modal" data-target="#form-saisie">Saisie</button></div>
+
+<div class="modal fade" id="form-saisie" tabindex="-1" role="dialog"
+     aria-labelledby="labelSaisie" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="labelSaisie">
+                    Ajouter une ressource
+                </h4>
+            </div>
+            <div class="modal-body" id="addFormSaisie">
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="control-label" for="Nom">Nom</label>
+                                <select class="form-control" id="selectRessource"></select>
+                                <label class="control-label" for="referenceTache">Tâche avancée</label>
+                                <select class="form-control" id="selectTache"></select>
+                                <label class="control-label" for="tpsPasse">Temps passé sur la tâche (h)</label>
+                                <input class="form-control" type="number" id="tpsPasseTache" min="0">
+                                <label class="control-label" for="tpsPasse">Pourcentage avancement tâche (%)</label>
+                                <input class="form-control" type="number" id="pourcentTache" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" id="addSaisie" class="btn btn-primary">
+                    Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 	$(function() {
@@ -143,52 +181,37 @@
             valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && pctTache.val() >= 0 && pctTache.val() <= 100;
 
             if ( valid ) {
-            	$.ajax({
+            	var data = '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}';
+                $.ajax({
 					type: "POST",
 					url: "http://localhost/Developement/queries/suivi.php",
 					dataType: 'json',
 					contentType:'application/json',
-					data: '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}',
+					data: data,
 					success : function(){
 						majTaches();
                         majRecapProj();
                         majEtatProj();
                         majRecapProj();
-						dialogSaisie.dialog("close");
-					},
-					error : function(){
-						alert("Y'a un souci")
-						dialogSaisie.dialog("close");
-					}
+                        $('#form-saisie').modal('hide');;
+                    },
+                    error : function(){
+                        alert("Y'a un souci");
+                        console.log(data);
+                        $('#form-saisie').modal('hide');
+                    }
 				});
             }
             return valid;
         }
-
-        dialogSaisie = $( "#dialog-form-saisie" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Ajouter": addSaisie,
-                Cancel: function() {
-                    dialogSaisie.dialog( "close" );
-                }
-            },
-            close: function() {
-                formSaisie[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
-            }
-        });
-
-        formSaisie = dialogSaisie.find( "form" ).on( "submit", function( event ) {
-            event.preventDefault();
+        $( "#addSaisie" ).button().on( "click", function() {
             addSaisie();
         });
 
-        $( "#addSaisie" ).button().on( "click", function() {
-            dialogSaisie.dialog( "open" );
+        $("#callFormSaisie").on("click", function(){
+            $('#addFormSaisie').find('select').val('');
+            $('#tpsPasseTache').val('');
+            $('#pourcentTache').val('');
         });
     });
 </script>
@@ -355,7 +378,7 @@
                     }
                 }
 
-                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td>" + currentValue.avancement + "</td><td>" + tempsRestant + "</td><td style=\"background-color:" + couleurCharge + ";\"></td><td style=\"background-color:" + couleurRetard + "\"></td></tr>");
+                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar' role='progressbar' aria-valuemin='0' aria-valuemax='100'>" + currentValue.avancement + "</div></div></td><td>" + tempsRestant + "</td><td style=\"background-color:" + couleurCharge + ";\"></td><td style=\"background-color:" + couleurRetard + "\"></td></tr>");
             });
         });
     }
