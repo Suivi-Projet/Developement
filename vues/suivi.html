@@ -1,6 +1,6 @@
 <div>
 	<div><label for="projet">Projet :</label>
-	<select id="selectProjet" onChange="majTaches();majRecapProj();majEtatProj();">
+	<select id="selectProjet" onChange="majTaches();majRecapProj();majEtatProj();majRecapProj();">
 	</select></div>
     <div>
         <div>
@@ -68,6 +68,30 @@
                 </table>
             </fieldset>
         </div>
+        <div>
+            <fieldset>
+                <legend>Récapitulatif des tâches</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Réf. Tâche</td>
+                            <td>Libellé</td>
+                            <td>Début Réel</td>
+                            <td>Fin Réelle</td>
+                            <td>Temps Consommé</td>
+                            <td>Coût</td>
+                            <td>Ratio tps réel / tps prévu</td>
+                            <td>% avancement</td>
+                            <td>Temps restant estimé</td>
+                            <td>Respect de la charge</td>
+                            <td>Retard avéré</td>
+                        </tr>
+                    </thead>
+                    <tbody id="recapTaches">
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
     </div>
 	<div><button id="addSaisie">Saisie</button></div>
 </div>
@@ -129,6 +153,7 @@
 						majTaches();
                         majRecapProj();
                         majEtatProj();
+                        majRecapProj();
 						dialogSaisie.dialog("close");
 					},
 					error : function(){
@@ -291,6 +316,14 @@
                     $("#ecartMontant").append(jQuery.parseJSON(data.data).ecartMontant);
                 }
             }
+        });
+    }
+
+    function majRecapProj(){
+        $("#recapTaches").empty();
+
+        $.getJSON("http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
+            console.log(jQuery.parseJSON(data.data));
         });
     }
 </script>
