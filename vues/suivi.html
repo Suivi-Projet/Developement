@@ -350,19 +350,19 @@
                 var dateDebutReelle = currentValue.dateDebutReelle == null ? "/" : currentValue.dateDebutReelle;
                 var dateFinReelle = currentValue.dateFinReelle == null ? "/" : currentValue.dateFinReelle;
                 var dateJour = new Date();
-                var couleurCharge = "success";
-                var couleurRetard = "danger";
+                var couleurCharge = "#B6F576";
+                var couleurRetard = "#F57676";
 
                 if (dateJour.addDays(parseInt(currentValue.tempsRestant / currentValue.dureeLegale)) > currentValue.dateFinPrevue || (currentValue.dateFinPrevu < dateJour) && currentValue.dateFinReelle == null) {
-                    couleurRetard = "danger";
+                    couleurRetard = "#F57676";
                 } else {
-                    couleurRetard = "success";
+                    couleurRetard = "#B6F576";
                 }
 
                 if (currentValue.tempsConsomme > currentValue.tempsPrevu) {
-                    couleurCharge = "danger";
+                    couleurCharge = "#F57676";
                 } else {
-                    couleurCharge = "success";
+                    couleurCharge = "#B6F576";
                 }
 
                 var tempsConsomme = currentValue.tempsConsomme == null ? "0" : currentValue.tempsConsomme;
@@ -377,7 +377,7 @@
                     }
                 }
 
-                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar progress-bar-info progress-bar-striped' role='progressbar'  aria-valuemin='0' aria-valuemax='100' style='width: "+ currentValue.avancement +"%;'>"+ currentValue.avancement +" %</div></div></td><td>" + tempsRestant + "</td><td class='" + couleurCharge + "'></td><td class='" + couleurRetard + "'></td></tr>");
+                $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar progress-bar-info progress-bar-striped' role='progressbar'  aria-valuemin='0' aria-valuemax='100' style='width: "+ currentValue.avancement +"%;'>"+ currentValue.avancement +" %</div></div></td><td>" + tempsRestant + "</td><td style='background-color: " + couleurCharge + ";'></td><td style='background-color: " + couleurRetard + ";'></td></tr>");
             });
         });
     }
