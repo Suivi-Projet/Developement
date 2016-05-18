@@ -1,0 +1,26 @@
+<div class="row-fluid">
+	<div class="span2 offset5">
+		<h4>Projet :</h4>
+		<select class="form-control" id="selectProjectPlanningPrev"></select>
+	</div>
+</div>
+<div>
+	<table id="tableauPlanningPrev">
+</div>
+<script>
+	function majProjets(){
+		$("#selectProjetPlanningPrev").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProjetPlanningPrev").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+			});
+			majTaches();
+			majAnnees();
+			majRessources();
+		});
+	}
+
+	majProjets();
+</script>

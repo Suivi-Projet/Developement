@@ -6,6 +6,9 @@ $year = isset($_GET["year"]) ? $_GET["year"] : date("Y");
 $monthStart = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '01';
 $monthEnd = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '12';
 
+$dateStart = $year.'-'.$monthStart.'-01';
+$dateEnd = $year.'-'.$monthEnd.'-'.date("t", strtotime($year.'-'.$monthEnd.'-01'));
+
 if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idRessource"])) {
 
 	$sqlTaches = "SELECT c.date, t.referenceTache, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache, SUM(tempsPassee) as tempsTotTache, dureeLegale,
@@ -17,7 +20,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 		  " AND c.codeRessource = ". $_GET["idRessource"].
 		  " AND c.codeRessource = r.codeRessource 
 		  	AND t.codeTache = c.codeTache 
-		    AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31' 
+		    AND date BETWEEN '".$dateStart."' AND '".$dateEnd."' 
 		    GROUP BY c.codeTache";
 
 	$reqTaches = $db->query($sqlTaches);
@@ -35,8 +38,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 				 INNER JOIN taches as t ON (t.codeTache = conso.codeTache)
 				 WHERE t.codeProjet = ".$_GET["idProjet"].
 			   " AND conso.codeRessource = ".$_GET["idRessource"]. 
-			   " AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31'";
-
+			   " AND date BETWEEN '".$dateStart."' AND '".$dateEnd."'"; 
 	$reqTotal = $db->query($sqlTotal);
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
 
@@ -53,7 +55,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 				    " AND c.codeTache = ". $_GET["idTache"].
 				    " AND c.codeRessource = r.codeRessource 
 				  	  AND t.codeTache = c.codeTache 
-				      AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31' 
+				      AND date BETWEEN '".$dateStart."' AND '".$dateEnd."'  
 				      GROUP BY c.codeRessource";
 
 	$reqRessources = $db->query($sqlRessources);
@@ -70,7 +72,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 				 INNER JOIN taches as t ON (t.codeTache = conso.codeTache)
 				 WHERE t.codeProjet = ".$_GET["idProjet"].
 			   " AND conso.codeTache = ".$_GET["idTache"]. 
-			   " AND date BETWEEN '".$year."-".$monthStart."-01' AND '".$year."-".$monthEnd."-31'";
+			   " AND date BETWEEN '".$dateStart."' AND '".$dateEnd."'";
 
 	$reqTotal = $db->query($sqlTotal);
 	$resultTotal = $reqTotal->fetchAll(PDO::FETCH_ASSOC);
