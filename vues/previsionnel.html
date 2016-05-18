@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProject" onChange="majTaches()"></select>
+		<select class="form-control" id="selectProject" onChange="majSelectedPrev();majTaches()"></select>
 	</div>
 </div>
 <div class="row-fluid">
@@ -201,9 +201,16 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
 			});
-			$("#selectProject").val(selected);
-			majTaches();
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProject").val(jQuery.parseJSON(data).data);
+					majTaches();
+	            }
+	        });
 		});
+
 	}
 
 	function majTaches(){
@@ -247,11 +254,29 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
 			});
-			majTaches();
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProject").val(jQuery.parseJSON(data).data);
+					majTaches();
+	            }
+	        });
 		});
     }
 
 	razProjects();
 
+
+
+    function majSelectedPrev(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProject").val()
+            }
+        });
+    }
 
 </script>

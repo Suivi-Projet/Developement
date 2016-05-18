@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjetRM" onChange="majAnneesRM();majTachesRM();majTableauTotalRM();"></select>
+		<select class="form-control" id="selectProjetRM" onChange="majSelectedRM();majAnneesRM();majTachesRM();majTableauTotalRM();"></select>
 	</div>
 </div>
 <div class="row-fluid">
@@ -93,7 +93,15 @@
 			majTachesRM();
 			majAnneesRM();
 			majRessourcesRM();
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProjetRM").val(jQuery.parseJSON(data).data);
+	            }
+	        });
 		});
+
 	}
 
 	function majAnneesRM(){
@@ -243,5 +251,15 @@
 		majTableauTotalRM();
 	}
 
+
+    function majSelectedRM(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjetRM").val()
+            }
+        });
+    }
 	majProjetsRM();
 </script>

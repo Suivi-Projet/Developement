@@ -1,11 +1,11 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjectPP" onChange="majTableauPP();"></select>
+		<select class="form-control" id="selectProjectPP" onChange="majSelectedPP();majTableauPP();"></select>
 	</div>
 </div>
 <div class="row-fluid">
-	<div class="span10 offset1">
+	<div class="span10 offset1" style="overflow-x:scroll;">
 		<table class="table table-bordered table-hover" id="tableauPlanningPrev">
 			<thead class="btn-primary disabled">
 				<tr id="headerPlanningPrev">
@@ -25,8 +25,16 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjectPP").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			majTableauPP();
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProjectPP").val(jQuery.parseJSON(data).data);
+					majTableauPP();
+	            }
+	        });
 		});
+
 	}
 
 	function monthDiff(d1, d2) {
@@ -112,6 +120,18 @@
 			}
 		});
 	}
+
+
+
+    function majSelectedPP(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjectPP").val()
+            }
+        });
+    }
 
 	majProjetsPP();
 </script>

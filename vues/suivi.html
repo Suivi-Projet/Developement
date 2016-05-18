@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <div class="span2 offset5">
         <h4>Projet :</h4>
-        <select class="form-control" id="selectProjet" onChange="majTaches();majEtatProj();majRecapProj(); majRecapTaches();"></select>
+        <select class="form-control" id="selectProjet" onChange="majSelectedSuiv();majTaches();majEtatProj();majRecapProj(); majRecapTaches();"></select>
     </div>
 </div>
 <div class="row-fluid">
@@ -181,7 +181,6 @@
             valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && pctTache.val() >= 0 && pctTache.val() <= 100;
 
             if ( valid ) {
-            	var data = '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}';
                 $.ajax({
 					type: "POST",
 					url: "http://localhost/Developement/queries/suivi.php",
@@ -193,7 +192,7 @@
                         majRecapProj();
                         majEtatProj();
                         majRecapTaches();
-                        $('#form-saisie').modal('hide');;
+                        $('#form-saisie').modal('hide');
                     },
                     error : function(){
                         alert("Y'a un souci");
@@ -214,9 +213,9 @@
         });
     });
 </script>
-<script>
+<script type="text/javascript">
 	function majProjets(){
-		$("#selectProjet").empty();
+        $("#selectProjet").empty();
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
@@ -232,6 +231,14 @@
                 majRecapProj();
                 majEtatProj();
                 majRecapTaches();
+
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+                    success : function(data){
+                        $("#selectProjet").val(jQuery.parseJSON(data).data);
+                    }
+                });
 			});
 		});
 	}
@@ -379,6 +386,16 @@
 
                 $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar progress-bar-info progress-bar-striped' role='progressbar'  aria-valuemin='0' aria-valuemax='100' style='width: "+ currentValue.avancement +"%;'>"+ currentValue.avancement +" %</div></div></td><td>" + tempsRestant + "</td><td style='background-color: " + couleurCharge + ";'></td><td style='background-color: " + couleurRetard + ";'></td></tr>");
             });
+        });
+    }
+
+    function majSelectedSuiv(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjet").val()
+            }
         });
     }
 

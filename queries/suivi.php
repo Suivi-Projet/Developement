@@ -8,11 +8,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
 	$req->bindParam(1, $json["codeRessource"]);
 	$req->bindParam(2, $json["codeTache"]);
-	$req->bindParam(3, date("Y-m-d"));
+	$neoDate = date("Y-m-d");
+	$req->bindParam(3, $neoDate);
 	$req->bindParam(4, $json["tempsPassee"]);
 
 	$done = $req->execute();
-	if(!done)
+	if(!$done)
 		echo json_encode(['codeRetour' => 500, 'result' => "La création de la journée de travail a échouée. Veuillez réessayer dans quelques instants."]);
 	else {
 		$updAvancement = $db->prepare("UPDATE taches SET avancement = ?, dateFinReelle = null WHERE codeTache = ?");
@@ -24,7 +25,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			$reqExistDateDeb = $db->prepare("SELECT dateDebutReelle FROM taches WHERE codeTache = ?");
 			$reqExistDateDeb->bindParam(1, $json["codeTache"]);
 			$reqExistDateDeb->execute();
-			$resultDateDeb = $reqExistDateDeb->fetchAll(PDO::FETCH_ASSOC);
+			$resultDateDeb = $reqExistDateDeb->fetch(PDO::FETCH_ASSOC);
 
 			if(is_null($resultDateDeb["dateDebutReelle"])) {
 				$updTache = $db->prepare("UPDATE taches SET dateDebutReelle = ? WHERE codeTache = ?");
