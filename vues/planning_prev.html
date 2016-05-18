@@ -4,15 +4,17 @@
 		<select class="form-control" id="selectProjectPP" onChange="majTableauPP();"></select>
 	</div>
 </div>
-<div style="overflow:auto;">
-	<table id="tableauPlanningPrev">
-		<thead>
-			<tr id="headerPlanningPrev">
-			</tr>
-		</thead>
-		<tbody id="bodyPlanningPrev">
-		</tbody>
-	</table>
+<div class="row-fluid">
+	<div class="span10 offset1">
+		<table class="table table-bordered table-hover" id="tableauPlanningPrev">
+			<thead class="btn-primary disabled">
+				<tr id="headerPlanningPrev">
+				</tr>
+			</thead>
+			<tbody id="bodyPlanningPrev">
+			</tbody>
+		</table>
+	</div>
 </div>
 <script>
 	function majProjetsPP(){
@@ -99,7 +101,7 @@
 							idFirst = i;
 
 						if (idFirst != null && i - idFirst < arrayDatesValue.length) {
-							$("#bodyPlanningPrev").append("<td style='background-color:green;'></td>");
+							$("#bodyPlanningPrev").append("<td style='background-color:#B6F576;'></td>");
 						} else {
 							$("#bodyPlanningPrev").append("<td></td>");
 						}
