@@ -19,4 +19,3 @@ if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => 'Le paramètre passé n\'est pas valide.']);
 }
-?>
