@@ -263,13 +263,48 @@
         $("#late").empty();
         $("#percentLate").empty();
 
-        $.getJSON("http://localhost/Developement/queries/suivi.php?idProjet=" + $("#selectProjet").val(), function(data){
+        $.getJSON("http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
             if(jQuery.parseJSON(data.data) !== false) {
-                $("#nbTask").append(jQuery.parseJSON(data.data).nbTaches);
-                $("#upperThanInitial").append(jQuery.parseJSON(data.data).nbDepassement);
-                $("#late").append(jQuery.parseJSON(data.data).nbLate);
-                $("#percentUpper").append(parseFloat((jQuery.parseJSON(data.data).nbDepassement / jQuery.parseJSON(data.data).nbTaches * 100)).toFixed(2) + "%");
-                $("#percentLate").append(parseFloat((jQuery.parseJSON(data.data).nbLate / jQuery.parseJSON(data.data).nbTaches * 100)).toFixed(2) + "%");
+                $("#nbTask").append(jQuery.parseJSON(data.data).length);
+
+                var nbLate = 0;
+                var nbUpper = 0;
+
+                var dateJour = new Date();
+
+                for (var i = 0; i < jQuery.parseJSON(data.data).length; i++) {
+                    var element = jQuery.parseJSON(data.data)[i];
+
+                    var tempsConsomme = element.tempsConsomme == null ? "0" : element.tempsConsomme;
+                    var cout = element.cout == null ? "0" : element.cout;
+                    var ratioTemps = element.ratioTemps == null ? "0" : element.ratioTemps;
+
+                    var tempsRestant = Math.round(element.tempsPrevu);
+
+                    if (element.avancement != 0) {
+                        if (tempsConsomme != "0"){
+                            tempsRestant = Math.round(((tempsConsomme * 100) / element.avancement));
+                        }
+                    }
+
+                    if (dateJour.addDays(parseInt(tempsRestant / element.dureeLegale)) > new Date(element.dateFinPrevue) || ((new Date(element.dateFinPrevue) < dateJour) && element.dateFinReelle == null) || element.dateFinReelle > element.dateFinPrevue) {
+                        nbLate++;
+                    }
+
+                    var tempsConso = element.tempsConsomme;
+                    var tempsPrevu = element.tempsPrevu;
+
+                    var shouldBeRed = (tempsConso - tempsPrevu) > 0;
+
+                    if (shouldBeRed) {
+                        nbUpper++;
+                    }
+                }
+
+                $("#upperThanInitial").append(nbUpper);
+                $("#late").append(nbLate);
+                $("#percentUpper").append(parseFloat((nbUpper / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
+                $("#percentLate").append(parseFloat((nbLate / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
             }
         });
     }
@@ -360,18 +395,6 @@
                 var couleurCharge = "#B6F576";
                 var couleurRetard = "#F57676";
 
-                if (dateJour.addDays(parseInt(currentValue.tempsRestant / currentValue.dureeLegale)) > currentValue.dateFinPrevue || (currentValue.dateFinPrevu < dateJour) && currentValue.dateFinReelle == null) {
-                    couleurRetard = "#F57676";
-                } else {
-                    couleurRetard = "#B6F576";
-                }
-
-                if (currentValue.tempsConsomme > currentValue.tempsPrevu) {
-                    couleurCharge = "#F57676";
-                } else {
-                    couleurCharge = "#B6F576";
-                }
-
                 var tempsConsomme = currentValue.tempsConsomme == null ? "0" : currentValue.tempsConsomme;
                 var cout = currentValue.cout == null ? "0" : currentValue.cout;
                 var ratioTemps = currentValue.ratioTemps == null ? "0" : currentValue.ratioTemps;
@@ -382,6 +405,23 @@
                     if (tempsConsomme != "0"){
                         tempsRestant = Math.round(((tempsConsomme * 100) / currentValue.avancement));
                     }
+                }
+
+                if (dateJour.addDays(parseInt(tempsRestant / currentValue.dureeLegale)) > new Date(currentValue.dateFinPrevue) || ((new Date(currentValue.dateFinPrevue) < dateJour) && currentValue.dateFinReelle == null) || currentValue.dateFinReelle > currentValue.dateFinPrevue) {
+                    couleurRetard = "#F57676";
+                } else {
+                    couleurRetard = "#B6F576";
+                }
+
+                var tempsConso = currentValue.tempsConsomme;
+                var tempsPrevu = currentValue.tempsPrevu;
+
+                var shouldBeRed = (tempsConso - tempsPrevu) > 0;
+
+                if (shouldBeRed) {
+                    couleurCharge = "#F57676";
+                } else {
+                    couleurCharge = "#B6F576";
                 }
 
                 $("#recapTaches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + dateDebutReelle + "</td><td>" + dateFinReelle + "</td><td>" + tempsConsomme + "</td><td>" + cout + "</td><td>" + parseFloat(ratioTemps).toFixed(2) + "</td><td> <div class='progress'><div class='progress-bar progress-bar-info progress-bar-striped' role='progressbar'  aria-valuemin='0' aria-valuemax='100' style='width: "+ currentValue.avancement +"%;'>"+ currentValue.avancement +" %</div></div></td><td>" + tempsRestant + "</td><td style='background-color: " + couleurCharge + ";'></td><td style='background-color: " + couleurRetard + ";'></td></tr>");
