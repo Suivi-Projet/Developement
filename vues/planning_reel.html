@@ -1,29 +1,29 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjectPP" onChange="majTableauPP();"></select>
+		<select class="form-control" id="selectProjetPR" onChange="majTableauPR();"></select>
 	</div>
 </div>
 <div style="overflow:auto;">
-	<table id="tableauPlanningPrev">
+	<table id="tableauPlanningReel">
 		<thead>
-			<tr id="headerPlanningPrev">
+			<tr id="headerPlanningReel">
 			</tr>
 		</thead>
-		<tbody id="bodyPlanningPrev">
+		<tbody id="bodyPlanningReel">
 		</tbody>
 	</table>
 </div>
 <script>
-	function majProjetsPP(){
-		$("#selectProjectPP").empty();
+	function majProjetPR(){
+		$("#selectProjetPR").empty();
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#selectProjectPP").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+				$("#selectProjetPR").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			majTableauPP();
+			majTableauPR();
 		});
 	}
 
@@ -35,8 +35,8 @@
 	    return months <= 0 ? 0 : months;
 	}
 
-	function majTableauPP(){
-		$.getJSON("http://localhost/Developement/queries/planning_reel.php?idProjet=" + $("#selectProjectPP").val(), function(data){
+	function majTableauPR(){
+		$.getJSON("http://localhost/Developement/queries/planning_reel.php?idProjet=" + $("#selectProjetPR").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false) {
 				var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -56,21 +56,21 @@
 					}
 				};
 
-				$("#headerPlanningPrev").empty();
+				$("#headerPlanningReel").empty();
 
-				$("#headerPlanningPrev").append("<td>Réf. Tâche</td><td>Temps Prévu (h)</td>");
+				$("#headerPlanningReel").append("<td>Réf. Tâche</td><td>Temps Prévu (h)</td>");
 
 				arrayDates.forEach(function(currentValue) {
-					$("#headerPlanningPrev").append("<td>" + currentValue + "</td>");
+					$("#headerPlanningReel").append("<td>" + currentValue + "</td>");
 				});
 
-				$("#bodyPlanningPrev").empty();
+				$("#bodyPlanningReel").empty();
 
 
 				(jQuery.parseJSON(data.data)).forEach(function(theValue) {
-					$("#bodyPlanningPrev").append("<tr>");
+					$("#bodyPlanningReel").append("<tr>");
 
-					$("#bodyPlanningPrev").append("<td>" + theValue.referenceTache + "</td><td>" + theValue.tempsPrevu + "</td>");
+					$("#bodyPlanningReel").append("<td>" + theValue.referenceTache + "</td><td>" + theValue.tempsPrevu + "</td>");
 
 					var arrayDatesValue = [];
 
@@ -101,17 +101,17 @@
 							idFirst = i;
 
 						if (idFirst != null && i - idFirst < arrayDatesValue.length) {
-							$("#bodyPlanningPrev").append("<td style='background-color:green;'></td>");
+							$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
 						} else {
-							$("#bodyPlanningPrev").append("<td></td>");
+							$("#bodyPlanningReel").append("<td></td>");
 						}
 					};
 
-					$("#bodyPlanningPrev").append("</tr>");
+					$("#bodyPlanningReel").append("</tr>");
 				});
 			}
 		});
 	}
 
-	majProjetsPP();
+	majProjetPR();
 </script>

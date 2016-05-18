@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjetRM" onChange="majAnnees();majTaches();majTableauTotal();"></select>
+		<select class="form-control" id="selectProjetRM" onChange="majAnneesRM();majTachesRM();majTableauTotalRM();"></select>
 	</div>
 </div>
 <div class="row-fluid">
@@ -20,7 +20,7 @@
 				<tbody>
 					<tr>
 						<td>
-							<select id="selectMois" onChange="majTableauTotal();">
+							<select id="selectMois" onChange="majTableauTotalRM();">
 								<option value="0">Tous</option>
 								<option value="1">Janvier</option>
 								<option value="2">Février</option>
@@ -37,15 +37,15 @@
 							</select>
 						</td>
 						<td>
-							<select id="selectAnnee" onChange="majTableauTotal();">
+							<select id="selectAnnee" onChange="majTableauTotalRM();">
 							</select>
 						</td>
 						<td>
-							<select id="selectRessource" onChange="updateRessource();">
+							<select id="selectRessourcesRM" onChange="updateRessourceRM();">
 							</select>
 						</td>
 						<td>
-							<select id="selectTache" onChange="updateTache();">
+							<select id="selectTacheRM" onChange="updateTacheRM();">
 							</select>
 						</td>
 					</tr>
@@ -67,8 +67,8 @@
 				<tbody>
 					<tr>
 						<td class="btn-primary disabled">Totaux</td>
-						<td id="tempsTotal"></td>
-						<td id="montantTotal"></td>
+						<td id="tempsTotalRM"></td>
+						<td id="montantTotalRM"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -77,12 +77,12 @@
 </div>
 <div class="row-fluid">
 	<div class="span10 offset1">
-		<table class="table table-bordered table-hover" id="tableauDetail">
+		<table class="table table-bordered table-hover" id="tableauDetailRM">
 		</table>
 	</div>
 </div>
 <script>
-	function majProjets(){
+	function majProjetsRM(){
 		$("#selectProjetRM").empty();
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
@@ -90,15 +90,13 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjetRM").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			majTaches();
-			majAnnees();
-			majRessources();
+			majTachesRM();
+			majAnneesRM();
+			majRessourcesRM();
 		});
 	}
 
-	majProjets();
-
-	function majAnnees(){
+	function majAnneesRM(){
 		$("#selectAnnee").empty();
 
 		$("#selectAnnee").append("<option value=\"0\">Toutes</option>");
@@ -114,36 +112,36 @@
 		});
 	}
 
-	function majRessources(){
-		$("#selectRessource").empty();
+	function majRessourcesRM(){
+		$("#selectRessourcesRM").empty();
 
-		$("#selectRessource").append("<option value=\"0\"> --- </option>");
+		$("#selectRessourcesRM").append("<option value=\"0\"> --- </option>");
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
+				$("#selectRessourcesRM").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
 			});
 		});
 	}
 
-	function majTaches(){
-		$("#selectTache").empty();
+	function majTachesRM(){
+		$("#selectTacheRM").empty();
 
-		$("#selectTache").append("<option value=\"0\"> --- </option>");
+		$("#selectTacheRM").append("<option value=\"0\"> --- </option>");
 
 		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjetRM").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
+				$("#selectTacheRM").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
 			});
 		});
 	}
 
-	function majTableauTotal(){
-		$("#tempsTotal").empty();
-		$("#montantTotal").empty();
-		$("#tableauDetail").empty();
+	function majTableauTotalRM(){
+		$("#tempsTotalRM").empty();
+		$("#montantTotalRM").empty();
+		$("#tableauDetailRM").empty();
 
 		var url = "";
 
@@ -162,16 +160,16 @@
 			urlAnnee = "&year=" + valeurAnnee;
 		}
 
-		if ($("#selectRessource").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
+		if ($("#selectRessourcesRM").val() == "0") {
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTacheRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
-					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
-					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
-					$("#tempsTotal").append(tempsTotal);
-					$("#montantTotal").append(montantTotal);
+					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotalRM != null ? jQuery.parseJSON(data.total)[0].tempsTotalRM : 0;
+					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotalRM != null ? jQuery.parseJSON(data.total)[0].montantTotalRM : 0;
+					$("#tempsTotalRM").append(tempsTotalRM);
+					$("#montantTotalRM").append(montantTotalRM);
 
-					$("#tableauDetail").append("<thead  class='btn-primary disabled'><tr><td>Date</td><td>Nom</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
+					$("#tableauDetailRM").append("<thead  class='btn-primary disabled'><tr><td>Date</td><td>Nom</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
 
 					if(jQuery.parseJSON(data.ressources) !== false) {
 						jQuery.parseJSON(data.ressources).forEach(function(currentValue) {
@@ -190,23 +188,23 @@
 								couleurQuota = "#B6F576";
 							}
 
-							$("#tableauDetail").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.nomRessource + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
+							$("#tableauDetailRM").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.nomRessource + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
 						});
 					}
 
-					$("#tableauDetail").append("</tbody>");
+					$("#tableauDetailRM").append("</tbody>");
 				}
 			});
-		} else if ($("#selectTache").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessource").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
+		} else if ($("#selectTacheRM").val() == "0") {
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessourcesRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
 
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
-					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
-					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
-					$("#tempsTotal").append(tempsTotal);
-					$("#montantTotal").append(montantTotal);
-					$("#tableauDetail").append("<thead class='btn-primary disabled'><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
+					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotalRM != null ? jQuery.parseJSON(data.total)[0].tempsTotalRM : 0;
+					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotalRM != null ? jQuery.parseJSON(data.total)[0].montantTotalRM : 0;
+					$("#tempsTotalRM").append(tempsTotalRM);
+					$("#montantTotalRM").append(montantTotalRM);
+					$("#tableauDetailRM").append("<thead class='btn-primary disabled'><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
 
 					if(jQuery.parseJSON(data.taches) !== false) {
 						jQuery.parseJSON(data.taches).forEach(function(currentValue) {
@@ -225,23 +223,25 @@
 								couleurQuota = "#B6F576";
 							}
 
-							$("#tableauDetail").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.referenceTache + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
+							$("#tableauDetailRM").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.referenceTache + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
 						});
 					}
 
-					$("#tableauDetail").append("</tbody>");
+					$("#tableauDetailRM").append("</tbody>");
 				}
 			});
 		}
 	}
 
-	function updateRessource(){
-		$("#selectTache").val("0");
-		majTableauTotal();
+	function updateRessourceRM(){
+		$("#selectTacheRM").val("0");
+		majTableauTotalRM();
 	}
 
-	function updateTache(){
-		$("#selectRessource").val("0");
-		majTableauTotal();
+	function updateTacheRM(){
+		$("#selectRessourcesRM").val("0");
+		majTableauTotalRM();
 	}
+
+	majProjetsRM();
 </script>
