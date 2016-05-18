@@ -1,0 +1,117 @@
+<div class="row-fluid">
+	<div class="span2 offset5">
+		<h4>Projet :</h4>
+		<select class="form-control" id="selectProjectPP" onChange="majTableauPP();"></select>
+	</div>
+</div>
+<div style="overflow:auto;">
+	<table id="tableauPlanningPrev">
+		<thead>
+			<tr id="headerPlanningPrev">
+			</tr>
+		</thead>
+		<tbody id="bodyPlanningPrev">
+		</tbody>
+	</table>
+</div>
+<script>
+	function majProjetsPP(){
+		$("#selectProjectPP").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProjectPP").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+			});
+			majTableauPP();
+		});
+	}
+
+	function monthDiff(d1, d2) {
+	    var months;
+	    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+	    months -= d1.getMonth() + 1;
+	    months += d2.getMonth() + 1;
+	    return months <= 0 ? 0 : months;
+	}
+
+	function majTableauPP(){
+		$.getJSON("http://localhost/Developement/queries/planning_reel.php?idProjet=" + $("#selectProjectPP").val(), function(data){
+			if(jQuery.parseJSON(data.data) !== false) {
+				var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+				var currentYear = (new Date(jQuery.parseJSON(data.dates).dateMin)).getFullYear();
+				var currentMonth = (new Date(jQuery.parseJSON(data.dates).dateMin)).getMonth();
+				var monthDifference = monthDiff(new Date(jQuery.parseJSON(data.dates).dateMin), new Date(jQuery.parseJSON(data.dates).dateMax));
+
+				var arrayDates = [];
+
+				for (var i = 0; i <= monthDifference; i++) {
+					arrayDates[i] = mois[currentMonth] + " " + currentYear;
+					if (currentMonth == "11") {
+						currentMonth = 0;
+						currentYear += 1;
+					} else {
+						currentMonth += 1;
+					}
+				};
+
+				$("#headerPlanningPrev").empty();
+
+				$("#headerPlanningPrev").append("<td>Réf. Tâche</td><td>Temps Prévu (h)</td>");
+
+				arrayDates.forEach(function(currentValue) {
+					$("#headerPlanningPrev").append("<td>" + currentValue + "</td>");
+				});
+
+				$("#bodyPlanningPrev").empty();
+
+
+				(jQuery.parseJSON(data.data)).forEach(function(theValue) {
+					$("#bodyPlanningPrev").append("<tr>");
+
+					$("#bodyPlanningPrev").append("<td>" + theValue.referenceTache + "</td><td>" + theValue.tempsPrevu + "</td>");
+
+					var arrayDatesValue = [];
+
+					var dateDebutValue = theValue.dateDebutPrevue;
+					var dateFinValue = theValue.dateFinPrevue;
+
+					var monthDifferenceValue = monthDiff(new Date(dateDebutValue), new Date(dateFinValue));
+
+					var currentYearValue = (new Date(dateDebutValue)).getFullYear();
+					var currentMonthValue = (new Date(dateDebutValue)).getMonth();
+
+					for (var i = 0; i <= monthDifferenceValue; i++) {
+						arrayDatesValue[i] = mois[currentMonthValue] + " " + currentYearValue;
+						if (currentMonthValue == "11") {
+							currentMonthValue = 0;
+							currentYearValue += 1;
+						} else {
+							currentMonthValue += 1;
+						}
+					};
+
+					var idFirst = null;
+					console.log('arrayDates', arrayDates);
+					console.log('arrayDatesValue', arrayDatesValue);
+					console.log('currentValue', theValue);
+					for (var i = 0; i < arrayDates.length; i++) {
+						if (arrayDates[i] == arrayDatesValue[0])
+							idFirst = i;
+
+						if (idFirst != null && i - idFirst < arrayDatesValue.length) {
+							$("#bodyPlanningPrev").append("<td style='background-color:green;'></td>");
+						} else {
+							$("#bodyPlanningPrev").append("<td></td>");
+						}
+					};
+
+					$("#bodyPlanningPrev").append("</tr>");
+				});
+			}
+		});
+	}
+
+	majProjetsPP();
+</script>
