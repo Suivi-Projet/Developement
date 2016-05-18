@@ -3,10 +3,7 @@
 include 'config.php';
 
 if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
-	$reqDates = $db->prepare("SELECT CASE WHEN MIN(dateDebutPrevue) < MIN(dateDebutReelle) THEN MIN(dateDebutPrevue) ELSE MIN(dateDebutReelle) END AS dateMin ,
-	   								 CASE WHEN MAX(dateFinPrevue) > MAX(dateFinReelle) THEN MAX(dateFinPrevue) ELSE MAX(dateFinReelle) END AS dateMax
-							  FROM taches 
-							  WHERE codeProjet = ?");
+	$reqDates = $db->prepare("SELECT MIN(dateDebutPrevue) AS dateDebut, MAX(dateFinPrevue) AS dateFin FROM taches WHERE codeProjet = ?");
 	$reqDates->bindParam(1, $_GET["idProjet"]);
 	$reqDates->execute();
 

@@ -40,9 +40,9 @@
 			if(jQuery.parseJSON(data.data) !== false) {
 				var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
-				var currentYear = (new Date(jQuery.parseJSON(data.dates).dateMin)).getFullYear();
-				var currentMonth = (new Date(jQuery.parseJSON(data.dates).dateMin)).getMonth();
-				var monthDifference = monthDiff(new Date(jQuery.parseJSON(data.dates).dateMin), new Date(jQuery.parseJSON(data.dates).dateMax));
+				var currentYear = (new Date(jQuery.parseJSON(data.dates).dateDebut)).getFullYear();
+				var currentMonth = (new Date(jQuery.parseJSON(data.dates).dateDebut)).getMonth();
+				var monthDifference = monthDiff(new Date(jQuery.parseJSON(data.dates).dateDebut), new Date(jQuery.parseJSON(data.dates).dateFin));
 
 				var arrayDates = [];
 
@@ -93,14 +93,30 @@
 					};
 
 					var idFirst = null;
-					console.log('arrayDates', arrayDates);
-					console.log('arrayDatesValue', arrayDatesValue);
-					console.log('currentValue', theValue);
 					for (var i = 0; i < arrayDates.length; i++) {
 						if (arrayDates[i] == arrayDatesValue[0])
 							idFirst = i;
 
 						if (idFirst != null && i - idFirst < arrayDatesValue.length) {
+							if (theValue.dateDebutReelle != null && superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateDebutReelle)))) {
+
+								if (theValue.dateFinReelle != null && superiorToDate(formatDate(new Date(theValue.dateFinReelle)), arrayDates[i])) {
+
+									if (formatDate(new Date(theValue.dateFinReelle)) == formatDate(new Date(theValue.dateFinPrevue))) {
+										if (theValue.dateFinReelle <= theValue.dateFinPrevue) {
+											$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
+										} else {
+											$("#bodyPlanningReel").append("<td style='background-color:red;'></td>");
+										}
+									} else {
+										$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
+									}
+
+								} else if (theValue.dateFinReelle != null && superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinReelle)))) {
+									$("#bodyPlanningReel").append("<td></td>");
+								}
+
+							}
 							$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
 						} else {
 							$("#bodyPlanningReel").append("<td></td>");
@@ -111,6 +127,39 @@
 				});
 			}
 		});
+	}
+
+	function formatDate(d1) {
+		var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+		var currentMois = d1.getMonth();
+		var currentYear = d1.getFullYear();
+
+		var date = mois[currentMois] + " " + currentYear;
+
+		return date;
+	}
+
+	function superiorToDate(d1, d2) {
+		var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+		var yearOne = d1.substr(d1.length - 4, 4);
+		var yearTwo = d2.substr(d2.length - 4, 4);
+
+		var monthOne = mois.indexOf(d1.substr(0, d1.length - 5)) + 1;
+		var monthTwo = mois.indexOf(d2.substr(0, d2.length - 5)) + 1;
+
+		var result = false;
+
+		if (yearOne > yearTwo || (yearOne == yearTwo && monthOne > monthTwo) || (yearOne == yearTwo && monthOne == monthTwo)) {
+			result =  true;
+		} else {
+			result = false;
+		}
+
+		console.log(yearOne + " " + monthOne + "   -   " + yearTwo + " " + monthTwo + "  =>  " + result);
+
+		return result;
 	}
 
 	majProjetPR();
