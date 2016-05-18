@@ -83,11 +83,11 @@
                         <td>Libellé</td>
                         <td>Début Réel</td>
                         <td>Fin Réelle</td>
-                        <td>Temps Consommé</td>
-                        <td>Coût</td>
+                        <td>Temps Consommé (h)</td>
+                        <td>Coût (€)</td>
                         <td>Ratio tps réel / tps prévu</td>
                         <td>% avancement</td>
-                        <td>Temps restant estimé</td>
+                        <td>Temps restant estimé (h)</td>
                         <td>Respect de la charge</td>
                         <td>Retard avéré</td>
                     </tr>
@@ -369,11 +369,11 @@
                 var cout = currentValue.cout == null ? "0" : currentValue.cout;
                 var ratioTemps = currentValue.ratioTemps == null ? "0" : currentValue.ratioTemps;
 
-                var tempsRestant = currentValue.tempsPrevu;
+                var tempsRestant = Math.round(currentValue.tempsPrevu);
 
                 if (currentValue.avancement != 0) {
                     if (tempsConsomme != "0"){
-                        tempsRestant = ((tempsConsomme * 100) / currentValue.avancement);
+                        tempsRestant = Math.round(((tempsConsomme * 100) / currentValue.avancement));
                     }
                 }
 
