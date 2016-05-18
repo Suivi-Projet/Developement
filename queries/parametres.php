@@ -287,5 +287,64 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 	}
 } else if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
-	
+	$object = htmlspecialchars($_GET["objet"]);
+	$body = file_get_contents('php://input');
+	switch ($object) {
+		case 'tache':
+			$req = $db->prepare("DELETE FROM taches WHERE codeTache = ?");
+			$req->bindParam(1, $body["idTache"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		case 'projet':
+			$req = $db->prepare("DELETE FROM projets WHERE codeProjet = ?");
+			$req->bindParam(1, $body["idProjet"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression du projet a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		case 'famille':
+			$req = $db->prepare("DELETE FROM familletache WHERE codeFamille = ?");
+			$req->bindParam(1, $body["idFamille"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression de la famille de tâche a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		case 'livrable':
+			$req = $db->prepare("DELETE FROM livrables WHERE codeLivrable = ?");
+			$req->bindParam(1, $body["idLivrable"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression du livrable a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		case 'categ':
+			$req = $db->prepare("DELETE FROM categoriepersonnel WHERE codeCategorie = ?");
+			$req->bindParam(1, $body["idCategorie"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression de la catégorie de personnel a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		case 'ressource':
+			$req = $db->prepare("DELETE FROM ressources WHERE codeRessource = ?");
+			$req->bindParam(1, $body["idRessource"]);
+			$done = $req->execute();
+
+			if($done)
+					echo json_encode(['codeRetour' => 200, 'result' => null]);
+				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression de la ressource a échouée. Veuillez réessayer dans quelques instants."]);
+			break;
+		default:
+			break;
+	}
 }
