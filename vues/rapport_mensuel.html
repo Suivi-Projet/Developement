@@ -74,8 +74,10 @@
 			</table>
 		</fieldset>
 	</div>
-	<div>
-		<table id="tableauDetail">
+</div>
+<div class="row-fluid">
+	<div class="span10 offset1">
+		<table class="table table-bordered table-hover" id="tableauDetail">
 		</table>
 	</div>
 </div>
@@ -169,23 +171,23 @@
 					$("#tempsTotal").append(tempsTotal);
 					$("#montantTotal").append(montantTotal);
 
-					$("#tableauDetail").append("<thead><tr><td>Date</td><td>Nom</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
+					$("#tableauDetail").append("<thead  class='btn-primary disabled'><tr><td>Date</td><td>Nom</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
 
 					if(jQuery.parseJSON(data.ressources) !== false) {
 						jQuery.parseJSON(data.ressources).forEach(function(currentValue) {
-							var couleurTache = "red";
-							var couleurQuota = "green";
+							var couleurTache = "#F57676";
+							var couleurQuota = "#B6F576";
 
 							if (currentValue.alerteTache == "true") {
-								couleurTache = "red";
+								couleurTache = "#F57676";
 							} else {
-								couleurTache = "green";
+								couleurTache = "#B6F576";
 							}
 
 							if (currentValue.alerteQuota == "true") {
-								couleurQuota = "red";
+								couleurQuota = "#F57676";
 							} else {
-								couleurQuota = "green";
+								couleurQuota = "#B6F576";
 							}
 
 							$("#tableauDetail").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.nomRessource + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
@@ -204,23 +206,23 @@
 					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
 					$("#tempsTotal").append(tempsTotal);
 					$("#montantTotal").append(montantTotal);
-					$("#tableauDetail").append("<thead><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
+					$("#tableauDetail").append("<thead class='btn-primary disabled'><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
 
 					if(jQuery.parseJSON(data.taches) !== false) {
 						jQuery.parseJSON(data.taches).forEach(function(currentValue) {
-							var couleurTache = "red";
-							var couleurQuota = "green";
+							var couleurTache = "#F57676";
+							var couleurQuota = "#B6F576";
 
 							if (currentValue.alerteTache == "true") {
-								couleurTache = "red";
+								couleurTache = "#F57676";
 							} else {
-								couleurTache = "green";
+								couleurTache = "#B6F576";
 							}
 
 							if (currentValue.alerteQuota == "true") {
-								couleurQuota = "red";
+								couleurQuota = "#F57676";
 							} else {
-								couleurQuota = "green";
+								couleurQuota = "#B6F576";
 							}
 
 							$("#tableauDetail").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.referenceTache + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
