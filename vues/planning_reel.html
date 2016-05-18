@@ -4,15 +4,17 @@
 		<select class="form-control" id="selectProjetPR" onChange="majSelectedPR();majTableauPR();"></select>
 	</div>
 </div>
-<div style="overflow-x:scroll;">
-	<table id="tableauPlanningReel">
-		<thead>
-			<tr id="headerPlanningReel">
-			</tr>
-		</thead>
-		<tbody id="bodyPlanningReel">
-		</tbody>
-	</table>
+<div class="row-fluid">
+	<div class="span10 offset1" style="overflow-x:scroll;">
+		<table class="table table-bordered table-hover" id="tableauPlanningReel">
+			<thead class="btn-primary disabled">
+				<tr id="headerPlanningReel">
+				</tr>
+			</thead>
+			<tbody id="bodyPlanningReel">
+			</tbody>
+		</table>
+	</div>
 </div>
 <script>
 	function majProjetPR(){
@@ -112,12 +114,12 @@
 
 									if (formatDate(new Date(theValue.dateFinReelle)) == formatDate(new Date(theValue.dateFinPrevue))) {
 										if (theValue.dateFinReelle <= theValue.dateFinPrevue) {
-											$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
+											$("#bodyPlanningReel").append("<td style='background-color:#B6F576;'></td>");
 										} else {
 											$("#bodyPlanningReel").append("<td style='background-color:red;'></td>");
 										}
 									} else {
-										$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
+										$("#bodyPlanningReel").append("<td style='background-color:#B6F576;'></td>");
 									}
 
 								} else if (theValue.dateFinReelle != null && superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinReelle)))) {
