@@ -143,6 +143,13 @@
 
 		var url = "";
 
+		var valeurMois = $("#selectMois").val();
+		var valeurAnnee = $("#selectAnnee").val();
+
+		if (valeurMois == 0) {
+			console.log("test");
+		}
+
 		if ($("#selectRessource").val() == "0") {
 			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjet").val();
 			$.getJSON(url, function(data){
