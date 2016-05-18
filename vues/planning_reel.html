@@ -114,10 +114,17 @@
 
 								} else if (theValue.dateFinReelle != null && superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinReelle)))) {
 									$("#bodyPlanningReel").append("<td></td>");
+								} else if (superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinPrevue))) && superiorToDate(arrayDates[i], formatDate(new Date()))){
+									$("#bodyPlanningReel").append("<td style='background-color:red;'></td>");
 								}
 
+							} else if(theValue.dateDebutReelle == null) {
+								if(superiorToDate(formatDate(new Date()), formatDate(new Date(theValue.dateDebutPrevue))) && superiorToDate(formatDate(new Date()), arrayDates[i])) {
+									$("#bodyPlanningReel").append("<td style='background-color:purple;'></td>");
+								} else {
+									$("#bodyPlanningReel").append("<td></td>");
+								}
 							}
-							$("#bodyPlanningReel").append("<td style='background-color:green;'></td>");
 						} else {
 							$("#bodyPlanningReel").append("<td></td>");
 						}
@@ -128,6 +135,9 @@
 			}
 		});
 	}
+	//rouge: retard
+	//vert: ok
+	//violet: pas commencé et aurait dû
 
 	function formatDate(d1) {
 		var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
