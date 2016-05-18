@@ -181,7 +181,6 @@
             valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && pctTache.val() >= 0 && pctTache.val() <= 100;
 
             if ( valid ) {
-            	var data = '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}';
                 $.ajax({
 					type: "POST",
 					url: "http://localhost/Developement/queries/suivi.php",
@@ -216,7 +215,7 @@
 </script>
 <script>
 	function majProjets(){
-		$("#selectProjet").empty();
+        $("#selectProjet").empty();
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
@@ -234,6 +233,12 @@
                 majRecapTaches();
 			});
 		});
+
+        var projectLaunched = <?php echo $_SESSION["projetEnCours"]; ?>;
+
+        if (projectLaunched != null) {
+            $("#selectProjet").val(projectLaunched);
+        }
 	}
 
 	majProjets();

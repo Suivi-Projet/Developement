@@ -25,6 +25,12 @@
 			});
 			majTableauPR();
 		});
+
+        var projectLaunched = <?php echo $_SESSION["projetEnCours"]; ?>;
+
+        if (projectLaunched != null) {
+            $("#selectProjetPR").val(projectLaunched);
+        }
 	}
 
 	function monthDiff(d1, d2) {

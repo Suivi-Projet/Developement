@@ -94,6 +94,12 @@
 			majAnneesRM();
 			majRessourcesRM();
 		});
+
+        var projectLaunched = <?php echo $_SESSION["projetEnCours"]; ?>;
+
+        if (projectLaunched != null) {
+            $("#selectProjetRM").val(projectLaunched);
+        }
 	}
 
 	function majAnneesRM(){

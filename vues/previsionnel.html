@@ -204,6 +204,12 @@
 			$("#selectProject").val(selected);
 			majTaches();
 		});
+
+        var projectLaunched = <?php echo $_SESSION["projetEnCours"]; ?>;
+
+        if (projectLaunched != null) {
+            $("#selectProjet").val(projectLaunched);
+        }
 	}
 
 	function majTaches(){
