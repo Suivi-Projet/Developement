@@ -366,7 +366,12 @@
                     couleurRetard = "#B6F576";
                 }
 
-                if (currentValue.tempsConsomme > currentValue.tempsPrevu) {
+                var tempsConso = currentValue.tempsConsomme;
+                var tempsPrevu = currentValue.tempsPrevu;
+
+                var shouldBeRed = (tempsConso - tempsPrevu) > 0;
+
+                if (shouldBeRed) {
                     couleurCharge = "#F57676";
                 } else {
                     couleurCharge = "#B6F576";
