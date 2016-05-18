@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjectPlanningPrev"></select>
+		<select class="form-control" id="selectProjectPP"></select>
 	</div>
 </div>
 <div>
@@ -9,16 +9,14 @@
 </div>
 <script>
 	function majProjets(){
-		$("#selectProjetPlanningPrev").empty();
+		$("#selectProjectPP").empty();
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			console.log(data);
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#selectProjetPlanningPrev").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+				$("#selectProjectPP").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			majTaches();
-			majAnnees();
-			majRessources();
 		});
 	}
 
