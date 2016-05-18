@@ -187,7 +187,7 @@
 					url: "http://localhost/Developement/queries/suivi.php",
 					dataType: 'json',
 					contentType:'application/json',
-					data: data,
+					data: '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}',
 					success : function(){
 						majTaches();
                         majRecapProj();
