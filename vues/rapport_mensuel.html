@@ -20,7 +20,7 @@
 				<tbody>
 					<tr>
 						<td>
-							<select id="selectMois" onChange"majTableauTotal();">
+							<select id="selectMois" onChange="majTableauTotal();">
 								<option value="0">Tous</option>
 								<option value="1">Janvier</option>
 								<option value="2">Février</option>
@@ -37,7 +37,7 @@
 							</select>
 						</td>
 						<td>
-							<select id="selectAnnee" onChange"majTableauTotal();">
+							<select id="selectAnnee" onChange="majTableauTotal();">
 							</select>
 						</td>
 						<td>
@@ -99,6 +99,8 @@
 	function majAnnees(){
 		$("#selectAnnee").empty();
 
+		$("#selectAnnee").append("<option value=\"0\">Toutes</option>");
+
 		$.getJSON("http://localhost/Developement/queries/rapport_mensuel.php?anneesProjet=" + $("#selectProjet").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false) {
 				var numberOfYears = jQuery.parseJSON(data.data).bigAnnee - jQuery.parseJSON(data.data).smallAnnee;
@@ -146,22 +148,56 @@
 		var valeurMois = $("#selectMois").val();
 		var valeurAnnee = $("#selectAnnee").val();
 
-		if (valeurMois == 0) {
-			console.log("test");
+		var urlMois = "";
+
+		if (valeurMois != "0") {
+			urlMois = "&month=" + valeurMois;
+		}
+
+		var urlAnnee = "";
+
+		if (valeurAnnee != 0) {
+			urlAnnee = "&year=" + valeurAnnee;
 		}
 
 		if ($("#selectRessource").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjet").val();
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTache").val() + "&idProjet=" + $("#selectProjet").val() + urlMois + urlAnnee;
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
 					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
 					var montantTotal = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
 					$("#tempsTotal").append(tempsTotal);
 					$("#montantTotal").append(montantTotal);
+
+					$("#tableauDetail").append("<thead><tr><td>Date</td><td>Nom</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");
+
+					if(jQuery.parseJSON(data.ressources) !== false) {
+						jQuery.parseJSON(data.ressources).forEach(function(currentValue) {
+							var couleurTache = "red";
+							var couleurQuota = "green";
+
+							if (currentValue.alerteTache == "true") {
+								couleurTache = "red";
+							} else {
+								couleurTache = "green";
+							}
+
+							if (currentValue.alerteQuota == "true") {
+								couleurQuota = "red";
+							} else {
+								couleurQuota = "green";
+							}
+
+							$("#tableauDetail").append("<tr><td>" + currentValue.date + "</td><td>" + currentValue.nomRessource + "</td><td>" + currentValue.tempsPassee + "</td><td>" + currentValue.montantTache + "</td><td style='background-color:" + couleurQuota + ";'></td><td style='background-color:" + couleurTache + ";'></td></tr>");
+						});
+					}
+
+					$("#tableauDetail").append("</tbody>");
 				}
 			});
 		} else if ($("#selectTache").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessource").val() + "&idProjet=" + $("#selectProjet").val();
+			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessource").val() + "&idProjet=" + $("#selectProjet").val() + urlMois + urlAnnee;
+
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
 					var tempsTotal = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
