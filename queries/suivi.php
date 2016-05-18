@@ -54,7 +54,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	}
 }else if(isset($_GET["idProjet"]) && !is_nan($_GET["idProjet"])) {
 	
-	$req = $db->prepare("SELECT a.nbTaches, b.nbDepassement, c.nbLate FROM (SELECT count(t.codeTache) as nbTaches FROM taches t WHERE codeProjet = ?) a, (SELECT COUNT(r.nbTaches) as nbDepassement FROM (SELECT t.codeTache as nbTaches FROM taches t WHERE codeProjet = ? AND t.tempsPrevu < (SELECT SUM(c.tempsPassee) FROM conso c WHERE c.codeTache = t.codeTache)) r) b, (SELECT COUNT(codeTache) as nbLate FROM (SELECT t.codeTache FROM taches t WHERE codeProjet = ? AND (t.dateDebutPrevue < t.dateDebutReelle OR (t.dateDebutPrevue < NOW()) OR (t.dateFinPrevue < NOW()) OR ( t.dateFinReelle > t.dateFinPrevue))) r) c");
+	$req = $db->prepare("SELECT a.nbTaches, b.nbDepassement, c.nbLate FROM
+							(SELECT count(t.codeTache) as nbTaches FROM taches t WHERE codeProjet = ?) a,
+							(SELECT COUNT(r.nbTaches) as nbDepassement FROM
+							(SELECT t.codeTache as nbTaches FROM taches t WHERE codeProjet = ? AND t.tempsPrevu <
+							(SELECT SUM(c.tempsPassee) FROM conso c WHERE c.codeTache = t.codeTache)) r) b,
+							(SELECT COUNT(codeTache) as nbLate FROM
+							(SELECT t.codeTache FROM taches t WHERE codeProjet = ? AND (t.dateDebutPrevue < t.dateDebutReelle OR (t.dateDebutPrevue < NOW()) OR (t.dateFinPrevue < NOW()) OR ( t.dateFinReelle > t.dateFinPrevue))) r) c");
 
 	$req->bindParam(1, $_GET["idProjet"]);
 	$req->bindParam(2, $_GET["idProjet"]);
@@ -118,5 +124,3 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
 }
-
-?>

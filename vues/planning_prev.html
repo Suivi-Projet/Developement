@@ -121,14 +121,15 @@
 		});
 	}
 
-
-
     function majSelectedPP(){
         $.ajax({
             type: "POST",
             url: "http://localhost/Developement/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProjectPP").val()
+            },
+            success: function(){
+            	majTableauPP();
             }
         });
     }

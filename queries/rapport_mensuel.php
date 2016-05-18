@@ -99,5 +99,3 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 } else {
 	echo json_encode(['codeRetour' => 500, 'result' => "Parametre invalide !"]);
 }
-
-?>

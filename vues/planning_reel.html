@@ -31,6 +31,7 @@
 	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	                $("#selectProjetPR").val(jQuery.parseJSON(data).data);
+	                majTableauPR();
 	            }
 	        });
 		});
@@ -116,7 +117,7 @@
 										if (theValue.dateFinReelle <= theValue.dateFinPrevue) {
 											$("#bodyPlanningReel").append("<td style='background-color:#B6F576;'></td>");
 										} else {
-											$("#bodyPlanningReel").append("<td style='background-color:red;'></td>");
+											$("#bodyPlanningReel").append("<td style='background-color:#F57676;'></td>");
 										}
 									} else {
 										$("#bodyPlanningReel").append("<td style='background-color:#B6F576;'></td>");
@@ -125,12 +126,12 @@
 								} else if (theValue.dateFinReelle != null && superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinReelle)))) {
 									$("#bodyPlanningReel").append("<td></td>");
 								} else if (superiorToDate(arrayDates[i], formatDate(new Date(theValue.dateFinPrevue))) && superiorToDate(arrayDates[i], formatDate(new Date()))){
-									$("#bodyPlanningReel").append("<td style='background-color:red;'></td>");
+									$("#bodyPlanningReel").append("<td style='background-color:#F57676;'></td>");
 								}
 
 							} else if(theValue.dateDebutReelle == null) {
 								if(superiorToDate(formatDate(new Date()), formatDate(new Date(theValue.dateDebutPrevue))) && superiorToDate(formatDate(new Date()), arrayDates[i])) {
-									$("#bodyPlanningReel").append("<td style='background-color:purple;'></td>");
+									$("#bodyPlanningReel").append("<td style='background-color:#FFB64F;'></td>");
 								} else {
 									$("#bodyPlanningReel").append("<td></td>");
 								}
@@ -180,9 +181,6 @@
 		return result;
 	}
 
-	majProjetPR();
-
-
 
     function majSelectedPR(){
         $.ajax({
@@ -190,7 +188,12 @@
             url: "http://localhost/Developement/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProjetPR").val()
+            },
+            success: function(){
+            	majTableauPR();
             }
         });
     }
+
+	majProjetPR();
 </script>
