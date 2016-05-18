@@ -181,7 +181,6 @@
             valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && pctTache.val() >= 0 && pctTache.val() <= 100;
 
             if ( valid ) {
-            	var data = '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '"}';
                 $.ajax({
 					type: "POST",
 					url: "http://localhost/Developement/queries/suivi.php",
