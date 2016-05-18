@@ -5,16 +5,16 @@ include 'config.php';
 $request = $db->prepare("SELECT MIN(dateDebutReelle) as dateDeb, MAX(dateFinReelle) as dateEnd FROM taches WHERE codeProjet = ?");
 $request->bindParam(1, $_GET["idProjet"]);
 $request->execute();
-$resDate = $req->fetch(PDO::FETCH_ASSOC);
+$resDate = $request->fetch(PDO::FETCH_ASSOC);
 
-$yearStart = isset($_GET["year"]) ? $_GET["year"] : $resDate["dateDeb"];
-$yearEnd = isset($_GET["year"]) ? $_GET["year"] : $resDate["dateEnd"];
+$yearStart = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateDeb"] == null ? date("Y") : explode('-', $resDate["dateDeb"])[0]);
+$yearEnd = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateEnd"] == null ? date("Y") : explode('-', $resDate["dateEnd"])[0]);
 
 $monthStart = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '01';
 $monthEnd = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '12';
 
 $dateStart = $yearStart.'-'.$monthStart.'-01';
-$dateEnd = $yearEnd.'-'.$monthEnd.'-'.date("t", strtotime($year.'-'.$monthEnd.'-01'));
+$dateEnd = $yearEnd.'-'.$monthEnd.'-'.date("t", strtotime($yearEnd.'-'.$monthEnd.'-01'));
 
 if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idRessource"])) {
 
