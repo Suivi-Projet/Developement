@@ -231,22 +231,16 @@
                 majRecapProj();
                 majEtatProj();
                 majRecapTaches();
+
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+                    success : function(data){
+                        $("#selectProjet").val(jQuery.parseJSON(data).data);
+                    }
+                });
 			});
 		});
-
-        var projectLaunched = null;
-
-        $.ajax({
-            type: "GET",
-            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
-            success : function(data){
-                console.log(data);
-            }
-        });
-
-        if (projectLaunched != null) {
-            $("#selectProjet").val(projectLaunched);
-        }
 	}
 
 	majProjets();
@@ -396,7 +390,13 @@
     }
 
     function majSelectedSuiv(){
-        $.getJSON("http://localhost/Developement/queries/maj_session.php?projetEnCours=" + $("#selectProjet").val());
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjet").val()
+            }
+        });
     }
 
     Date.prototype.addDays = function(days)

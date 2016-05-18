@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<div class="span2 offset5">
 		<h4>Projet :</h4>
-		<select class="form-control" id="selectProjetPR" onChange="majTableauPR();"></select>
+		<select class="form-control" id="selectProjetPR" onChange="majSelectedPR();majTableauPR();"></select>
 	</div>
 </div>
 <div style="overflow:auto;">
@@ -24,13 +24,15 @@
 				$("#selectProjetPR").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
 			majTableauPR();
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProjetPR").val(jQuery.parseJSON(data).data);
+	            }
+	        });
 		});
 
-        var projectLaunched = <?php echo $_SESSION["projetEnCours"]; ?>;
-
-        if (projectLaunched != null) {
-            $("#selectProjetPR").val(projectLaunched);
-        }
 	}
 
 	function monthDiff(d1, d2) {
@@ -173,10 +175,20 @@
 			result = false;
 		}
 
-		console.log(yearOne + " " + monthOne + "   -   " + yearTwo + " " + monthTwo + "  =>  " + result);
-
 		return result;
 	}
 
 	majProjetPR();
+
+
+
+    function majSelectedPR(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjetPR").val()
+            }
+        });
+    }
 </script>
