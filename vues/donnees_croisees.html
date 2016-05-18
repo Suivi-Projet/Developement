@@ -1,0 +1,41 @@
+<div class="row-fluid">
+	<div class="span2 offset5">
+		<h4>Projet :</h4>
+		<select class="form-control" id="selectProjectDC" onChange="majSelectedDC();"></select>
+	</div>
+</div>
+<script>
+	function majProjetsDC(){
+		$("#selectProjectDC").empty();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue) {
+				$("#selectProjectDC").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
+			});
+	        $.ajax({
+	            type: "GET",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            success : function(data){
+	                $("#selectProjectDC").val(jQuery.parseJSON(data).data);
+            		//ici les fonctions à appeler si besoin pour des maj de contenu
+	            }
+	        });
+		});
+	}
+
+    function majSelectedDC(){
+        $.ajax({
+            type: "POST",
+            url: "http://localhost/Developement/queries/maj_session.php",
+            data: {
+                projetEnCours: $("#selectProjectDC").val()
+            },
+            success: function(){
+            	//ici les fonctions à appeler si besoin pour des maj de contenu
+            }
+        });
+    }
+
+	majProjetsDC();
+</script>

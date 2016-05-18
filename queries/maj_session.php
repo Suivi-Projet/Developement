@@ -7,6 +7,7 @@ if (isset($_POST['projetEnCours'])) {
 }
 
 if(isset($_GET["projetEnCours"])) {
-	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["projetEnCours"]]);
+	$data = isset($_SESSION["projetEnCours"]) ? $_SESSION["projetEnCours"] : null;
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $data]);
 }
 ?>

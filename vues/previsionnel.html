@@ -258,7 +258,17 @@
 	            type: "GET",
 	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
-	                $("#selectProject").val(jQuery.parseJSON(data).data);
+	            	if (jQuery.parseJSON(data).data == null) {
+	            		$.ajax({
+				            type: "POST",
+				            url: "http://localhost/Developement/queries/maj_session.php",
+				            data: {
+				                projetEnCours: $("#selectProject").val()
+				            }
+				        });
+	            	} else {
+	                	$("#selectProject").val(jQuery.parseJSON(data).data);
+	            	}
 					majTaches();
 	            }
 	        });
@@ -266,8 +276,6 @@
     }
 
 	razProjects();
-
-
 
     function majSelectedPrev(){
         $.ajax({
