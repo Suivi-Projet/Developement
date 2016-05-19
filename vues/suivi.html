@@ -236,6 +236,7 @@
             valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && checkPercentage(pctTache) && checkDate(dateSaisi);
 
             if ( valid ) {
+                console.log($("#selectRessource").val(), $("#selectTache").val(), $("#tpsPasseTache").val(), $("#pourcentTache").val(), formatForTable(new Date($("#dateSaisie").val())));
                 $.ajax({
 					type: "POST",
 					url: "http://gestionprojet.herokuapp.com/queries/suivi.php",
@@ -283,17 +284,17 @@
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
 				});
-                majTaches();
-                majRecapProj();
-                majEtatProj();
-                majRecapTaches();
-                majListeConsos();
 
                 $.ajax({
                     type: "GET",
                     url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=ok",
                     success : function(data){
                         $("#selectProjet").val(jQuery.parseJSON(data).data);
+                        majTaches();
+                        majRecapProj();
+                        majEtatProj();
+                        majRecapTaches();
+                        majListeConsos();
                     }
                 });
 			});

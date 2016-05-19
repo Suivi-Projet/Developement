@@ -41,18 +41,51 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 			if(is_null($resultDateDeb["dateDebutReelle"])) {
 				$updTache = $db->prepare("UPDATE taches SET dateDebutReelle = ? WHERE codeTache = ?");
-				$updTache->bindParam(1, date("Y-m-d"));
+				$updTache->bindParam(1, $json["dateConso"]);
 				$updTache->bindParam(2, $json["codeTache"]);
 				$doneDateDeb = $updTache->execute();
 
 				if(!$doneDateDeb)
 					echo json_encode(['codeRetour' => 500, 'result' => "La mise à jour de la date de début réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 
+			} else {
+				$val = 0;
+
+				if ($resultDateDeb["dateDebutReelle"] > $json["dateConso"]){
+					$val = $json["dateConso"];
+				} else {
+					$val = $resultDateDeb["dateDebutReelle"];
+				}
+
+				$updTache = $db->prepare("UPDATE taches SET dateDebutReelle = ? WHERE codeTache = ?");
+				$updTache->bindParam(1, $val);
+				$updTache->bindParam(2, $json["codeTache"]);
+				$doneDateDeb = $updTache->execute();
+
+				if(!$doneDateDeb)
+					echo json_encode(['codeRetour' => 500, 'result' => "La mise à jour de la date de début réelle de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 			}
 
 			if($json["avancement"] == 100) {
+				$reqExistDateFin = $db->prepare("SELECT dateFinReelle FROM taches WHERE codeTache = ?");
+				$reqExistDateFin->bindParam(1, $json["codeTache"]);
+				$reqExistDateFin->execute();
+				$resultDateFin = $reqExistDateDeb->fetch(PDO::FETCH_ASSOC);
+
+				$val = 0;
+
+				if(is_null($resultDateFin["dateFinReelle"])) {
+					$val = $json["dateConso"];
+				} else {
+					if ($resultDateFin["dateFinReelle"] < $json["dateConso"]){
+					$val = $json["dateConso"];
+				} else {
+					$val = $resultDateFin["dateFinReelle"];
+				}
+				}
+
 				$updTacheEnd = $db->prepare("UPDATE taches SET dateFinReelle = ? WHERE codeTache = ?");
-				$updTacheEnd->bindParam(1, $json["dateConso"]);
+				$updTacheEnd->bindParam(1, $val);
 				$updTacheEnd->bindParam(2, $json["codeTache"]);
 				$doneUpTacheEnd = $updTacheEnd->execute();
 				if(!$doneUpTacheEnd)
