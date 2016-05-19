@@ -28,7 +28,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 		  " AND c.codeRessource = r.codeRessource 
 		  	AND t.codeTache = c.codeTache 
 		    AND date BETWEEN '".$dateStart."' AND '".$dateEnd."' 
-		    GROUP BY c.codeTache";
+		    GROUP BY c.codeTache, c.date";
 
 	$reqTaches = $db->query($sqlTaches);
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
@@ -63,7 +63,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 				    " AND c.codeRessource = r.codeRessource 
 				  	  AND t.codeTache = c.codeTache 
 				      AND date BETWEEN '".$dateStart."' AND '".$dateEnd."'  
-				      GROUP BY c.codeRessource";
+				      GROUP BY c.codeRessource, c.date";
 
 	$reqRessources = $db->query($sqlRessources);
 	$resultRessources = $reqRessources->fetchAll(PDO::FETCH_ASSOC);

@@ -26,7 +26,7 @@
 		</fieldset>
 	</div>
 	<div class="span4 offset1">
-		<button class="btn btn-primary" id="callFormTache" data-toggle="modal" data-target="#form-tache">Ajouter une Tâche</button>
+		<button class="btn btn-primary" class="callFormTache" data-toggle="modal" data-target="#form-tache" onClick="AddTaskMajData()">Ajouter une Tâche</button>
 	</div>
 </div>
 <div class="modal fade" id="form-tache" tabindex="-1" role="dialog"
@@ -183,7 +183,7 @@
 			addTache();
         });
 
-		$("#callFormTache").on("click", function(){
+		$(".callFormTache").on("click", function(){
 			$('#addFormTache').find('input:text, select').val('');
 			$('#coutTache').val('');
 			$('#tempsTache').val('');
@@ -225,9 +225,9 @@
 				var dateDebut = new Date(currentValue.dateDebutPrevue).getDate() + " " + months[new Date(currentValue.dateDebutPrevue).getMonth()] + " " + new Date(currentValue.dateDebutPrevue).getFullYear();
 				var dateFin = new Date(currentValue.dateFinPrevue).getDate() + " " + months[new Date(currentValue.dateFinPrevue).getMonth()] + " " + new Date(currentValue.dateFinPrevue).getFullYear();
 				if(currentValue.dateDebutReelle == null && currentValue.dateFinReelle == null) {
-					$("#taches").append("<tr><td><a onclick=deleteTache(" + currentValue.codeTache + ")><img src='./img/trash.png' alt='Supprimer la tâche' height='20' width='20'/></a> " + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
+					$("#taches").append("<tr><td><a onclick=deleteTache(" + currentValue.codeTache + ")><img src='./img/trash.png' alt='Supprimer la tâche' height='20' width='20'/></a> <a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.referenceTache + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.libelleTache + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.libelleFamille + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + dateDebut + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + dateFin + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">"+ currentValue.tempsPrevu +"</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">"+ currentValue.coutPrevu +"</a></td></tr>");
 				} else {
-					$("#taches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
+					$("#taches").append("<tr><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.referenceTache + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.libelleTache + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + currentValue.libelleFamille + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + dateDebut + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">" + dateFin + "</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">"+ currentValue.tempsPrevu +"</a></td><td><a class=\"callFormTache\" data-toggle=\"modal\" data-target=\"#form-tache\" onClick=\"updateTaskMajData('" + currentValue.codeTache + "','" + currentValue.libelleTache + "','" + currentValue.referenceTache + "','" + currentValue.codeFamille + "','" + currentValue.codeLivrable + "','" + currentValue.dateDebutPrevue + "','" + currentValue.dateFinPrevue +  "','" + currentValue.tempsPrevu + "','" + currentValue.coutPrevu + "')\">"+ currentValue.coutPrevu +"</a></td></tr>");
 				}
 				
 			});
@@ -305,6 +305,54 @@
                 }
             });
         }
+    }
+
+    function updateTaskMajData(code, nomTache, refTache, famTache, livTache, startTache, endTache, tpsPrevu, ctPrevu){
+        $("#myModalLabel").html("Modifier une tâche");
+        $("#addTache").html("Mettre à jour");
+
+        $("#nomTache").val(nomTache);
+        $("#refTache").val(refTache);
+        $("#selectFamille").val(famTache);
+        $("#selectLivrable").val(livTache);
+        $("#startTache").val(startTache);
+        $("#endTache").val(endTache);
+        $("#tempsTache").val(tpsPrevu);
+        $("#coutTache").val(ctPrevu);
+
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeTache: code
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function AddTaskMajData(){
+        $("#myModalLabel").html("Ajouter une tâche");
+        $("#addTache").html("Ajouter");
+
+        $("#nomTache").val("");
+        $("#refTache").val("");
+        $("#selectFamille").val("");
+        $("#selectLivrable").val("");
+        $("#startTache").val("");
+        $("#endTache").val("");
+        $("#tempsTache").val("");
+        $("#coutTache").val("");
+
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeTache: null
+                },
+                success: function(data) {
+                }
+        })
     }
 
 </script>

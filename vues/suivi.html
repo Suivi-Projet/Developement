@@ -279,15 +279,7 @@
                     var cout = element.cout == null ? "0" : element.cout;
                     var ratioTemps = element.ratioTemps == null ? "0" : element.ratioTemps;
 
-                    var tempsRestant = Math.round(element.tempsPrevu);
-
-                    if (element.avancement != 0) {
-                        if (tempsConsomme != "0"){
-                            tempsRestant = Math.round(((tempsConsomme * 100) / element.avancement));
-                        }
-                    }
-
-                    if (dateJour.addDays(parseInt(tempsRestant / element.dureeLegale)) > new Date(element.dateFinPrevue) || ((new Date(element.dateFinPrevue) < dateJour) && element.dateFinReelle == null) || element.dateFinReelle > element.dateFinPrevue) {
+                    if (((new Date(element.dateFinPrevue) < dateJour) && element.dateFinReelle == null) || element.dateFinReelle > element.dateFinPrevue) {
                         nbLate++;
                     }
 
@@ -353,8 +345,12 @@
                 }
 
                 if (jQuery.parseJSON(data.data).dateFinReelle != null) {
-                    var dateFinReel = new Date(jQuery.parseJSON(data.data).dateFinReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinReelle).getFullYear();
-                    $("#finReel").append(dateFinReel);
+                    if(jQuery.parseJSON(data.unfinished).length == 0) {
+                        var dateFinReel = new Date(jQuery.parseJSON(data.data).dateFinReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinReelle).getFullYear();
+                        $("#finReel").append(dateFinReel);
+                    } else {
+                        $("#finReel").append("/");
+                    }
                 }
 
                 if (jQuery.parseJSON(data.data).tempsConsomme != null) {
@@ -370,7 +366,12 @@
                 }
 
                 if (jQuery.parseJSON(data.data).ecartDateFin != null) {
-                    $("#ecartFin").append(jQuery.parseJSON(data.data).ecartDateFin);
+                    if(jQuery.parseJSON(data.unfinished).length == 0) {
+                        $("#ecartFin").append(jQuery.parseJSON(data.data).ecartDateFin);
+                    }
+                    else {
+                        $("#ecartFin").append("/");
+                    }
                 }
 
                 if (jQuery.parseJSON(data.data).ecartDuree != null) {
@@ -403,11 +404,11 @@
 
                 if (currentValue.avancement != 0) {
                     if (tempsConsomme != "0"){
-                        tempsRestant = Math.round(((tempsConsomme * 100) / currentValue.avancement));
+                        tempsRestant = Math.round(tempsConsomme - ((tempsConsomme * 100) / currentValue.avancement));
                     }
                 }
 
-                if (dateJour.addDays(parseInt(tempsRestant / currentValue.dureeLegale)) > new Date(currentValue.dateFinPrevue) || ((new Date(currentValue.dateFinPrevue) < dateJour) && currentValue.dateFinReelle == null) || currentValue.dateFinReelle > currentValue.dateFinPrevue) {
+                if (((new Date(currentValue.dateFinPrevue) < dateJour) && currentValue.dateFinReelle == null) || currentValue.dateFinReelle > currentValue.dateFinPrevue) {
                     couleurRetard = "#F57676";
                 } else {
                     couleurRetard = "#B6F576";

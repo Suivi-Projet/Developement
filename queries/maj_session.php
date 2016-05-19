@@ -2,8 +2,6 @@
 
 session_start();
 
-
-
 if (isset($_POST['projetEnCours'])) {
 	$_SESSION['projetEnCours'] = $_POST['projetEnCours'];
 }
@@ -34,5 +32,35 @@ if(isset($_GET["authentified"])) {
 if(isset($_GET["logout"])) {
 	$_SESSION["login"] = null;
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => null]);
+}
+
+if(isset($_POST["codeProjet"])) {
+	$_SESSION["codeProjet"] = $_POST["codeProjet"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeProjet"]]);
+}
+
+if(isset($_POST["codeFamille"])) {
+	$_SESSION["codeFamille"] = $_POST["codeFamille"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeFamille"]]);
+}
+
+if(isset($_POST["codeLivrable"])) {
+	$_SESSION["codeLivrable"] = $_POST["codeLivrable"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeLivrable"]]);
+}
+
+if(isset($_POST["codeCategorie"])) {
+	$_SESSION["codeCategorie"] = $_POST["codeCategorie"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeCategorie"]]);
+}
+
+if(isset($_POST["codeRessource"])) {
+	$_SESSION["codeRessource"] = $_POST["codeRessource"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeRessource"]]);
+}
+
+if(isset($_POST["codeTache"])) {
+	$_SESSION["codeTache"] = $_POST["codeTache"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeTache"]]);
 }
 ?>

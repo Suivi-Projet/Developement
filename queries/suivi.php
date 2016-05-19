@@ -71,8 +71,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$result = $req->fetch(PDO::FETCH_ASSOC);
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 }else if(isset($_GET["infoProjet"]) && !is_nan($_GET["infoProjet"])) {
-	$req = $db->prepare("SELECT dateDebutPrevue, dateFinPrevue, SUM(tempsPrevu) as dureePrevu, MIN(dateDebutReelle) as dateDebutReelle, MAX(dateFinReelle) as dateFinReelle,
-									  DATEDIFF(MIN(dateDebutReelle), dateDebutPrevue) as ecartDateDebut, DATEDIFF(MAX(dateFinReelle), dateFinPrevue) as ecartDateFin,
+	$req = $db->prepare("SELECT MIN(dateDebutPrevue) as dateDebutPrevue, MAX(dateFinPrevue) as dateFinPrevue, SUM(tempsPrevu) as dureePrevu, MIN(dateDebutReelle) as dateDebutReelle, MAX(dateFinReelle) as dateFinReelle,
+									  DATEDIFF(MIN(dateDebutReelle), MIN(dateDebutPrevue)) as ecartDateDebut, DATEDIFF(MAX(dateFinReelle), MAX(dateFinPrevue)) as ecartDateFin,
 									  temp.tempsConsomme, (SUM(tempsPrevu) - temp.tempsConsomme) as ecartDuree, temp.montantPrevu, temp.montantReel, (temp.montantPrevu-temp.montantReel) as ecartMontant 
 							  FROM taches, (
 								SELECT SUM(t.coutPrevu) as montantPrevu, res.tempsConsomme, res.montantReel
@@ -96,9 +96,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$req->bindParam(3, $_GET["infoProjet"]);
 
 	$done = $req->execute();
+
+	$lastReq = $db->prepare("SELECT codeTache FROM taches WHERE dateFinReelle IS NULL AND codeProjet = ?");
+
+	$lastReq->bindParam(1, $_GET["infoProjet"]);
+
+	$lastReq->execute();
 	if($done) {
 		$result = $req->fetch(PDO::FETCH_ASSOC);
-		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+		$lastResult = $lastReq->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result), 'unfinished' => json_encode($lastResult)]);
 	}
 } else if(isset($_GET["recapProjet"]) && !is_nan($_GET["recapProjet"])) {
 	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, t.dateDebutReelle, t.dateFinReelle, t.tempsPrevu, SUM(res.tempsPassee) as tempsConsomme, 

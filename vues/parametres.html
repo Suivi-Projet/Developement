@@ -12,7 +12,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button class="btn btn-primary" id="callFormProjet" data-toggle="modal" data-target="#form-projet"> Ajouter</button></td>
+					<td><button class="btn btn-primary" class="callFormProjet" data-toggle="modal" data-target="#form-projet" onClick="AddProjMajData()"> Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -31,7 +31,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button class="btn btn-primary" id="callFormFamille" data-toggle="modal" data-target="#form-famille">Ajouter</button></td>
+					<td><button class="btn btn-primary" class="callFormFamille" data-toggle="modal" data-target="#form-famille" onClick="AddFamMajData()">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -50,7 +50,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button class="btn btn-primary" id="callFormLivrable" data-toggle="modal" data-target="#form-livrable">Ajouter</button></td>
+					<td><button class="btn btn-primary" class="callFormLivrable" data-toggle="modal" data-target="#form-livrable" onClick="AddLivMajData()">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -71,7 +71,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td><button class="btn btn-primary" id="callFormCategorie" data-toggle="modal" data-target="#form-categorie">Ajouter</button></td>
+					<td><button class="btn btn-primary" class="callFormCategorie" data-toggle="modal" data-target="#form-categorie" onClick="AddCatMajData()">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -92,7 +92,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3"><button class="btn btn-primary" id="callFormUser" data-toggle="modal" data-target="#form-user">Ajouter</button></td>
+					<td colspan="3"><button class="btn btn-primary" class="callFormUser" data-toggle="modal" data-target="#form-user" onClick="AddResMajData()">Ajouter</button></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -274,7 +274,7 @@
                     <span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="labelCategorie">
-                    Ajouter un categorie
+                    Ajouter une categorie
                 </h4>
             </div>
             <div class="modal-body" id="addFormCategorie">
@@ -297,18 +297,88 @@
     </div>
 </div>
 <script>
+	function majData(){
+		$("#nomProjet").empty();
+		$("#nomFamille").empty();
+		$("#nomLivrable").empty();
+		$("#nomCategorie").empty();
+		$("#selectCateg").empty();
+		$("#nomRessource").empty();
+		$("#parametre").val();
+
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+			if(jQuery.parseJSON(data.data) !== false)
+			jQuery.parseJSON(data.data).forEach(function (currentValue, index) {
+                if(currentValue.dateDebutReelle === null && currentValue.dateFinReelle === null) {
+                    $("#nomProjet").append("<tr><td><a class='callFormProjet' data-target='#form-projet' data-toggle='modal' onClick='updateProjMajData(\"" + currentValue.codeProjet + "\", \"" + currentValue.libelleProjet + "\")'>" + currentValue.libelleProjet + "</a><a onclick=deleteProjet(" + currentValue.codeProjet + ")><img src='./img/trash.png' alt='Supprimer le projet' height='20' width='20'/></a></td></tr>");
+                }else {
+                    $("#nomProjet").append("<tr><td><a class='callFormProjet' data-target='#form-projet' data-toggle='modal' onClick='updateProjMajData(\"" + currentValue.codeProjet + "\", \"" + currentValue.libelleProjet + "\")'>" + currentValue.libelleProjet + "</a></td></tr>");
+                }
+			});
+            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
+                if(jQuery.parseJSON(data.data) !== false)
+                jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                    $("#nomLivrable").append("<tr><td><a class='callFormLivrable' data-toggle='modal' data-target='#form-livrable' onClick=\"updateLivMajData('" + currentValue.codeLivrable + "','" + currentValue.libelleLivrable + "')\">" + currentValue.libelleLivrable + "</a></td></tr>");
+                });
+                $.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
+                    if(jQuery.parseJSON(data.data) !== false)
+                    jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                        $("#nomCategorie").append("<tr><td><a class=\"callFormCategorie\" data-toggle=\"modal\" data-target=\"#form-categorie\" onClick=\"updateCatMajData('" + currentValue.codeCategorie + "','" + currentValue.libelleCategorie + "')\">" + currentValue.libelleCategorie + "</a></td></tr>");
+                        $("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
+                    });
+                    $.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
+                        if(jQuery.parseJSON(data.data) !== false)
+                        jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                            $("#nomFamille").append("<tr><td><a onClick=\"updateFamMajData('" + currentValue.codeFamille + "', '" + currentValue.libelleFamille + "')\" class='callFormFamille' data-target='#form-famille' data-toggle='modal'>" + currentValue.libelleFamille + "</a></td></tr>");
+                        });
+                        $.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
+                            if(jQuery.parseJSON(data.data) !== false)
+                            jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                                $("#parametre").val(currentValue.dureeLegale);
+                            });
+                            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+                                if(jQuery.parseJSON(data.data) !== false)
+                                jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                                    $("#nomRessource").append("<tr><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\"> " + currentValue.nomRessource + "</a></td><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\">" + currentValue.libelleCategorie + "</a></td><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\"> " + currentValue.tauxHoraire + "</a></td></tr>");
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+		});
+
+	}
+
+    function deleteProjet(idProjet) {
+        if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
+            $.ajax({
+                url: 'http://localhost/Developement/queries/parametres.php?objet=projet',
+                type: 'POST',
+                contentType: 'application/json',
+                data: '{"_method": "delete", "idProjet": "' + idProjet + '"}',
+                success: function (data) {
+                    majData();
+                }
+            });
+        }
+    }
+
+	majData();
+</script>
+<script>
     /* Gestion Formulaire Add User */
     $(function() {
         var nomRes = $( "#nomRes" ),
         coutRes = $("#coutRes"),
-		categ = $("#selectCateg"),
+        categ = $("#selectCateg"),
         allFields = $( [] ).add( nomRes).add(coutRes),
         tips = $( ".validateTips" );
 
         function updateTips( t ) {
             tips
-				.text( t )
-				.addClass( "ui-state-highlight" );
+                .text( t )
+                .addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -340,25 +410,25 @@
             allFields.removeClass( "ui-state-error" );
 
             valid = valid && checkLength( nomRes, "username", 3, 255 );
-			valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Votre nom peut contenir les caractères suivants : a-z, 0-9, underscores, espaces et doit commencer par une lettre." );
+            valid = valid && checkRegexp( nomRes, /^[a-z]([0-9a-z_\s])+$/i, "Votre nom peut contenir les caractères suivants : a-z, 0-9, underscores, espaces et doit commencer par une lettre." );
             valid = valid && checkLength( categ, "username", 1, 5 );
 
             if ( valid ) {
-				$.ajax({
-					type: "POST",
-					url: "http://localhost/Developement/queries/parametres.php",
-					dataType: 'json',
-					contentType:'application/json',
-					data: '{"objet" : "ressource",	"nomRessource" : "' + $("#nomRes").val()+ '","tauxHoraire" : "'+ $("#coutRes").val()+'","codeCatPerso" : "'+ $("#selectCateg").val()+'" }',
-					success : function(){
-						majData();
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost/Developement/queries/parametres.php",
+                    dataType: 'json',
+                    contentType:'application/json',
+                    data: '{"objet" : "ressource",  "nomRessource" : "' + $("#nomRes").val()+ '","tauxHoraire" : "'+ $("#coutRes").val()+'","codeCatPerso" : "'+ $("#selectCateg").val()+'" }',
+                    success : function(){
+                        majData();
                         $('#form-user').modal('hide');;
-					},
-					error : function(){
-						alert("Y'a un souci")
+                    },
+                    error : function(){
+                        alert("Y'a un souci")
                         $('#form-user').modal('hide');
-					}
-				});
+                    }
+                });
             }
             return valid;
         }
@@ -367,15 +437,14 @@
             addUser();
         });
 
-        $("#callFormUser").on("click", function(){
+        $(".callFormUser").on("click", function(){
             $('#addFormUser').find('input:text').val('');
-            $('selectCateg').reset();
             $('#coutRes').val('');
         });
     });
 
     /* Gestion Formulaire Add Projet */
-	$(function() {
+    $(function() {
 
         var nomProjet = $( "#nomProj" ),
         allFields = $( [] ).add( nomProjet),
@@ -383,8 +452,8 @@
 
         function updateTips( t ) {
             tips
-				.text( t )
-				.addClass( "ui-state-highlight" );
+                .text( t )
+                .addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -408,22 +477,22 @@
             valid = valid && checkLength( nomProjet, "projet", 3, 255 );
 
             if ( valid ) {
-				$.ajax
-			    ({
-			        type: "POST",
-			        url: "http://localhost/Developement/queries/parametres.php",
-			        dataType: 'json',
-			        contentType:'application/json',
-			        data: '{"objet": "projet","libelleProjet": "' + $("#nomProj").val() + '"}',
-			        success: function () {
-			        	majData();
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "http://localhost/Developement/queries/parametres.php",
+                    dataType: 'json',
+                    contentType:'application/json',
+                    data: '{"objet": "projet","libelleProjet": "' + $("#nomProj").val() + '"}',
+                    success: function () {
+                        majData();
                         $('#form-projet').modal('hide');;
                     },
                     error : function(){
                         alert("Y'a un souci")
                         $('#form-projet').modal('hide');
                     }
-			    })
+                })
             }
             return valid;
         }
@@ -431,13 +500,13 @@
         $( "#addProjet" ).button().on( "click", function() {
             addProjet();
         });
-        $("#callFormProjet").on("click", function(){
+        $(".callFormProjet").on("click", function(){
             $('#addFormProjet').find('input:text').val('');
         });
     });
 
     /* Gestion formulaire Add Famille */
-	$(function() {
+    $(function() {
 
         var nomFamille = $( "#nomFam" ),
         allFields = $( [] ).add( nomFamille),
@@ -445,8 +514,8 @@
 
         function updateTips( t ) {
             tips
-				.text( t )
-				.addClass( "ui-state-highlight" );
+                .text( t )
+                .addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -470,33 +539,37 @@
             valid = valid && checkLength( nomFamille, "famille", 3, 255 );
 
             if ( valid ) {
-				$.ajax
-			    ({
-			        type: "POST",
-			        url: "http://localhost/Developement/queries/parametres.php",
-			        dataType: 'json',
-			        contentType:'application/json',
-			        data: '{"objet": "famille","libelleFamille": "' + $("#nomFam").val() + '"}',
-			        success: function () {
-			        	majData();
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "http://localhost/Developement/queries/parametres.php",
+                    dataType: 'json',
+                    contentType:'application/json',
+                    data: '{"objet": "famille","libelleFamille": "' + $("#nomFam").val() + '"}',
+                    success: function () {
+                        majData();
                         $('#form-famille').modal('hide');;
                     },
                     error : function(){
                         alert("Y'a un souci")
                         $('#form-famille').modal('hide');
                     }
-			    })
+                })
             }
             return valid;
         }
 
-        $( "#callFormFamille" ).button().on( "click", function() {
+        $( "#addFamille" ).button().on( "click", function() {
+            addFamille();
+        });
+
+        $( ".callFormFamille" ).button().on( "click", function() {
             $('#addFormFamille').find('input:text').val('');
         });
     });
 
     /*Gestion formulaire Add Livrable */
-	$(function() {
+    $(function() {
 
         var nomLivrable = $( "#nomLiv" ),
         allFields = $( [] ).add( nomFamille),
@@ -504,8 +577,8 @@
 
         function updateTips( t ) {
             tips
-				.text( t )
-				.addClass( "ui-state-highlight" );
+                .text( t )
+                .addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -529,22 +602,23 @@
             valid = valid && checkLength( nomLivrable, "livrable", 3, 255 );
 
             if ( valid ) {
-				$.ajax
-			    ({
-			        type: "POST",
-			        url: "http://localhost/Developement/queries/parametres.php",
-			        dataType: 'json',
-			        contentType:'application/json',
-			        data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
-			        success: function () {
-			        	majData();
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "http://localhost/Developement/queries/parametres.php",
+                    dataType: 'json',
+                    contentType:'application/json',
+                    data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
+                    success: function (data) {
+                        console.log(data);
+                        majData();
                         $('#form-livrable').modal('hide');;
                     },
                     error : function(){
                         alert("Y'a un souci")
                         $('#form-livrable').modal('hide');
                     }
-			    })
+                })
             }
             return valid;
         }
@@ -553,21 +627,21 @@
             addLivrable();
         });
 
-        $( "#callFormLivrable" ).button().on( "click", function() {
+        $( ".callFormLivrable" ).button().on( "click", function() {
             $('#addFormLivrable').find('input:text').val('');
         });
     });
 
     /* Gestion formulaire Add Catégorie */
-	$(function() {
+    $(function() {
         var nomCategorie = $( "#nomCat" ),
         allFields = $( [] ).add( nomCategorie),
         tips = $( ".validateTips" );
 
         function updateTips( t ) {
             tips
-				.text( t )
-				.addClass( "ui-state-highlight" );
+                .text( t )
+                .addClass( "ui-state-highlight" );
             setTimeout(function() {
                 tips.removeClass( "ui-state-highlight", 1500 );
             }, 500 );
@@ -591,22 +665,22 @@
             valid = valid && checkLength( nomCategorie, "livrable", 3, 255 );
 
             if ( valid ) {
-				$.ajax
-			    ({
-			        type: "POST",
-			        url: "http://localhost/Developement/queries/parametres.php",
-			        dataType: 'json',
-			        contentType:'application/json',
-			        data: '{"objet": "categ","libelleCategorie": "' + $("#nomCat").val() + '"}',
-			        success: function () {
-			        	majData();
+                $.ajax
+                ({
+                    type: "POST",
+                    url: "http://localhost/Developement/queries/parametres.php",
+                    dataType: 'json',
+                    contentType:'application/json',
+                    data: '{"objet": "categ","libelleCategorie": "' + $("#nomCat").val() + '"}',
+                    success: function () {
+                        majData();
                         $('#form-categorie').modal('hide');;
                     },
                     error : function(){
                         alert("Y'a un souci")
                         $('#form-categorie').modal('hide');
                     }
-			    })
+                })
             }
             return valid;
         }
@@ -615,12 +689,12 @@
             addCategorie();
         });
 
-        $( "#callFormCategorie" ).button().on( "click", function() {
+        $( ".callFormCategorie" ).button().on( "click", function() {
             $('#addFormCategorie').find('input:text').val('');
         });
     });
 
-	$ (function (){
+    $ (function (){
         $( "#addQuota" ).button().on( "click", function() {
             $.ajax
             ({
@@ -634,75 +708,159 @@
                 }
             })
         });
-	})
-</script>
-<script>
-	function majData(){
-		$("#nomProjet").empty();
-		$("#nomFamille").empty();
-		$("#nomLivrable").empty();
-		$("#nomCategorie").empty();
-		$("#selectCateg").empty();
-		$("#nomRessource").empty();
-		$("#parametre").val();
+    })
 
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
-			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue, index) {
-                if(currentValue.dateDebutReelle === null && currentValue.dateFinReelle === null) {
-                    $("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "<a onclick=deleteProjet(" + currentValue.codeProjet + ")><img src='./img/trash.png' alt='Supprimer le projet' height='20' width='20'/></a></td></tr>");
-                }else {
-                    $("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></tr>");
+    function updateProjMajData(code, libelle){
+        $("#labelProjet").html("Modifier un projet");
+        $("#addProjet").html("Mettre à jour");
+        $("#nomProj").val(libelle);
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeProjet: code
+                },
+                success: function(data) {
                 }
-			});
-            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
-                if(jQuery.parseJSON(data.data) !== false)
-                jQuery.parseJSON(data.data).forEach(function (currentValue) {
-                    $("#nomLivrable").append("<tr><td >" + currentValue.libelleLivrable + "</td></tr>");
-                });
-                $.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
-                    if(jQuery.parseJSON(data.data) !== false)
-                    jQuery.parseJSON(data.data).forEach(function (currentValue) {
-                        $("#nomCategorie").append("<tr><td >" + currentValue.libelleCategorie + "</td></tr>");
-                        $("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
-                    });
-                    $.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
-                        if(jQuery.parseJSON(data.data) !== false)
-                        jQuery.parseJSON(data.data).forEach(function (currentValue) {
-                            $("#nomFamille").append("<tr><td >" + currentValue.libelleFamille + "</td></tr>");
-                        });
-                        $.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
-                            if(jQuery.parseJSON(data.data) !== false)
-                            jQuery.parseJSON(data.data).forEach(function (currentValue) {
-                                $("#parametre").val(currentValue.dureeLegale);
-                            });
-                            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
-                                if(jQuery.parseJSON(data.data) !== false)
-                                jQuery.parseJSON(data.data).forEach(function (currentValue) {
-                                    $("#nomRessource").append("<tr><td> " + currentValue.nomRessource + "</td><td>" + currentValue.libelleCategorie + "</td><td> " + currentValue.tauxHoraire + "</td></tr>");
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-		});
-
-	}
-
-    function deleteProjet(idProjet) {
-        if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
-            $.ajax({
-                url: 'http://localhost/Developement/queries/parametres.php?objet=projet',
-                type: 'POST',
-                contentType: 'application/json',
-                data: '{"_method": "delete", "idProjet": "' + idProjet + '"}',
-                success: function (data) {
-                    majData();
-                }
-            });
-        }
+        })
     }
 
-	majData();
+    function AddProjMajData(){
+        $("#labelProjet").html("Ajouter un projet");
+        $("#addProjet").html("Ajouter");
+        $("#nomProj").val("");
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeProjet: null
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function updateFamMajData(code, libelle){
+        $("#labelFamille").html("Modifier une famille");
+        $("#addFamille").html("Mettre à jour");
+        $("#nomFam").val(libelle);
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeFamille: code
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function AddFamMajData(){
+        $("#labelFamille").html("Ajouter une famille");
+        $("#addFamille").html("Ajouter");
+        $("#nomFamille").val("");
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeFamille: null
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function updateLivMajData(code, libelle){
+        $("#labelLivrable").html("Modifier un livrable");
+        $("#addLivrable").html("Mettre à jour");
+        $("#nomLiv").val(libelle);
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeLivrable: code
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function AddLivMajData(){
+        $("#labelLivrable").html("Ajouter un livrable");
+        $("#addLivrable").html("Ajouter");
+        $("#nomLiv").val("");
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeLivrable: null
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function updateCatMajData(code, libelle){
+        $("#labelCategorie").html("Modifier une catégorie");
+        $("#addCategorie").html("Mettre à jour");
+        $("#nomCat").val(libelle);
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeCategorie: code
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function AddCatMajData(){
+        $("#labelCategorie").html("Ajouter une catégorie");
+        $("#addCategorie").html("Ajouter");
+        $("#nomCat").val("");
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeCategorie: null
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function updateResMajData(code, libelleCat, tauxHor, nomRess){
+        $("#labelUser").html("Modifier une ressource");
+        $("#addUser").html("Mettre à jour");
+        $("#nomRes").val(nomRess);
+        $("#selectCateg").val(libelleCat);
+        $("#coutRes").val(tauxHor);
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeRessource: code
+                },
+                success: function(data) {
+                }
+        })
+    }
+
+    function AddResMajData(){
+        $("#labelUser").html("Ajouter une ressource");
+        $("#addUser").html("Ajouter");
+        $("#nomRes").val("");
+        $("#nomRes").val("");
+        $("#coutRes").val("");
+        $.ajax({
+            type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    codeRessource: null
+                },
+                success: function(data) {
+                }
+        })
+    }
 </script>
