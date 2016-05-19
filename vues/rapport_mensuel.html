@@ -99,14 +99,14 @@
 	function majProjetsRM(){
 		$("#selectProjetRM").empty();
 
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjetRM").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
 	        $.ajax({
 	            type: "GET",
-	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
+	            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	                $("#selectProjetRM").val(jQuery.parseJSON(data).data);
 					majTachesRM();
@@ -124,7 +124,7 @@
 
 		$("#selectAnnee").append("<option value=\"0\">Toutes</option>");
 
-		$.getJSON("http://localhost/Developement/queries/rapport_mensuel.php?anneesProjet=" + $("#selectProjetRM").val(), function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/rapport_mensuel.php?anneesProjet=" + $("#selectProjetRM").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false) {
 				var numberOfYears = jQuery.parseJSON(data.data).bigAnnee - jQuery.parseJSON(data.data).smallAnnee;
 
@@ -140,7 +140,7 @@
 
 		$("#selectRessourcesRM").append("<option value=\"0\"> --- </option>");
 
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=ressources", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectRessourcesRM").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
@@ -153,7 +153,7 @@
 
 		$("#selectTacheRM").append("<option value=\"0\"> --- </option>");
 
-		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjetRM").val(), function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/previsionnel.php?idProjet=" + $("#selectProjetRM").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectTacheRM").append("<option value='" + currentValue.codeTache + "'>" + currentValue.referenceTache + "</option>");
@@ -184,7 +184,7 @@
 		}
 
 		if ($("#selectRessourcesRM").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idTache=" + $("#selectTacheRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
+			url = "http://gestionprojet.herokuapp.com/queries/rapport_mensuel.php?idTache=" + $("#selectTacheRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
 					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
@@ -219,7 +219,7 @@
 				}
 			});
 		} else if ($("#selectTacheRM").val() == "0") {
-			url = "http://localhost/Developement/queries/rapport_mensuel.php?idRessource=" + $("#selectRessourcesRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
+			url = "http://gestionprojet.herokuapp.com/queries/rapport_mensuel.php?idRessource=" + $("#selectRessourcesRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
 
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
@@ -270,7 +270,7 @@
     function majSelectedRM(){
         $.ajax({
             type: "POST",
-            url: "http://localhost/Developement/queries/maj_session.php",
+            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProjetRM").val()
             }
