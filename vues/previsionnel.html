@@ -224,7 +224,12 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				var dateDebut = new Date(currentValue.dateDebutPrevue).getDate() + " " + months[new Date(currentValue.dateDebutPrevue).getMonth()] + " " + new Date(currentValue.dateDebutPrevue).getFullYear();
 				var dateFin = new Date(currentValue.dateFinPrevue).getDate() + " " + months[new Date(currentValue.dateFinPrevue).getMonth()] + " " + new Date(currentValue.dateFinPrevue).getFullYear();
-				$("#taches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
+				if(currentValue.dateDebutReelle == null && currentValue.dateFinReelle == null) {
+					$("#taches").append("<tr><td><a onclick=deleteTache(" + currentValue.codeTache + ")><img src='./img/trash.png' alt='Supprimer la tâche' height='20' width='20'/></a> " + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
+				} else {
+					$("#taches").append("<tr><td>" + currentValue.referenceTache + "</td><td>" + currentValue.libelleTache + "</td><td>" + currentValue.libelleFamille + "</td><td>" + dateDebut + "</td><td>" + dateFin + "</td><td>"+ currentValue.tempsPrevu +"</td><td>"+ currentValue.coutPrevu +"</td></tr>");
+				}
+				
 			});
 		});
 	}
@@ -285,6 +290,21 @@
                 projetEnCours: $("#selectProject").val()
             }
         });
+    }
+
+    function deleteTache(idTache) {
+        if(confirm("Êtes-vous sûr de vouloir supprimer cette tâche du projet ?")) {
+            $.ajax({
+                url: 'http://localhost/Developement/queries/previsionnel.php?objet=tache',
+                type: 'POST',
+                contentType: 'application/json',
+                data: '{"_method": "delete", "idTache": "' + idTache + '"}',
+                success: function (data) {
+                    majSelectedPrev();
+                    majTaches();
+                }
+            });
+        }
     }
 
 </script>
