@@ -148,11 +148,21 @@
             }
         }
 
+        function checkSuperior(d1, d2){
+        	if (new Date(d1.val()) > new Date(d2.val())) {
+        		d1.addClass( "ui-state-error");
+        		d2.addClass( "ui-state-error");
+        		return false;
+        	} else {
+        		return true;
+        	}
+        }
+
         function addTache() {
             var valid = true;
             allFields.removeClass( "ui-state-error" );
 
-            valid = valid && checkLength( nomTache, "nomtache", 3, 255 ) && checkLength(refTache, "reftache", 2, 8) && checkLength(dateDebut, "dateDebut", 10, 10) && checkLength(dateFin, "dateFin", 10, 10) && checkLength(tpsPrevu, "tempsPrevu", 1, 10) && checkLength(ctPrevu, "coutPrevu", 1, 10);
+            valid = valid && checkLength( nomTache, "nomtache", 3, 255 ) && checkLength(refTache, "reftache", 2, 8) && checkLength(dateDebut, "dateDebut", 10, 10) && checkLength(dateFin, "dateFin", 10, 10) && checkLength(tpsPrevu, "tempsPrevu", 1, 10) && checkLength(ctPrevu, "coutPrevu", 1, 10) && checkSuperior(dateDebut, dateFin);
 
             if ( valid ) {
             	var codeLivrable = $("#selectLivrable").val() == "0" ? null : "\"" + $("#selectLivrable").val() + "\"";
