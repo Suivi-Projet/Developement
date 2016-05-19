@@ -648,8 +648,12 @@
 
 		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
-			jQuery.parseJSON(data.data).forEach(function (currentValue) {
-				$("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></tr>");
+			jQuery.parseJSON(data.data).forEach(function (currentValue, index) {
+                if(currentValue.dateDebutReelle === null && currentValue.dateFinReelle === null) {
+                    $("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "<a onclick=deleteProjet(" + currentValue.codeProjet + ")><img src='./img/trash.png' alt='Supprimer le projet' height='20' width='20'/></a></td></tr>");
+                }else {
+                    $("#nomProjet").append("<tr><td>" + currentValue.libelleProjet + "</td></tr>");
+                }
 			});
             $.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
                 if(jQuery.parseJSON(data.data) !== false)
@@ -685,6 +689,20 @@
 		});
 
 	}
+
+    function deleteProjet(idProjet) {
+        if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
+            $.ajax({
+                url: 'http://localhost/Developement/queries/parametres.php?objet=projet',
+                type: 'POST',
+                contentType: 'application/json',
+                data: '{"_method": "delete", "idProjet": "' + idProjet + '"}',
+                success: function (data) {
+                    majData();
+                }
+            });
+        }
+    }
 
 	majData();
 </script>

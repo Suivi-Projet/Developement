@@ -2,7 +2,7 @@
 
 include 'config.php';
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
+if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents('php://input'))->_method)) {
 
 	$json = json_decode(file_get_contents('php://input'), true);
 
@@ -242,7 +242,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 		case 'projets':
 			$req = $db->query("SELECT * FROM projets");
 			$result = $req->fetchAll(PDO::FETCH_ASSOC);
-
+			for($i = 0; $i < count($result); $i++) {
+				$reqDates = $db->prepare("SELECT MIN(dateDebutReelle) AS DateDeb, MIN(dateFinReelle) AS DateFin FROM taches WHERE codeProjet = ?");
+				$reqDates->bindParam(1, $result[$i]["codeProjet"]);
+				$reqDates->execute();
+				$resDates = $reqDates->fetch(PDO::FETCH_ASSOC);
+				$result[$i]["dateDebutReelle"] = $resDates["DateDeb"];
+				$result[$i]["dateFinReelle"] = $resDates["DateFin"];
+			}
+			
 			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 			break;
 
@@ -286,31 +294,25 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			# code...
 			break;
 	}
-} else if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
+} else if ($_SERVER['REQUEST_METHOD'] == "POST" && isset(json_decode(file_get_contents('php://input'))->_method)) {
 	$object = htmlspecialchars($_GET["objet"]);
-	$body = file_get_contents('php://input');
+	$json = json_decode(file_get_contents('php://input'));
 	switch ($object) {
 		case 'tache':
-			$req = $db->prepare("DELETE FROM taches WHERE codeTache = ?");
-			$req->bindParam(1, $body["idTache"]);
-			$done = $req->execute();
-
-			if($done)
-					echo json_encode(['codeRetour' => 200, 'result' => null]);
-				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
+			$req = $db->prepare("CALL DELETE_TACHE(?)");
+			$req->bindParam(1, $json->idTache);
+			$req->execute();
+					
+			echo json_encode(['codeRetour' => 200, 'result' => null]);
 			break;
 		case 'projet':
-			$req = $db->prepare("DELETE FROM projets WHERE codeProjet = ?");
-			$req->bindParam(1, $body["idProjet"]);
-			$done = $req->execute();
-
-			if($done)
-					echo json_encode(['codeRetour' => 200, 'result' => null]);
-				else echo json_encode(['codeRetour' => 500, 'result' => "La suppression du projet a échouée. Veuillez réessayer dans quelques instants."]);
+			$sql = "SET @p0=".$json->idProjet."; CALL DELETE_PROJET(@p0);";
+			$db->query($sql);					
+			echo json_encode(['codeRetour' => 200, 'result' => null]);
 			break;
 		case 'famille':
 			$req = $db->prepare("DELETE FROM familletache WHERE codeFamille = ?");
-			$req->bindParam(1, $body["idFamille"]);
+			$req->bindParam(1, $json["idFamille"]);
 			$done = $req->execute();
 
 			if($done)
@@ -319,7 +321,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 		case 'livrable':
 			$req = $db->prepare("DELETE FROM livrables WHERE codeLivrable = ?");
-			$req->bindParam(1, $body["idLivrable"]);
+			$req->bindParam(1, $json["idLivrable"]);
 			$done = $req->execute();
 
 			if($done)
@@ -328,7 +330,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 		case 'categ':
 			$req = $db->prepare("DELETE FROM categoriepersonnel WHERE codeCategorie = ?");
-			$req->bindParam(1, $body["idCategorie"]);
+			$req->bindParam(1, $json["idCategorie"]);
 			$done = $req->execute();
 
 			if($done)
@@ -337,7 +339,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 			break;
 		case 'ressource':
 			$req = $db->prepare("DELETE FROM ressources WHERE codeRessource = ?");
-			$req->bindParam(1, $body["idRessource"]);
+			$req->bindParam(1, $json["idRessource"]);
 			$done = $req->execute();
 
 			if($done)

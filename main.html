@@ -54,6 +54,7 @@
         <li><a href="vues/planning_reel.html">Planning Réel</a></li>
         <li><a href="vues/donnees_croisees.html">Données croisées</a></li>
         <li><a href="vues/parametres.html">Paramètres</a></li>
+        <li><a class="btn btn-danger" style="color:white;" onClick="logOut()" ><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
     </ul>
 </div>
 <script>
@@ -68,6 +69,18 @@
         });
     }
     );
+
+    /*$.getJSON("http://localhost/Developement/queries/maj_session.php?authentified=projets", function(data){
+        if(data.data == null) {
+            window.location.replace("index.html");
+        }
+    });*/
+
+    function logOut(){
+        $.getJSON("http://localhost/Developement/queries/maj_session.php?logout=projets", function(data){
+            window.location.replace("index.html");
+        });
+    }
 </script>
 </body>
 </html>

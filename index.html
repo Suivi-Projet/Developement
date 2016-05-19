@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion projet - Authentification</title>
+    <script src="js/jquery-2.2.3.min.js"></script>
+
+    <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="css/login.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="project.ico" />
+</head>
+<body>
+    <div tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="loginmodal-container">
+                <h1>Authentification</h1><br>
+                <input type="text" name="user" id="inputLog" placeholder="Identifiant">
+                <input type="password" name="pass" id="inputPass" placeholder="Mot De Passe">
+                <input type="submit" name="login" class="login loginmodal-submit" value="Login" onClick="tryLogin()">
+            </div>
+        </div>
+    </div>
+    <script>
+        function tryLogin() {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/Developement/queries/maj_session.php",
+                data: {
+                    authentify : "", 
+                    user : $("#inputLog").val(), 
+                    pass : $("#inputPass").val() 
+                },
+                success : function(){
+                    window.location.replace("main.html");
+                },
+                error : function(){
+                    alert("Les identifiants saisis ne sont pas corrects");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
