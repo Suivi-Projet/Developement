@@ -276,7 +276,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'ressources':
-			$req = $db->query("SELECT r.codeRessource, r.nomRessource, c.libelleCategorie, r.tauxHoraire FROM ressources r
+			$req = $db->query("SELECT r.codeRessource, r.nomRessource, c.libelleCategorie, r.tauxHoraire, r.codeCatPerso FROM ressources r
 			 INNER JOIN categoriepersonnel c ON r.codeCatPerso = c.codeCategorie");
 			$result = $req->fetchAll(PDO::FETCH_ASSOC);
 
