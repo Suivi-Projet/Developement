@@ -281,7 +281,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
+                    url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=ok",
                     success : function(data){
                         $("#selectProjet").val(jQuery.parseJSON(data).data);
                     }
@@ -310,40 +310,45 @@
         $("#late").empty();
         $("#percentLate").empty();
 
-        $.getJSON("http://gestionprojet.herokuapp.com/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
-            if(jQuery.parseJSON(data.data) !== false) {
-                $("#nbTask").append(jQuery.parseJSON(data.data).length);
+        $.ajax({
+            type: "GET",
+                url: "http://gestionprojet.herokuapp.com/queries/suivi.php?recapProjet=" + $("#selectProjet").val(),
+                    success : function(infos){
+                var data = jQuery.parseJSON(infos);
+                if(jQuery.parseJSON(data.data) !== false) {
+                    $("#nbTask").append(jQuery.parseJSON(data.data).length);
 
-                var nbLate = 0;
-                var nbUpper = 0;
+                    var nbLate = 0;
+                    var nbUpper = 0;
 
-                var dateJour = new Date();
+                    var dateJour = new Date();
 
-                for (var i = 0; i < jQuery.parseJSON(data.data).length; i++) {
-                    var element = jQuery.parseJSON(data.data)[i];
+                    for (var i = 0; i < jQuery.parseJSON(data.data).length; i++) {
+                        var element = jQuery.parseJSON(data.data)[i];
 
-                    var tempsConsomme = element.tempsConsomme == null ? "0" : element.tempsConsomme;
-                    var cout = element.cout == null ? "0" : element.cout;
-                    var ratioTemps = element.ratioTemps == null ? "0" : element.ratioTemps;
+                        var tempsConsomme = element.tempsConsomme == null ? "0" : element.tempsConsomme;
+                        var cout = element.cout == null ? "0" : element.cout;
+                        var ratioTemps = element.ratioTemps == null ? "0" : element.ratioTemps;
 
-                    if (((new Date(element.dateFinPrevue) < dateJour) && element.dateFinReelle == null) || element.dateFinReelle > element.dateFinPrevue) {
-                        nbLate++;
+                        if (((new Date(element.dateFinPrevue) < dateJour) && element.dateFinReelle == null) || element.dateFinReelle > element.dateFinPrevue) {
+                            nbLate++;
+                        }
+
+                        var tempsConso = element.tempsConsomme;
+                        var tempsPrevu = element.tempsPrevu;
+
+                        var shouldBeRed = (tempsConso - tempsPrevu) > 0;
+
+                        if (shouldBeRed) {
+                            nbUpper++;
+                        }
                     }
 
-                    var tempsConso = element.tempsConsomme;
-                    var tempsPrevu = element.tempsPrevu;
-
-                    var shouldBeRed = (tempsConso - tempsPrevu) > 0;
-
-                    if (shouldBeRed) {
-                        nbUpper++;
-                    }
+                    $("#upperThanInitial").append(nbUpper);
+                    $("#late").append(nbLate);
+                    $("#percentUpper").append(parseFloat((nbUpper / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
+                    $("#percentLate").append(parseFloat((nbLate / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
                 }
-
-                $("#upperThanInitial").append(nbUpper);
-                $("#late").append(nbLate);
-                $("#percentUpper").append(parseFloat((nbUpper / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
-                $("#percentLate").append(parseFloat((nbLate / jQuery.parseJSON(data.data).length * 100)).toFixed(2) + "%");
             }
         });
     }
