@@ -96,6 +96,11 @@
 				fillLivDonut();
 				fillResDonut();
 				fillTacheDonut();
+				famDonut.destroy();
+				livDonut.destroy();
+				resDonut.destroy();
+				tacheDonut.destroy();
+				graphChart.destroy();
 				fillTpsResGraph();
             }
         });
@@ -103,10 +108,15 @@
 
 	majProjetsDC();
 
+	var famDonut;
+	var livDonut;
+	var resDonut;
+	var tacheDonut;
+	var graphChart;
 	function fillFamDonut(){
 		$("#famDonut").empty();
 		var ctx = document.getElementById("famDonut");
-		var famDonut;
+
 		var dataDonut = {
 			labels: [],
 			datasets: [{
@@ -130,13 +140,11 @@
 
 		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?famTpsTotal=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
-				console.log(data.data);
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var nomFam = currentValue.libellefamille;
 					var tpsTotal = currentValue.tmpsTotal;
 					dataDonut.labels.push(nomFam);
 					dataDonut.datasets[0].data.push(tpsTotal);
-
 				});
 			}
 			famDonut = new Chart(ctx, {
@@ -152,7 +160,7 @@
 	function fillLivDonut(){
 		$("#livDonut").empty();
 		var ctx = document.getElementById("livDonut");
-		var livDonut;
+
 		var dataDonut = {
 			labels: [],
 			datasets: [{
@@ -194,10 +202,11 @@
 
 
 	}
+
 	function fillResDonut(){
 		$("#resDonut").empty();
 		var ctx = document.getElementById("resDonut");
-		var resDonut;
+
 		var dataDonut = {
 			labels: [],
 			datasets: [{
@@ -242,7 +251,7 @@
 	function fillTacheDonut(){
 		$("#tacheDonut").empty();
 		var ctx = document.getElementById("tacheDonut");
-		var tacheDonut;
+
 		var dataDonut = {
 			labels: [],
 			datasets: [{
@@ -287,60 +296,63 @@
 
 	function fillTpsResGraph(){
 
-		var couleursDeLarcEnCiel = ["#26B99A", "#10C4EB", "#F5A64C", "#03586A", "#E2FA57", "#FA57D1"];
+		var couleursDeLarcEnCiel = ["#26B99A", "#10C4EB", "#F5A64C", "#03586A", "#6F57FA", "#FA57D1"];
 
-		$("#tpsResGraph").empty();
 		var ctx = document.getElementById("tpsResGraph");
-		var graphChart;
+
+
 		var dataGraph;
 
 
 		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?coutResMois=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
+				console.info(jQuery.parseJSON(data.data));
 
-				dataGraph = {
-					labels: [],
-					datasets: [{
-						label: '',
-						backgroundColor: "#26B99A",
-						data: []
-					}, {
-						label: '',
-						backgroundColor: "#10C4EB",
-						data: []
-					}, {
-						label: '',
-						backgroundColor: "#F5A64C",
-						data: []
-					}, {
-						label: '',
-						backgroundColor: "#03586A",
-						data: []
-					}]
-				};
+				var tmpLabels = [];
+				var tmpDataSets = [];
 
-				for (i = 0; i<jQuery.parseJSON(data.data).length; i++){
-					var alreadyExist = false;
-					var nomRes = jQuery.parseJSON(data.data)[i]["nomRes"];
-					var mois = jQuery.parseJSON(data.data)[i]["mois"];
-					var prix = jQuery.parseJSON(data.data)[i]["prixConso"];
-
-					if(dataGraph.labels.indexOf(mois) == -1) {
-						dataGraph.labels.push(mois);
+				jQuery.parseJSON(data.data).forEach(function(currentValue){
+					if (tmpLabels.indexOf(currentValue.mois) == -1) {
+						tmpLabels.push(currentValue.mois);
 					}
 
-					var posMois = dataGraph.labels.indexOf(mois);
-					var posRes = i;
+					var position = -1;
 
-					for(var j = 0; j < dataGraph.datasets.length; j++) {
-
-						if(dataGraph.datasets[j].label == nomRes) {
-							posRes = j;
+					for (var i = 0; i < tmpDataSets.length; i++) {
+						if (tmpDataSets[i].label == currentValue.nomRes) {
+							position = i;
 							break;
 						}
 					}
-					dataGraph.datasets[posRes].label = nomRes;
-					dataGraph.datasets[posRes].data[posMois] = prix;
+
+					if (position == -1) {
+						position = tmpDataSets.length;
+						tmpDataSets[position] = {
+							label: currentValue.nomRes,
+							backgroundColor : couleursDeLarcEnCiel[position],
+							data: []
+					}
+				}
+
+				var value = tmpDataSets[position].data;
+
+				for (var i = 0; i <= tmpLabels.indexOf(currentValue.mois); i++){
+					if (i == tmpLabels.indexOf(currentValue.mois)) {
+						value[i] = currentValue.prixConso
+					} else if(value[i] == null) {
+						value[i] = 0;
+					}
+				}
+				tmpDataSets[position] = {
+					label: currentValue.nomRes,
+					backgroundColor : couleursDeLarcEnCiel[position],
+					data: value
+			}
+		})
+
+				dataGraph = {
+					labels: tmpLabels,
+					datasets: tmpDataSets
 				};
 			}
 			graphChart = new Chart(ctx, {
