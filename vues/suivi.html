@@ -345,8 +345,12 @@
                 }
 
                 if (jQuery.parseJSON(data.data).dateFinReelle != null) {
-                    var dateFinReel = new Date(jQuery.parseJSON(data.data).dateFinReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinReelle).getFullYear();
-                    $("#finReel").append(dateFinReel);
+                    if(jQuery.parseJSON(data.unfinished).length == 0) {
+                        var dateFinReel = new Date(jQuery.parseJSON(data.data).dateFinReelle).getDate() + " " + months[new Date(jQuery.parseJSON(data.data).dateFinReelle).getMonth()] + " " + new Date(jQuery.parseJSON(data.data).dateFinReelle).getFullYear();
+                        $("#finReel").append(dateFinReel);
+                    } else {
+                        $("#finReel").append("/");
+                    }
                 }
 
                 if (jQuery.parseJSON(data.data).tempsConsomme != null) {
@@ -362,7 +366,12 @@
                 }
 
                 if (jQuery.parseJSON(data.data).ecartDateFin != null) {
-                    $("#ecartFin").append(jQuery.parseJSON(data.data).ecartDateFin);
+                    if(jQuery.parseJSON(data.unfinished).length == 0) {
+                        $("#ecartFin").append(jQuery.parseJSON(data.data).ecartDateFin);
+                    }
+                    else {
+                        $("#ecartFin").append("/");
+                    }
                 }
 
                 if (jQuery.parseJSON(data.data).ecartDuree != null) {

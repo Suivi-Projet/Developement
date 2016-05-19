@@ -96,9 +96,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$req->bindParam(3, $_GET["infoProjet"]);
 
 	$done = $req->execute();
+
+	$lastReq = $db->prepare("SELECT codeTache FROM taches WHERE dateFinReelle IS NULL AND codeProjet = ?");
+
+	$lastReq->bindParam(1, $_GET["infoProjet"]);
+
+	$lastReq->execute();
 	if($done) {
 		$result = $req->fetch(PDO::FETCH_ASSOC);
-		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+		$lastResult = $lastReq->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result), 'unfinished' => json_encode($lastResult)]);
 	}
 } else if(isset($_GET["recapProjet"]) && !is_nan($_GET["recapProjet"])) {
 	$req = $db->prepare("SELECT t.referenceTache, t.libelleTache, t.dateDebutReelle, t.dateFinReelle, t.tempsPrevu, SUM(res.tempsPassee) as tempsConsomme, 
