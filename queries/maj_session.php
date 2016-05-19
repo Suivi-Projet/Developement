@@ -63,4 +63,9 @@ if(isset($_POST["codeTache"])) {
 	$_SESSION["codeTache"] = $_POST["codeTache"];
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeTache"]]);
 }
+
+if(isset($_POST["codeConso"])) {
+	$_SESSION["codeConso"] = $_POST["codeConso"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeConso"]]);
+}
 ?>
