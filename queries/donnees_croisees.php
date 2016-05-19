@@ -34,6 +34,7 @@ if (isset($_GET["famTpsTotal"])){
 
     $result = $req->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+
 } else if (isset($_GET["resTpsTotal"])) {
     $req = $db->prepare("SELECT SUM(c.tempsPassee) as tpsResTotal, r.nomRessource as ressource FROM conso c
                         INNER JOIN ressources r ON (c.codeRessource = r.codeRessource)
@@ -48,6 +49,7 @@ if (isset($_GET["famTpsTotal"])){
 
     $result = $req->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+
 } else if (isset($_GET["tpsTache"])) {
     $req = $db->prepare("SELECT SUM(c.tempsPassee) as TpsTache, res.referenceTache as tache FROM conso c
                         INNER JOIN
@@ -63,6 +65,7 @@ if (isset($_GET["famTpsTotal"])){
 
     $result = $req->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+
 } else if (isset($_GET["coutResMois"])) {
     $req = $db->prepare("SELECT (c.tempsPassee * r.tauxHoraire) as prixConso, DATE_FORMAT(c.date, '%m-%Y') as mois, r.nomRessource as nomRes FROM conso c
                         INNER JOIN ressources r ON (c.codeRessource = r.codeRessource)
