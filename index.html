@@ -19,22 +19,19 @@
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h1>Authentification</h1><br>
-              <form onSubmit="tryLogin()">
                 <input type="text" name="user" id="inputLog" placeholder="Identifiant">
                 <input type="password" name="pass" id="inputPass" placeholder="Mot De Passe">
-                <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-              </form>
+                <input type="submit" name="login" class="login loginmodal-submit" value="Login" onClick="tryLogin()">
             </div>
         </div>
     </div>
     <script>
         function tryLogin() {
-            console.log($("#inputLog").val(), $("#inputPass").val());
             $.ajax({
                 type: "POST",
                 url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
-                    authentify : "test", 
+                    authentify : "", 
                     user : $("#inputLog").val(), 
                     pass : $("#inputPass").val() 
                 },
