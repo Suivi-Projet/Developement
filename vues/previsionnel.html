@@ -169,7 +169,7 @@
 
 				$.ajax({
 					type: "POST",
-					url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+					url: "http://localhost/Developement/queries/parametres.php",
 					dataType: 'json',
 					contentType:'application/json',
 					data: '{"objet" : "tache",	"libelleTache" : "'+$("#nomTache").val()+'","refTache" : "'+$("#refTache").val()+'","codeFamille" : "'+$("#selectFamille").val()+'","dateDebutPrevue" : "'+new Date($("#startTache").val()).getFullYear() + "-" + (new Date($("#startTache").val()).getMonth() + 1) + "-" + new Date($("#startTache").val()).getDate() +'","dateFinPrevue" : "'+new Date($("#endTache").val()).getFullYear() + "-" + (new Date($("#endTache").val()).getMonth() + 1) + "-" + new Date($("#endTache").val()).getDate()+'", "codeProjet" : "'+$("#selectProject").val()+'","tempsPrevu" : "' + $("#tempsTache").val() + '", "coutPrevu" : "' + $("#coutTache").val() + '", "codeLivrable" : ' + codeLivrable + ' }',
@@ -206,14 +206,14 @@
 
 		$("#selectProject").empty();
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
 			});
 	        $.ajax({
 	            type: "GET",
-	            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	                $("#selectProject").val(jQuery.parseJSON(data).data);
 					majTaches();
@@ -229,7 +229,7 @@
 
 		$("#taches").empty();
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/previsionnel.php?idProjet=" + $("#selectProject").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProject").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				var dateDebut = new Date(currentValue.dateDebutPrevue).getDate() + " " + months[new Date(currentValue.dateDebutPrevue).getMonth()] + " " + new Date(currentValue.dateDebutPrevue).getFullYear();
@@ -244,14 +244,14 @@
 		});
 	}
 
-	$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=familles", function(data){
+	$.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
 		if(jQuery.parseJSON(data.data) !== false)
 		jQuery.parseJSON(data.data).forEach(function (currentValue) {
 			$("#selectFamille").append("<option value=\"" + currentValue.codeFamille + "\">" + currentValue.libelleFamille + "</option>");
 		});
 	});
 
-	$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=livrables", function(data){
+	$.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
 		if(jQuery.parseJSON(data.data) !== false)
 		jQuery.parseJSON(data.data).forEach(function (currentValue) {
 			$("#selectLivrable").append("<option value=\"" + currentValue.codeLivrable + "\">" + currentValue.libelleLivrable + "</option>");
@@ -264,19 +264,19 @@
     function razProjects() {
 		$("#selectProject").empty();
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProject").append("<option value=\"" + currentValue.codeProjet + "\">" + currentValue.libelleProjet + "</option>");
 			});
 	        $.ajax({
 	            type: "GET",
-	            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	            	if (jQuery.parseJSON(data).data == null) {
 	            		$.ajax({
 				            type: "POST",
-				            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+				            url: "http://localhost/Developement/queries/maj_session.php",
 				            data: {
 				                projetEnCours: $("#selectProject").val()
 				            }
@@ -295,7 +295,7 @@
     function majSelectedPrev(){
         $.ajax({
             type: "POST",
-            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+            url: "http://localhost/Developement/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProject").val()
             }
@@ -305,7 +305,7 @@
     function deleteTache(idTache) {
         if(confirm("Êtes-vous sûr de vouloir supprimer cette tâche du projet ?")) {
             $.ajax({
-                url: 'http://gestionprojet.herokuapp.com/queries/previsionnel.php?objet=tache',
+                url: 'http://localhost/Developement/queries/previsionnel.php?objet=tache',
                 type: 'POST',
                 contentType: 'application/json',
                 data: '{"_method": "delete", "idTache": "' + idTache + '"}',
@@ -332,7 +332,7 @@
 
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeTache: code
                 },
@@ -356,7 +356,7 @@
 
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeTache: null
                 },
