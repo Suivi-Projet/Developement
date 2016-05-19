@@ -2,8 +2,6 @@
 
 session_start();
 
-
-
 if (isset($_POST['projetEnCours'])) {
 	$_SESSION['projetEnCours'] = $_POST['projetEnCours'];
 }

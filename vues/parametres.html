@@ -559,6 +559,10 @@
             return valid;
         }
 
+        $( "#addFamille" ).button().on( "click", function() {
+            addFamille();
+        });
+
         $( ".callFormFamille" ).button().on( "click", function() {
             $('#addFormFamille').find('input:text').val('');
         });
@@ -605,7 +609,8 @@
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
-                    success: function () {
+                    success: function (data) {
+                        console.log(data);
                         majData();
                         $('#form-livrable').modal('hide');;
                     },
