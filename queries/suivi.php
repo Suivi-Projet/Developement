@@ -142,7 +142,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$result = $req->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
-<<<<<<< HEAD
 } else if(isset($_GET["allConsos"])) {
 	$req = $db->prepare("SELECT c.date, c.codeConso, c.codeRessource, c.codeTache, c.tempsPassee, r.nomRessource, t.libelleTache, t.avancement FROM conso c
 		INNER JOIN ressources r ON (r.codeRessource = c.codeRessource)
@@ -161,21 +160,4 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$result = $req->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
-}
-=======
-} else if(isset($_GET["consosProjet"]) && !is_nan($_GET["consosProjet"])) {
-	$req = $db->prepare("SELECT c.date, t.libelleTache, r.nomRessource, c.tempsPassee, t.avancement 
-						 FROM conso c
-						 INNER JOIN taches t ON (c.codeTache = t.codeTache)
-						 INNER JOIN ressources r ON (r.codeRessource = c.codeRessource)
-						 WHERE t.codeProjet = ?");
-	$req->bindParam(1, $_GET["consosProjet"]);
-
-	$done = $req->execute();
-
-	if($done) {
-		$result = $req->fetchAll(PDO::FETCH_ASSOC);
-			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
-	} else echo json_encode(['codeRetour' => 500, 'result' => 'Une erreur est survenue lors de la récupération des consos.']);
 } else echo json_encode(['codeRetour' => 500, 'result' => 'Appel invalide !!!']);
->>>>>>> 878154a273b934fa5b9a177b055867d53da9af80
