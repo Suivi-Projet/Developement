@@ -2,15 +2,27 @@
 
 include 'config.php';
 
+session_start();
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$json = json_decode(file_get_contents('php://input'), true);
 
-	$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
+	$req = null;
+
+	if(!isset($_SESSION['codeConso']) || $_SESSION['codeConso'] == ""){
+		$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
+	} else {
+		$req = $db->prepare("UPDATE conso c SET c.codeRessource = ?, c.codeTache = ?, c.date = ?, c.tempsPassee = ? WHERE codeConso = ?");
+	}
+
 	$req->bindParam(1, $json["codeRessource"]);
 	$req->bindParam(2, $json["codeTache"]);
-	$neoDate = date("Y-m-d");
-	$req->bindParam(3, $neoDate);
+	$req->bindParam(3, $json["dateConso"]);
 	$req->bindParam(4, $json["tempsPassee"]);
+
+	if(isset($_SESSION['codeConso']) && $_SESSION['codeConso'] != ""){
+		$req->bindParam(5, $_SESSION["codeConso"]);
+	}
 
 	$done = $req->execute();
 	if(!$done)
@@ -40,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 			if($json["avancement"] == 100) {
 				$updTacheEnd = $db->prepare("UPDATE taches SET dateFinReelle = ? WHERE codeTache = ?");
-				$updTacheEnd->bindParam(1, date("Y-m-d"));
+				$updTacheEnd->bindParam(1, $json["dateConso"]);
 				$updTacheEnd->bindParam(2, $json["codeTache"]);
 				$doneUpTacheEnd = $updTacheEnd->execute();
 				if(!$doneUpTacheEnd)
@@ -124,6 +136,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	WHERE t.codeProjet = ?
 	GROUP BY t.codeTache");
 	$req->bindParam(1, $_GET["recapProjet"]);
+
+	$done = $req->execute();
+	if($done) {
+		$result = $req->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+	}
+} else if(isset($_GET["allConsos"])) {
+	$req = $db->prepare("SELECT c.date, c.codeConso, c.codeRessource, c.codeTache, c.tempsPassee, r.nomRessource, t.libelleTache, t.avancement FROM conso c
+		INNER JOIN ressources r ON (r.codeRessource = c.codeRessource)
+		INNER JOIN 
+		(
+		    SELECT * FROM taches
+		    WHERE taches.codeProjet = ?
+		)
+		t ON (t.codeTache = c.codeTache)
+		ORDER BY c.date, c.codeTache");
+
+	$req->bindParam(1, $_SESSION["projetEnCours"]);
 
 	$done = $req->execute();
 	if($done) {
