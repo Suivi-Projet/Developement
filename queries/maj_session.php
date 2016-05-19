@@ -58,4 +58,9 @@ if(isset($_POST["codeRessource"])) {
 	$_SESSION["codeRessource"] = $_POST["codeRessource"];
 	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeRessource"]]);
 }
+
+if(isset($_POST["codeTache"])) {
+	$_SESSION["codeTache"] = $_POST["codeTache"];
+	echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => $_SESSION["codeTache"]]);
+}
 ?>

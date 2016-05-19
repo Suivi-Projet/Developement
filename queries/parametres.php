@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			$req->bindParam(7, $json["coutPrevu"]);
 			$req->bindParam(8, $json["codeLivrable"]);
 			$req->bindParam(9, $json["codeProjet"]);
-			$req->bindParam(10, $json["codeTache"]);
+			$req->bindParam(10, $_SESSION["codeTache"]);
 
 			$done = $req->execute();
 
