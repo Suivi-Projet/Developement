@@ -513,7 +513,7 @@
     function formatDate(d1) {
         var mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
-        var currentDay = d1.getDay();
+        var currentDay = d1.getDate();
         var currentMois = d1.getMonth();
         var currentYear = d1.getFullYear();
 
@@ -523,7 +523,7 @@
     }
 
     function formatForInsertion(d1){
-        var currentDay = d1.getDay();
+        var currentDay = d1.getDate();
         var currentMois = d1.getMonth() + 1;
         var currentYear = d1.getFullYear();
 
@@ -541,7 +541,7 @@
     }
 
     function formatForTable(d1){
-        var currentDay = d1.getDay();
+        var currentDay = d1.getDate();
         var currentMois = d1.getMonth() + 1;
         var currentYear = d1.getFullYear();
 
@@ -567,9 +567,8 @@
         $("#selectTache").val(codeTache);
         $("#tpsPasseTache").val(tpsPasse);
         $("#pourcentTache").val(avancemt);
-        $("#dateSaisie").val(formatForInsertion(new Date(dateConso)));
 
-        console.log(formatForInsertion(new Date(dateConso)));
+        $("#dateSaisie").val(formatForInsertion(new Date(dateConso)));
 
         $.ajax({
             type: "POST",

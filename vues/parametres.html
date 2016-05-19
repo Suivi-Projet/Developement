@@ -610,7 +610,6 @@
                     contentType:'application/json',
                     data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
                     success: function (data) {
-                        console.log(data);
                         majData();
                         $('#form-livrable').modal('hide');;
                     },
