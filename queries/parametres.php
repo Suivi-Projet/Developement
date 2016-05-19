@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 
 	switch ($json['objet']) {
 		case 'tache':
-		if(!isset($json['codeTache'])) {
+		if(!isset($_SESSION['codeTache'])) {
 			$req = $db->prepare("INSERT INTO taches (libelleTache, codeFamille, dateDebutPrevue, dateFinPrevue, codeProjet, referenceTache, tempsPrevu, coutPrevu, codeLivrable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			$req->bindParam(1, $json["libelleTache"]);
@@ -51,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'projet':
-			if(!isset($json["codeProjet"])) {
+			if(!isset($_SESSION["codeProjet"])) {
 				$req = $db->prepare("INSERT INTO projets (libelleProjet) 
 						  VALUES (?)");
 
@@ -66,7 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			} else {
 				$req = $db ->prepare("UPDATE projets SET libelleProjet = ? WHERE codeProjet = ?");
 				$req->bindParam(1, $json["libelleProjet"]);
-				$req->bindParam(2, $json["codeProjet"]);
+				$req->bindParam(2, $_SESSION["codeProjet"]);
 
 				$done = $req->execute();
 
@@ -77,7 +77,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'famille':
-			if(!isset($json['codeFamille'])) {
+			if(!isset($_SESSION['codeFamille'])) {
 				$req = $db->prepare("INSERT INTO familletache (libelleFamille) 
 							  VALUES (?)");
 
@@ -94,7 +94,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 									 SET libelleFamille = ? WHERE codeFamille = ?");
 
 				$req->bindParam(1, $json["libelleFamille"]);
-				$req->bindParam(2, $json["codeFamille"]);
+				$req->bindParam(2, $_SESSION["codeFamille"]);
 
 				$done = $req->execute();
 
@@ -105,7 +105,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'livrable':
-			if(!isset($json['codeLivrable'])) {
+			if(!isset($_SESSION['codeLivrable'])) {
 				$req = $db->prepare("INSERT INTO livrables (libelleLivrable) 
 							  VALUES (?)");
 
@@ -122,7 +122,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 									 SET libelleLivrable = ? WHERE codeLivrable = ?");
 
 				$req->bindParam(1, $json["libelleLivrable"]);
-				$req->bindParam(2, $json["codeLivrable"]);
+				$req->bindParam(2, $_SESSION["codeLivrable"]);
 
 				$done = $req->execute();
 
@@ -133,7 +133,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'categ':
-			if(!isset($json['codeCategorie'])) {
+			if(!isset($_SESSION['codeCategorie'])) {
 				$req = $db->prepare("INSERT INTO categoriepersonnel (libelleCategorie) 
 							  VALUES (?)");
 
@@ -150,7 +150,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 									 SET libelleCategorie = ? WHERE codeCategorie = ?");
 
 				$req->bindParam(1, $json["libelleCategorie"]);
-				$req->bindParam(2, $json["codeCategorie"]);
+				$req->bindParam(2, $_SESSION["codeCategorie"]);
 
 				$done = $req->execute();
 
@@ -161,7 +161,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			break;
 
 		case 'ressource':
-			if(!isset($json['codeRessource'])) {
+			if(!isset($_SESSION['codeRessource'])) {
 				$req = $db->prepare("INSERT INTO ressources (nomRessource, tauxHoraire, codeCatPerso) 
 							  VALUES (?, ?, ?)");
 
@@ -182,7 +182,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 				$req->bindParam(1, $json["nomRessource"]);
 				$req->bindParam(2, $json["tauxHoraire"]);
 				$req->bindParam(3, $json["codeCatPerso"]);
-				$req->bindParam(4, $json["codeRessource"]);
+				$req->bindParam(4, $_SESSION["codeRessource"]);
 
 				$done = $req->execute();
 
