@@ -3,7 +3,7 @@
 include 'config.php';
 
 if (isset($_GET["famTpsTotal"])){
-    $req = $db->prepare("SELECT libellefamille, tmp.tpsTotal as tmpsTotal FROM familleTache f,(
+    $req = $db->prepare("SELECT libellefamille, tmp.tpsTotal as tmpsTotal FROM familletache f,(
                             SELECT SUM(cons.tempsTotal) as tpsTotal, cons.codeFamille FROM
                                 (SELECT SUM(c.tempsPassee) as tempsTotal, t.codeFamille
                                  FROM conso c, taches t

@@ -70,14 +70,14 @@
     }
     );
 
-    /*$.getJSON("http://gestionprojet.herokuapp.com/queries/maj_session.php?authentified=projets", function(data){
+    /*$.getJSON("http://localhost/Developement/queries/maj_session.php?authentified=projets", function(data){
         if(data.data == null) {
             window.location.replace("index.php");
         }
     });*/
 
     function logOut(){
-        $.getJSON("http://gestionprojet.herokuapp.com/queries/maj_session.php?logout=projets", function(data){
+        $.getJSON("http://localhost/Developement/queries/maj_session.php?logout=projets", function(data){
             window.location.replace("index.php");
         });
     }
