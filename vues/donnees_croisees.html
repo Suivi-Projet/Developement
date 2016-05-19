@@ -130,11 +130,13 @@
 
 		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?famTpsTotal=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
+				console.log(data.data);
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var nomFam = currentValue.libellefamille;
 					var tpsTotal = currentValue.tmpsTotal;
 					dataDonut.labels.push(nomFam);
 					dataDonut.datasets[0].data.push(tpsTotal);
+
 				});
 			}
 			famDonut = new Chart(ctx, {
@@ -285,27 +287,37 @@
 
 	function fillTpsResGraph(){
 
+		var couleursDeLarcEnCiel = ["#26B99A", "#10C4EB", "#F5A64C", "#03586A", "#E2FA57", "#FA57D1"];
+
 		$("#tpsResGraph").empty();
 		var ctx = document.getElementById("tpsResGraph");
 		var graphChart;
-		var dataGraph = {
-				labels: [],
-				datasets: [{
-				label: '',
-				backgroundColor: "#26B99A",
-				data: []
-			}, {
-				label: '',
-				backgroundColor: "#03586A",
-				data: []
-			}]
-		}
+		var dataGraph;
+
 
 		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?coutResMois=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
-				console.log(jQuery.parseJSON(data.data)[0]);
-				console.log(jQuery.parseJSON(data.data)[1]);
-				console.log(jQuery.parseJSON(data.data)[2]);
+
+				dataGraph = {
+					labels: [],
+					datasets: [{
+						label: '',
+						backgroundColor: "#26B99A",
+						data: []
+					}, {
+						label: '',
+						backgroundColor: "#10C4EB",
+						data: []
+					}, {
+						label: '',
+						backgroundColor: "#F5A64C",
+						data: []
+					}, {
+						label: '',
+						backgroundColor: "#03586A",
+						data: []
+					}]
+				};
 
 				for (i = 0; i<jQuery.parseJSON(data.data).length; i++){
 					var alreadyExist = false;
@@ -328,10 +340,9 @@
 						}
 					}
 					dataGraph.datasets[posRes].label = nomRes;
-					dataGraph.datasets[posRes].data.push(prix);
+					dataGraph.datasets[posRes].data[posMois] = prix;
 				};
 			}
-			console.info(dataGraph);
 			graphChart = new Chart(ctx, {
 				type: 'bar',
 				data: dataGraph,

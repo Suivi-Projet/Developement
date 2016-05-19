@@ -321,6 +321,7 @@
         $("#late").empty();
         $("#percentLate").empty();
 
+
         $.ajax({
             type: "GET",
                 url: "http://gestionprojet.herokuapp.com/queries/suivi.php?recapProjet=" + $("#selectProjet").val(),
