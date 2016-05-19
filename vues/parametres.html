@@ -696,7 +696,7 @@
                 url: 'http://localhost/Developement/queries/parametres.php?objet=projet',
                 type: 'POST',
                 contentType: 'application/json',
-                data: '{"_method"="delete", "idProjet": "' + idProjet + '"}',
+                data: '{"_method": "delete", "idProjet": "' + idProjet + '"}',
                 success: function (data) {console.log(data);
                     majData();
                 }
