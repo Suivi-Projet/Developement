@@ -7,8 +7,8 @@ $request->bindParam(1, $_GET["idProjet"]);
 $request->execute();
 $resDate = $request->fetch(PDO::FETCH_ASSOC);
 
-$yearStart = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateDeb"] == null ? date("Y") : explode('-', $resDate["dateDeb"])[0]);
-$yearEnd = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateEnd"] == null ? date("Y") : explode('-', $resDate["dateEnd"])[0]);
+$yearStart = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateDeb"] == null ? "0000" : explode('-', $resDate["dateDeb"])[0]);
+$yearEnd = isset($_GET["year"]) ? $_GET["year"] : ($resDate["dateEnd"] == null ? "9999" : explode('-', $resDate["dateEnd"])[0]);
 
 $monthStart = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '01';
 $monthEnd = (isset($_GET["month"]) && $_GET["month"] !== null) ? $_GET["month"] : '12';

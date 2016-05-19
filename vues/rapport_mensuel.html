@@ -100,14 +100,15 @@
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjetRM").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			majTachesRM();
-			majAnneesRM();
-			majRessourcesRM();
 	        $.ajax({
 	            type: "GET",
 	            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	                $("#selectProjetRM").val(jQuery.parseJSON(data).data);
+					majTachesRM();
+					majAnneesRM();
+					majRessourcesRM();
+					majTableauTotalRM();
 	            }
 	        });
 		});
@@ -182,8 +183,8 @@
 			url = "http://gestionprojet.herokuapp.com/queries/rapport_mensuel.php?idTache=" + $("#selectTacheRM").val() + "&idProjet=" + $("#selectProjetRM").val() + urlMois + urlAnnee;
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
-					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotalRM != null ? jQuery.parseJSON(data.total)[0].tempsTotalRM : 0;
-					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotalRM != null ? jQuery.parseJSON(data.total)[0].montantTotalRM : 0;
+					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
+					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
 					$("#tempsTotalRM").append(tempsTotalRM);
 					$("#montantTotalRM").append(montantTotalRM);
 
@@ -218,8 +219,8 @@
 
 			$.getJSON(url, function(data){
 				if(jQuery.parseJSON(data.total) !== false) {
-					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotalRM != null ? jQuery.parseJSON(data.total)[0].tempsTotalRM : 0;
-					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotalRM != null ? jQuery.parseJSON(data.total)[0].montantTotalRM : 0;
+					var tempsTotalRM = jQuery.parseJSON(data.total)[0].tempsTotal != null ? jQuery.parseJSON(data.total)[0].tempsTotal : 0;
+					var montantTotalRM = jQuery.parseJSON(data.total)[0].montantTotal != null ? jQuery.parseJSON(data.total)[0].montantTotal : 0;
 					$("#tempsTotalRM").append(tempsTotalRM);
 					$("#montantTotalRM").append(montantTotalRM);
 					$("#tableauDetailRM").append("<thead class='btn-primary disabled'><tr><td>Date</td><td>Réf. Tâche</td><td>Temps Passé (h)</td><td>Montant (€)</td><td>Alerte Tâche</td><td>Alerte Quota</td></tr></thead><tbody>");

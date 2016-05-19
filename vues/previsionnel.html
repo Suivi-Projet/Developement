@@ -325,8 +325,8 @@
         $("#refTache").val(refTache);
         $("#selectFamille").val(famTache);
         $("#selectLivrable").val(livTache);
-        $("#startTache").val(startTache);
-        $("#endTache").val(endTache);
+        $("#startTache").val(formatDateForTab(new Date(startTache)));
+        $("#endTache").val(formatDateForTab(new Date(endTache)));
         $("#tempsTache").val(tpsPrevu);
         $("#coutTache").val(ctPrevu);
 
@@ -363,6 +363,24 @@
                 success: function(data) {
                 }
         })
+    }
+
+    function formatDateForTab(d1) {
+    	var currentDay = d1.getDate();
+    	var currentMonth = d1.getMonth() + 1;
+    	var currentYear = d1.getFullYear();
+
+    	if (currentDay < 10) {
+    		currentDay = "0" + currentDay;
+    	}
+
+    	if (currentMonth < 10) {
+    		currentMonth = "0" + currentMonth;
+    	}
+
+    	var result = currentMonth + "/" + currentDay + "/" + currentYear;
+
+    	return result;
     }
 
 </script>
