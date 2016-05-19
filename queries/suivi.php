@@ -2,15 +2,26 @@
 
 include 'config.php';
 
+session_start();
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$json = json_decode(file_get_contents('php://input'), true);
-
-	$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
-	$req->bindParam(1, $json["codeRessource"]);
-	$req->bindParam(2, $json["codeTache"]);
-	$neoDate = date("Y-m-d");
-	$req->bindParam(3, $neoDate);
-	$req->bindParam(4, $json["tempsPassee"]);
+	if($_GET["objet"] != "consos") {
+		$req = $db->prepare("INSERT INTO conso (codeRessource, codeTache, date, tempsPassee) VALUES (?, ?, ?, ?)");
+		$req->bindParam(1, $json["codeRessource"]);
+		$req->bindParam(2, $json["codeTache"]);
+		$neoDate = is_null($json["date"]) ? date("Y-m-d") : $json["date"];
+		$req->bindParam(3, $neoDate);
+		$req->bindParam(4, $json["tempsPassee"]);
+	} else {
+		$req = $db->prepare("UPDATE conso SET codeRessource = ?, codeTache = ?, date = ?, tempsPassee = ? WHERE codeConso = ?");
+		$req->bindParam(1, $json["codeRessource"]);
+		$req->bindParam(2, $json["codeTache"]);
+		$neoDate = is_null($json["date"]) ? date("Y-m-d") : $json["date"];
+		$req->bindParam(3, $neoDate);
+		$req->bindParam(4, $json["tempsPassee"]);
+		$req->bindParam(5, $_SESSION["codeConso"]);
+	}
 
 	$done = $req->execute();
 	if(!$done)
@@ -130,4 +141,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$result = $req->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
 	}
-}
+} else if(isset($_GET["consosProjet"]) && !is_nan($_GET["consosProjet"])) {
+	$req = $db->prepare("SELECT c.date, t.libelleTache, r.nomRessource, c.tempsPassee, t.avancement 
+						 FROM conso c
+						 INNER JOIN taches t ON (c.codeTache = t.codeTache)
+						 INNER JOIN ressources r ON (r.codeRessource = c.codeRessource)
+						 WHERE t.codeProjet = ?");
+	$req->bindParam(1, $_GET["consosProjet"]);
+
+	$done = $req->execute();
+
+	if($done) {
+		$result = $req->fetchAll(PDO::FETCH_ASSOC);
+			echo json_encode(['codeRetour' => 200, 'result' => null, 'data' => json_encode($result)]);
+	} else echo json_encode(['codeRetour' => 500, 'result' => 'Une erreur est survenue lors de la récupération des consos.']);
+} else echo json_encode(['codeRetour' => 500, 'result' => 'Appel invalide !!!']);
