@@ -54,10 +54,17 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 } else if (!isset($_GET["idRessource"]) && isset($_GET["idTache"]) && !is_nan($_GET["idTache"])){
 	
 	$sqlRessources = "SELECT c.date, t.referenceTache, r.nomRessource, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache,
-							 SUM(tempsPassee) as tempsTotTache, dureeLegale, t.tempsPrevu
+							 SUM(tempsPassee) as tempsTotTache, dureeLegale, t.tempsPrevu, res.tempsDay
 					  FROM parametres as p, conso as c   
 					  INNER JOIN taches as t ON (t.codeTache = c.codeTache)
 					  INNER JOIN ressources as r ON (c.codeRessource = r.codeRessource)
+					  INNER JOIN
+					  (
+					  	SELECT SUM(co.tempsPassee) tempsDay,
+					  	co.codeRessource, co.date FROM conso co
+					  	GROUP BY co.codeRessource, co.date
+					  ) res
+					  ON (res.codeRessource = c.codeRessource AND res.date = c.date)
 					  WHERE t.codeProjet = ".$_GET["idProjet"].
 				    " AND c.codeTache = ". $_GET["idTache"].
 				    " AND c.codeRessource = r.codeRessource 
@@ -70,7 +77,7 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 
 	for($i = 0; $i<count($resultRessources); $i++) {
 		$resultRessources[$i]["alerteTache"] = $resultRessources[$i]["tempsPrevu"] - $resultRessources[$i]["tempsTotTache"] < 0 ? true : false;
-		$resultRessources[$i]["alerteQuota"] = $resultRessources[$i]["tempsPassee"] - $resultRessources[$i]["dureeLegale"] < 0 ? false : true;
+		$resultRessources[$i]["alerteQuota"] = $resultRessources[$i]["tempsDay"] - $resultRessources[$i]["dureeLegale"] < 0 ? false : true;
 	}
 
 	$sqlTotal = "SELECT SUM(tempsPassee) as tempsTotal, SUM(conso.tempsPassee*ressources.tauxHoraire) as montantTotal 
