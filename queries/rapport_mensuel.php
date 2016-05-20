@@ -19,23 +19,31 @@ $dateEnd = $yearEnd.'-'.$monthEnd.'-'.date("t", strtotime($yearEnd.'-'.$monthEnd
 if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idRessource"])) {
 
 	$sqlTaches = "SELECT c.date, t.referenceTache, c.tempsPassee, (c.tempsPassee * r.tauxHoraire) as montantTache, SUM(tempsPassee) as tempsTotTache, dureeLegale,
-						 t.tempsPrevu
+						 t.tempsPrevu, res.tempsDay
 			FROM parametres as p, conso as c   
 			INNER JOIN taches as t ON (t.codeTache = c.codeTache)
 			INNER JOIN ressources as r ON (c.codeRessource = r.codeRessource)
+					  INNER JOIN
+					  (
+					  	SELECT SUM(co.tempsPassee) tempsDay,
+					  	co.codeRessource, co.date FROM conso co
+					  	GROUP BY co.codeRessource, co.date
+					  ) res
+					  ON (res.codeRessource = c.codeRessource AND res.date = c.date)
 			WHERE t.codeProjet = ".$_GET["idProjet"].
 		  " AND c.codeRessource = ". $_GET["idRessource"].
 		  " AND c.codeRessource = r.codeRessource 
 		  	AND t.codeTache = c.codeTache 
-		    AND date BETWEEN '".$dateStart."' AND '".$dateEnd."' 
+		    AND c.date BETWEEN '".$dateStart."' AND '".$dateEnd."' 
 		    GROUP BY c.codeTache, c.date";
 
 	$reqTaches = $db->query($sqlTaches);
+
 	$resultTaches = $reqTaches->fetchAll(PDO::FETCH_ASSOC);
 
 	for($i = 0; $i<count($resultTaches); $i++) {
-		$resultTaches[$i]["alerteTache"] = $resultTaches[$i]["tempsPrevu"] - $resultTaches[$i]["tempsTotTache"] < 0 ? true : false;
-		$resultTaches[$i]["alerteQuota"] = $resultTaches[$i]["tempsPassee"] - $resultTaches[$i]["dureeLegale"] < 0 ? false : true;
+		$resultTaches[$i]["alerteTache"] = $resultTaches[$i]["tempsPrevu"] - $resultTaches[$i]["tempsTotTache"] < 0 ? "true" : "false";
+		$resultTaches[$i]["alerteQuota"] = $resultTaches[$i]["dureeLegale"] - $resultTaches[$i]["tempsDay"] < 0 ? "true" : "false";
 	}
 
 
@@ -61,23 +69,23 @@ if(isset($_GET["idRessource"]) && !isset($_GET["idTache"]) && !is_nan($_GET["idR
 					  INNER JOIN
 					  (
 					  	SELECT SUM(co.tempsPassee) tempsDay,
-					  	co.codeRessource, co.date FROM conso co
-					  	GROUP BY co.codeRessource, co.date
+					  	co.codeTache, co.date, co.codeRessource FROM conso co
+					  	GROUP BY co.codeTache, co.date, co.codeRessource
 					  ) res
-					  ON (res.codeRessource = c.codeRessource AND res.date = c.date)
+					  ON (res.codeTache = c.codeTache AND res.date = c.date AND c.codeRessource = res.codeRessource)
 					  WHERE t.codeProjet = ".$_GET["idProjet"].
 				    " AND c.codeTache = ". $_GET["idTache"].
 				    " AND c.codeRessource = r.codeRessource 
 				  	  AND t.codeTache = c.codeTache 
-				      AND date BETWEEN '".$dateStart."' AND '".$dateEnd."'  
+				      AND c.date BETWEEN '".$dateStart."' AND '".$dateEnd."'  
 				      GROUP BY c.codeRessource, c.date";
 
 	$reqRessources = $db->query($sqlRessources);
 	$resultRessources = $reqRessources->fetchAll(PDO::FETCH_ASSOC);
 
 	for($i = 0; $i<count($resultRessources); $i++) {
-		$resultRessources[$i]["alerteTache"] = $resultRessources[$i]["tempsPrevu"] - $resultRessources[$i]["tempsTotTache"] < 0 ? true : false;
-		$resultRessources[$i]["alerteQuota"] = $resultRessources[$i]["tempsDay"] - $resultRessources[$i]["dureeLegale"] < 0 ? false : true;
+		$resultRessources[$i]["alerteTache"] = $resultRessources[$i]["tempsPrevu"] - $resultRessources[$i]["tempsTotTache"] < 0 ? "true" : "false";
+		$resultRessources[$i]["alerteQuota"] = $resultRessources[$i]["dureeLegale"] - $resultRessources[$i]["tempsDay"] < 0 ? "true" : "false";
 	}
 
 	$sqlTotal = "SELECT SUM(tempsPassee) as tempsTotal, SUM(conso.tempsPassee*ressources.tauxHoraire) as montantTotal 
