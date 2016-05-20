@@ -248,7 +248,7 @@
             var valid = true;
             allFields.removeClass( "ui-state-error" );
 
-            valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && checkPercentage(pctTache) && checkTempsPasse(tpsPasse) && checkDate(dateSaisi);
+            valid = valid && checkLength( tpsPasse, "tempsPasse", 1, 10 ) && checkLength(pctTache, "pourcentTache", 1, 3) && checkPercentage(pctTache) && checkDate(dateSaisi);
 
             if ( valid ) {
                 console.log($("#selectRessource").val(), $("#selectTache").val(), $("#tpsPasseTache").val(), $("#pourcentTache").val(), formatForTable(new Date($("#dateSaisie").val())));
