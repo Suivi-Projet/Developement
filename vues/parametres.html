@@ -306,7 +306,7 @@
 		$("#nomRessource").empty();
 		$("#parametre").val();
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue, index) {
                 if(currentValue.dateDebutReelle === null && currentValue.dateFinReelle === null) {
@@ -315,28 +315,28 @@
                     $("#nomProjet").append("<tr><td><a class='callFormProjet' data-target='#form-projet' data-toggle='modal' onClick='updateProjMajData(\"" + currentValue.codeProjet + "\", \"" + currentValue.libelleProjet + "\")'>" + currentValue.libelleProjet + "</a></td></tr>");
                 }
 			});
-            $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=livrables", function(data){
+            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=livrables", function(data){
                 if(jQuery.parseJSON(data.data) !== false)
                 jQuery.parseJSON(data.data).forEach(function (currentValue) {
                     $("#nomLivrable").append("<tr><td><a class='callFormLivrable' data-toggle='modal' data-target='#form-livrable' onClick=\"updateLivMajData('" + currentValue.codeLivrable + "','" + currentValue.libelleLivrable + "')\">" + currentValue.libelleLivrable + "</a></td></tr>");
                 });
-                $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=categs", function(data){
+                $.getJSON("http://localhost/Developement/queries/parametres.php?objet=categs", function(data){
                     if(jQuery.parseJSON(data.data) !== false)
                     jQuery.parseJSON(data.data).forEach(function (currentValue) {
                         $("#nomCategorie").append("<tr><td><a class=\"callFormCategorie\" data-toggle=\"modal\" data-target=\"#form-categorie\" onClick=\"updateCatMajData('" + currentValue.codeCategorie + "','" + currentValue.libelleCategorie + "')\">" + currentValue.libelleCategorie + "</a></td></tr>");
                         $("#selectCateg").append("<option value=\"" + currentValue.codeCategorie + "\">" + currentValue.libelleCategorie + "</option>");
                     });
-                    $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=familles", function(data){
+                    $.getJSON("http://localhost/Developement/queries/parametres.php?objet=familles", function(data){
                         if(jQuery.parseJSON(data.data) !== false)
                         jQuery.parseJSON(data.data).forEach(function (currentValue) {
                             $("#nomFamille").append("<tr><td><a onClick=\"updateFamMajData('" + currentValue.codeFamille + "', '" + currentValue.libelleFamille + "')\" class='callFormFamille' data-target='#form-famille' data-toggle='modal'>" + currentValue.libelleFamille + "</a></td></tr>");
                         });
-                        $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=parametres", function(data){
+                        $.getJSON("http://localhost/Developement/queries/parametres.php?objet=parametres", function(data){
                             if(jQuery.parseJSON(data.data) !== false)
                             jQuery.parseJSON(data.data).forEach(function (currentValue) {
                                 $("#parametre").val(currentValue.dureeLegale);
                             });
-                            $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=ressources", function(data){
+                            $.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
                                 if(jQuery.parseJSON(data.data) !== false)
                                 jQuery.parseJSON(data.data).forEach(function (currentValue) {
                                     $("#nomRessource").append("<tr><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\"> " + currentValue.nomRessource + "</a></td><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\">" + currentValue.libelleCategorie + "</a></td><td><a class=\"callFormUser\" data-toggle=\"modal\" data-target=\"#form-user\" onClick=\"updateResMajData('" + currentValue.codeRessource + "','" + currentValue.codeCatPerso + "', '" + currentValue.tauxHoraire + "', '" + currentValue.nomRessource + "')\"> " + currentValue.tauxHoraire + "</a></td></tr>");
@@ -353,7 +353,7 @@
     function deleteProjet(idProjet) {
         if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
             $.ajax({
-                url: 'http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projet',
+                url: 'http://localhost/Developement/queries/parametres.php?objet=projet',
                 type: 'POST',
                 contentType: 'application/json',
                 data: '{"_method": "delete", "idProjet": "' + idProjet + '"}',
@@ -416,7 +416,7 @@
             if ( valid ) {
                 $.ajax({
                     type: "POST",
-                    url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                    url: "http://localhost/Developement/queries/parametres.php",
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet" : "ressource",  "nomRessource" : "' + $("#nomRes").val()+ '","tauxHoraire" : "'+ $("#coutRes").val()+'","codeCatPerso" : "'+ $("#selectCateg").val()+'" }',
@@ -480,7 +480,7 @@
                 $.ajax
                 ({
                     type: "POST",
-                    url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                    url: "http://localhost/Developement/queries/parametres.php",
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet": "projet","libelleProjet": "' + $("#nomProj").val() + '"}',
@@ -542,7 +542,7 @@
                 $.ajax
                 ({
                     type: "POST",
-                    url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                    url: "http://localhost/Developement/queries/parametres.php",
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet": "famille","libelleFamille": "' + $("#nomFam").val() + '"}',
@@ -605,7 +605,7 @@
                 $.ajax
                 ({
                     type: "POST",
-                    url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                    url: "http://localhost/Developement/queries/parametres.php",
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet": "livrable","libelleLivrable": "' + $("#nomLiv").val() + '"}',
@@ -667,7 +667,7 @@
                 $.ajax
                 ({
                     type: "POST",
-                    url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                    url: "http://localhost/Developement/queries/parametres.php",
                     dataType: 'json',
                     contentType:'application/json',
                     data: '{"objet": "categ","libelleCategorie": "' + $("#nomCat").val() + '"}',
@@ -698,7 +698,7 @@
             $.ajax
             ({
                 type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/parametres.php",
+                url: "http://localhost/Developement/queries/parametres.php",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: '{"objet": "parametre","dureeLegale": "' + $("#parametre").val() + '"}',
@@ -715,7 +715,7 @@
         $("#nomProj").val(libelle);
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeProjet: code
                 },
@@ -730,7 +730,7 @@
         $("#nomProj").val("");
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeProjet: null
                 },
@@ -745,7 +745,7 @@
         $("#nomFam").val(libelle);
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeFamille: code
                 },
@@ -760,7 +760,7 @@
         $("#nomFamille").val("");
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeFamille: null
                 },
@@ -775,7 +775,7 @@
         $("#nomLiv").val(libelle);
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeLivrable: code
                 },
@@ -790,7 +790,7 @@
         $("#nomLiv").val("");
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeLivrable: null
                 },
@@ -805,7 +805,7 @@
         $("#nomCat").val(libelle);
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeCategorie: code
                 },
@@ -820,7 +820,7 @@
         $("#nomCat").val("");
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeCategorie: null
                 },
@@ -837,7 +837,7 @@
         $("#coutRes").val(tauxHor);
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeRessource: code
                 },
@@ -854,7 +854,7 @@
         $("#coutRes").val("");
         $.ajax({
             type: "POST",
-                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+                url: "http://localhost/Developement/queries/maj_session.php",
                 data: {
                     codeRessource: null
                 },

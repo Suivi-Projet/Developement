@@ -30,19 +30,31 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && !isset(json_decode(file_get_contents(
 			else echo json_encode(['codeRetour' => 500, 'result' => "La création de la tâche a échouée. Veuillez réessayer dans quelques instants."]);
 
 		} else {
+			$reqDateDebFin = $db->prepare("SELECT dateDebutRelle, dateFinRelle FROM taches WHERE codeTache = ?");
+
+			$reqDateDebFin->bindParam(1, $_SESSION["codeTache"]);
+
+			$reqDateDebFin->execute();
+
+			$result = $reqDateDebFin->fetch(PDO::FETCH_ASSOC);
+
+			$dateDeb = $result["dateDebutReelle"];
+			$dateFin = $result["dateFinReelle"];
+
 			$req = $db->prepare("UPDATE taches 
-								 SET libelleTache = ?, codeFamille = ?, dateDebutPrevue = ?, dateFinPrevue = ?, dateDebutReelle = ?, dateFinReelle = ?, coutPrevu = ?, codeLivrable = ?, codeProjet = ? WHERE codeTache = ?");
+								 SET libelleTache = ?, codeFamille = ?, dateDebutPrevue = ?, dateFinPrevue = ?, dateDebutReelle = ?, dateFinReelle = ?, coutPrevu = ?, codeLivrable = ?, codeProjet = ?, referenceTache = ? WHERE codeTache = ?");
 
 			$req->bindParam(1, $json["libelleTache"]);
 			$req->bindParam(2, $json["codeFamille"]);
 			$req->bindParam(3, $json["dateDebutPrevue"]);
 			$req->bindParam(4, $json["dateFinPrevue"]);
-			$req->bindParam(5, $json["dateDebutReelle"]);
-			$req->bindParam(6, $json["dateFinReelle"]);
+			$req->bindParam(5, $dateDeb);
+			$req->bindParam(6, $dateFin);
 			$req->bindParam(7, $json["coutPrevu"]);
 			$req->bindParam(8, $json["codeLivrable"]);
 			$req->bindParam(9, $json["codeProjet"]);
 			$req->bindParam(10, $_SESSION["codeTache"]);
+			$req->bindParam(11, $json["refTache"]);
 
 			$done = $req->execute();
 

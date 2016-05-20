@@ -64,14 +64,14 @@
 	function majProjetsDC(){
 		$("#selectProjectDC").empty();
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjectDC").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
 	        $.ajax({
 	            type: "GET",
-	            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=bite",
+	            url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=bite",
 	            success : function(data){
 	                $("#selectProjectDC").val(jQuery.parseJSON(data).data);
             		fillFamDonut();
@@ -87,7 +87,7 @@
     function majSelectedDC(){
         $.ajax({
             type: "POST",
-            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
+            url: "http://localhost/Developement/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProjectDC").val()
             },
@@ -138,7 +138,7 @@
 			}]
 		};
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?famTpsTotal=" + $("#selectProjectDC").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?famTpsTotal=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var nomFam = currentValue.libellefamille;
@@ -184,7 +184,7 @@
 			}]
 		};
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?livTpsTotal=" + $("#selectProjectDC").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?livTpsTotal=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var nomLiv = currentValue.liv;
@@ -230,7 +230,7 @@
 			}]
 		};
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?resTpsTotal=" + $("#selectProjectDC").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?resTpsTotal=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var nomRes = currentValue.ressource;
@@ -275,7 +275,7 @@
 			}]
 		};
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?tpsTache=" + $("#selectProjectDC").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?tpsTache=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					var tache = currentValue.tache;
@@ -304,7 +304,7 @@
 		var dataGraph;
 
 
-		$.getJSON("http://gestionprojet.herokuapp.com/queries/donnees_croisees.php?coutResMois=" + $("#selectProjectDC").val(), function(data){
+		$.getJSON("http://localhost/Developement/queries/donnees_croisees.php?coutResMois=" + $("#selectProjectDC").val(), function(data){
 			if (jQuery.parseJSON(data.data) !== false) {
 				console.info(jQuery.parseJSON(data.data));
 
