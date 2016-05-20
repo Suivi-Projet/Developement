@@ -239,7 +239,7 @@
                 console.log($("#selectRessource").val(), $("#selectTache").val(), $("#tpsPasseTache").val(), $("#pourcentTache").val(), formatForTable(new Date($("#dateSaisie").val())));
                 $.ajax({
 					type: "POST",
-					url: "http://localhost/Developement/queries/suivi.php",
+					url: "http://gestionprojet.herokuapp.com/queries/suivi.php",
 					dataType: 'json',
 					contentType:'application/json',
 					data: '{"codeRessource" : "' + $("#selectRessource").val() + '", "codeTache" : "' + $("#selectTache").val() + '", "tempsPassee" : "' + $("#tpsPasseTache").val() + '", "avancement" : "' + $("#pourcentTache").val() + '","dateConso" : "' + formatForTable(new Date($("#dateSaisie").val())) + '"}',
@@ -274,12 +274,12 @@
 	function majProjets(){
         $("#selectProjet").empty();
 
-		$.getJSON("http://localhost/Developement/queries/parametres.php?objet=projets", function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=projets", function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectProjet").append("<option value='" + currentValue.codeProjet + "'>" + currentValue.libelleProjet + "</option>");
 			});
-			$.getJSON("http://localhost/Developement/queries/parametres.php?objet=ressources", function(data){
+			$.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=ressources", function(data){
 				if(jQuery.parseJSON(data.data) !== false)
 				jQuery.parseJSON(data.data).forEach(function (currentValue) {
 					$("#selectRessource").append("<option value='" + currentValue.codeRessource + "'>" + currentValue.nomRessource + "</option>");
@@ -287,7 +287,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost/Developement/queries/maj_session.php?projetEnCours=ok",
+                    url: "http://gestionprojet.herokuapp.com/queries/maj_session.php?projetEnCours=ok",
                     success : function(data){
                         $("#selectProjet").val(jQuery.parseJSON(data).data);
                         majTaches();
@@ -306,7 +306,7 @@
 	function majTaches(){
 		$("#selectTache").empty();
 
-		$.getJSON("http://localhost/Developement/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
+		$.getJSON("http://gestionprojet.herokuapp.com/queries/previsionnel.php?idProjet=" + $("#selectProjet").val(), function(data){
 			if(jQuery.parseJSON(data.data) !== false)
 			jQuery.parseJSON(data.data).forEach(function (currentValue) {
 				$("#selectTache").append("<option value='" + currentValue.codeTache + "'>" + currentValue.libelleTache + "</option>");
@@ -324,7 +324,7 @@
 
         $.ajax({
             type: "GET",
-                url: "http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(),
+                url: "http://gestionprojet.herokuapp.com/queries/suivi.php?recapProjet=" + $("#selectProjet").val(),
                     success : function(infos){
                 var data = jQuery.parseJSON(infos);
                 if(jQuery.parseJSON(data.data) !== false) {
@@ -382,7 +382,7 @@
 
         var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
-        $.getJSON("http://localhost/Developement/queries/suivi.php?infoProjet=" + $("#selectProjet").val(), function(data){
+        $.getJSON("http://gestionprojet.herokuapp.com/queries/suivi.php?infoProjet=" + $("#selectProjet").val(), function(data){
             if(jQuery.parseJSON(data.data) !== false) {
 
                 if (jQuery.parseJSON(data.data).dateDebutPrevue != null) {
@@ -452,7 +452,7 @@
     function majRecapTaches(){
         $("#recapTaches").empty();
 
-        $.getJSON("http://localhost/Developement/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
+        $.getJSON("http://gestionprojet.herokuapp.com/queries/suivi.php?recapProjet=" + $("#selectProjet").val(), function(data){
             jQuery.parseJSON(data.data).forEach(function(currentValue) {
                 var dateDebutReelle = currentValue.dateDebutReelle == null ? "/" : currentValue.dateDebutReelle;
                 var dateFinReelle = currentValue.dateFinReelle == null ? "/" : currentValue.dateFinReelle;
@@ -497,7 +497,7 @@
     function majSelectedSuiv(){
         $.ajax({
             type: "POST",
-            url: "http://localhost/Developement/queries/maj_session.php",
+            url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
             data: {
                 projetEnCours: $("#selectProjet").val()
             }
@@ -507,7 +507,7 @@
     function majListeConsos(){
         $("#listeConsos").empty();
 
-        $.getJSON("http://localhost/Developement/queries/suivi.php?allConsos=1", function(data){
+        $.getJSON("http://gestionprojet.herokuapp.com/queries/suivi.php?allConsos=1", function(data){
             if(jQuery.parseJSON(data.data) !== false)
             jQuery.parseJSON(data.data).forEach(function (currentValue) {
                 $("#listeConsos").append("<tr><td><a class=\"callFormSaisie\" data-toggle=\"modal\" data-target=\"#form-saisie\" onClick=\"updateConsMajData('" + currentValue.codeConso + "','" + currentValue.codeRessource + "','" + currentValue.codeTache + "','" + currentValue.tempsPassee + "','" + currentValue.avancement + "', '" + currentValue.date + "')\">" + formatDate(new Date(currentValue.date)) + "</a></td><td><a class=\"callFormSaisie\" data-toggle=\"modal\" data-target=\"#form-saisie\" onClick=\"updateConsMajData('" + currentValue.codeConso + "','" + currentValue.codeRessource + "','" + currentValue.codeTache + "','" + currentValue.tempsPassee + "','" + currentValue.avancement + "', '" + currentValue.date + "')\">" + currentValue.nomRessource + "</a></td><td><a class=\"callFormSaisie\" data-toggle=\"modal\" data-target=\"#form-saisie\" onClick=\"updateConsMajData('" + currentValue.codeConso + "','" + currentValue.codeRessource + "','" + currentValue.codeTache + "','" + currentValue.tempsPassee + "','" + currentValue.avancement + "', '" + currentValue.date + "')\">" + currentValue.libelleTache + "</a></td><td><a class=\"callFormSaisie\" data-toggle=\"modal\" data-target=\"#form-saisie\" onClick=\"updateConsMajData('" + currentValue.codeConso + "','" + currentValue.codeRessource + "','" + currentValue.codeTache + "','" + currentValue.tempsPassee + "','" + currentValue.avancement + "', '" + currentValue.date + "')\">" + currentValue.tempsPassee + "</a></td><td><a class=\"callFormSaisie\" data-toggle=\"modal\" data-target=\"#form-saisie\" onClick=\"updateConsMajData('" + currentValue.codeConso + "','" + currentValue.codeRessource + "','" + currentValue.codeTache + "','" + currentValue.tempsPassee + "','" + currentValue.avancement + "', '" + currentValue.date + "')\">" + currentValue.avancement + "</a></td></tr>");
@@ -584,7 +584,7 @@
 
         $.ajax({
             type: "POST",
-                url: "http://localhost/Developement/queries/maj_session.php",
+                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
                 data: {
                     codeConso: code
                 },
@@ -603,7 +603,7 @@
 
         $.ajax({
             type: "POST",
-                url: "http://localhost/Developement/queries/maj_session.php",
+                url: "http://gestionprojet.herokuapp.com/queries/maj_session.php",
                 data: {
                     codeConso: null
                 },
