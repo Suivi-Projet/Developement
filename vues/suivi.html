@@ -220,6 +220,21 @@
             }
         }
 
+        function checkTempsPasse(d){
+             $.getJSON("http://gestionprojet.herokuapp.com/queries/parametres.php?objet=parametres", function(data){
+                if(jQuery.parseJSON(data.data) !== false)
+                jQuery.parseJSON(data.data).forEach(function (currentValue) {
+                    var duree = currentValue.dureeLegale;
+                    if (d.val() > durre) {
+                        d.addClass("ui-state-error");
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+            });
+        }
+
         function checkPercentage(d) {
             if (d.val() < 0 || d.val() > 100){
                 d.addClass("ui-state-error");
